@@ -27,12 +27,9 @@ public class Project2InventorySystem {
       String user = prop.getProperty("DB_USER");
       String pass = prop.getProperty("DB_PASS");
       
-      Connection conn = DriverManager.getConnection(
-        url,
-        user,
-        pass
-      );
-      //new Login();
+      Connection conn = DriverManager.getConnection( url, user, pass);
+      
+      new Login(conn);
       System.out.print(conn);
       
       
