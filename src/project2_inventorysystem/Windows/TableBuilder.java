@@ -4,6 +4,7 @@
  */
 package project2_inventorysystem.Windows;
 
+import java.awt.Color;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -17,12 +18,14 @@ public class TableBuilder extends JTable{
   
   int column_count;
   
-  TableBuilder(ResultSet rs, int width, int height){
+  TableBuilder(ResultSet rs){
     try{
       this.rs = rs;
       
       setModel(buildModel(rs));
-      setSize(width, height);
+      getTableHeader().setBackground(new Color(0X291C0E));
+      getTableHeader().setForeground(new Color(0xE1D4C2));
+      //setBounds(x,y,width, height);
       setVisible(true);
       
     }catch (Exception ex){
@@ -46,7 +49,7 @@ public class TableBuilder extends JTable{
       String[] column_names = new String[column_count];
       
       for(int column = 0; column < column_count; ){
-        column_names[column] = rs_metadata.getColumnName(++column);
+        column_names[column] = rs_metadata.getColumnLabel(++column);
       }
       
       tbl_model = new DefaultTableModel(column_names,0);
