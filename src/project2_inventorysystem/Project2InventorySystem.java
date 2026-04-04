@@ -30,7 +30,8 @@ public class Project2InventorySystem {
       Connection conn = DriverManager.getConnection( url, user, pass);
       
       new Login(conn);
-      System.out.print(conn);
+//      new Dashboard();
+      System.out.println(conn);
       
       
       

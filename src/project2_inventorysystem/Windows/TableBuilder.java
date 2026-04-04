@@ -12,13 +12,36 @@ import java.sql.*;
  * @author user
  */
 public class TableBuilder extends JTable{
+  ResultSet rs;
   DefaultTableModel tbl_model;
-  ResultSetMetaData rs_metadata;
+  
+  int column_count;
   
   TableBuilder(ResultSet rs, int width, int height){
     try{
-      rs_metadata = rs.getMetaData();
-      int column_count = rs_metadata.getColumnCount();
+      this.rs = rs;
+      
+      setModel(buildModel(rs));
+      setSize(width, height);
+      setVisible(true);
+      
+    }catch (Exception ex){
+      System.out.print(ex.getCause());
+    }
+  }
+  
+  public void refreshTable(ResultSet new_rs){
+    try{
+      setModel(buildModel(new_rs));
+    }catch(Exception ex){
+      System.out.print(ex.getCause());
+    }
+  }
+  
+  private DefaultTableModel buildModel(ResultSet rs){
+    try{
+      ResultSetMetaData rs_metadata = rs.getMetaData();
+      column_count = rs_metadata.getColumnCount();
       
       String[] column_names = new String[column_count];
       
@@ -37,12 +60,11 @@ public class TableBuilder extends JTable{
         tbl_model.addRow(record);
       }
       
-      setSize(width, height);
-      setModel(tbl_model);
-      setVisible(true);
+      return tbl_model;
       
-    }catch (Exception ex){
+    }catch(Exception ex){
       System.out.print(ex.getCause());
     }
+    return tbl_model;
   }
 }
