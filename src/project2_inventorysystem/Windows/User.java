@@ -8,6 +8,6 @@ package project2_inventorysystem.Windows;
  *
  * @author user
  */
-public class UserAcounts {
+public class User {
   
 }

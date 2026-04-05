@@ -3,10 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package project2_inventorysystem;
+import project2_inventorysystem.Windows.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import project2_inventorysystem.Windows.*;
+
 import java.sql.*;
 /**
  *

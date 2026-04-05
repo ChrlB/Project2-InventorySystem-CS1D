@@ -18,9 +18,9 @@ public class ButtonBuilder extends JButton{
     setBounds(x, y, width, height);
     setFocusable(false);
     setText(label);
-    //setForeground(new Color(0xD69000));
-    //setBackground(new Color(40,40,35));
-    setForeground(new Color(0xE1D4C2));
-    setBackground(new Color(0X291C0E));
+    setForeground(Color.WHITE);
+    setBackground(new Color(0x3D4D55));
+    //setForeground(new Color(0xE1D4C2));
+//    setBackground(new Color(0X291C0E));
   }
 }

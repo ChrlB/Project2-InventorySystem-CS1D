@@ -23,8 +23,10 @@ public class TableBuilder extends JTable{
       this.rs = rs;
       
       setModel(buildModel(rs));
-      getTableHeader().setBackground(new Color(0X291C0E));
-      getTableHeader().setForeground(new Color(0xE1D4C2));
+      //getTableHeader().setBackground(new Color(0X291C0E));
+      //getTableHeader().setForeground(new Color(0xE1D4C2));
+      getTableHeader().setForeground(Color.WHITE);
+      getTableHeader().setBackground(new Color(0x3D4D55));
       //setBounds(x,y,width, height);
       setVisible(true);
       
