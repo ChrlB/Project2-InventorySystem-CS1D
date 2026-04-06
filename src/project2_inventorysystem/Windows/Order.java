@@ -23,6 +23,7 @@ public class Order extends JFrame{
   public Order(int userID,Connection conn){
     this.conn = conn;
     user_ID = userID;
+    
     setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     setTitle("ORDER");
     setLayout(null);

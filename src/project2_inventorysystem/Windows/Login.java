@@ -8,6 +8,7 @@ package project2_inventorysystem.Windows;
  *
  * @author user
  */
+import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import java.awt.Color;
 import javax.swing.JFrame;
 import java.sql.*;

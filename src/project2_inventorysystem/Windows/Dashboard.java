@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package project2_inventorysystem.Windows;
+import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +28,8 @@ public class Dashboard extends JFrame{
   IconBuilder order_icon,
               product_icon,
               sales_icon,
-              user_icon;
+              user_icon,
+              logo_icon;
   
   int user_ID;
   PreparedStatement pstmt;
@@ -38,11 +40,12 @@ public class Dashboard extends JFrame{
   public Dashboard(int userID, Connection conn){
     try{
       this.conn = conn;
-
       user_ID = userID;
+      
       header = new JPanel();
       header.setBounds(0,0,1070,100);
       header.setBackground(new Color(0x10232A));
+      header.setLayout(null);
       //header.setBackground(new Color(0X3E2522));
       
       button_panel = new JPanel();
@@ -61,11 +64,13 @@ public class Dashboard extends JFrame{
 //      sales_btn.addActionListener(e -> new Sales());
 //      user_btn.addActionListener(e -> new User());
       
-      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",50,40,70,70);
-      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",50,115,70,70);
-      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",50,190,70,70);
-      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",50,265,70,70);
+      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",40,40,80,70);
+      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",40,115,80,70);
+      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",40,190,80,70);
+      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",40,265,80,70);
       
+      logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
+              
       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       setTitle("DASHBOARD");
       setLayout(null);
@@ -120,6 +125,8 @@ public class Dashboard extends JFrame{
       button_panel.add(product_icon);
       button_panel.add(sales_icon);
       button_panel.add(user_icon);
+      
+      header.add(logo_icon);
       
       add(low_stocks_tbl);
       add(best_products_tbl);

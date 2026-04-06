@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
 import javax.swing.JTable;
@@ -18,7 +18,7 @@ public class TableBuilder extends JTable{
   
   int column_count;
   
-  TableBuilder(ResultSet rs){
+  public TableBuilder(ResultSet rs){
     try{
       this.rs = rs;
       
