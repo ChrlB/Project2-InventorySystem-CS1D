@@ -70,23 +70,13 @@ public class Dashboard extends JFrame{
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",40,265,80,70);
       
       logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
-              
-      setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      setTitle("DASHBOARD");
-      setLayout(null);
-      setResizable(false);
-      setSize(1070,550);
-      getContentPane().setBackground(new Color(0xD3C3B9));
-      //getContentPane().setBackground(new Color(0xFFE0B2));
-      
+             
       sql = """
         SELECT 
             productID,
             productName as name,
-            productStocks as stocks 
-        FROM products WHERE productStocks < 11""";
-      
-      //sql ="Select * from categories";
+            stockQuantity as stocks 
+        FROM products WHERE stockQuantity < 11""";
       
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
@@ -97,8 +87,8 @@ public class Dashboard extends JFrame{
         SELECT 
             productID,
             productName as name,
-            categoryID as category 
-        FROM products WHERE productStocks < 11""";
+            categoryName as category 
+        FROM products WHERE stockQuantity < 11""";
       
       //sql ="Select * from categories";
       
@@ -107,12 +97,19 @@ public class Dashboard extends JFrame{
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
       best_products_tbl.setBounds(730,150,300,350);
 
-      // 2. Add the listener to call your method
+      
+      setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      setTitle("DASHBOARD");
+      setLayout(null);
+      setResizable(false);
+      setSize(1070,550);
+      getContentPane().setBackground(new Color(0xD3C3B9));
+      //getContentPane().setBackground(new Color(0xFFE0B2));
+      
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
-          logout(user_ID); // Call your method here
-          
+          logout(user_ID); 
         }
       });
       

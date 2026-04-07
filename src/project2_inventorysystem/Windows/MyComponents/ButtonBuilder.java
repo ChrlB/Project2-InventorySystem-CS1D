@@ -13,8 +13,8 @@ import javax.swing.JButton;
  */
 public class ButtonBuilder extends JButton{
   
-  
-  public ButtonBuilder(String label,int x,int y, int width, int height){
+  public ButtonBuilder(String label, int x, int y, int width, int height){
+    
     setBounds(x, y, width, height);
     setFocusable(false);
     setText(label);

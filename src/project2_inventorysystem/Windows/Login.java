@@ -12,14 +12,11 @@ import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import java.awt.Color;
 import javax.swing.JFrame;
 import java.sql.*;
-import javax.swing.JButton;
-import javax.swing.JScrollPane;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class Login extends JFrame {
   PreparedStatement pstmt;
   ResultSet rs ;
-  JScrollPane tbl;
   ButtonBuilder login_btn;
   Connection conn;
   String sql;
@@ -28,31 +25,12 @@ public class Login extends JFrame {
     
     try{
       this.conn = conn;
-//      String hashed = BCrypt.hashpw("admin123", BCrypt.gensalt(12));
-//      String sql = "insert into users(username,password,fullname) values(?,?,?)";
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setString(1, "admin");
-//      pstmt.setString(2, hashed);
-//      pstmt.setString(3, "admin");
-//      
-//      pstmt.executeUpdate();
-
-      
-      
+      String username = "admin";
       String pass = "admin123";
+      
       login_btn = new ButtonBuilder("LOGIN",5,10,100,50);
-      login_btn.addActionListener((a)-> login("admin",pass));
-      
-      
-//      stmt = conn.createStatement();
-//      rs = stmt.executeQuery("Select * from categories");
-//      
-//      TableBuilder tblb = new TableBuilder(rs,500,400);
-//      
-//      tbl = new JScrollPane(tblb);
-//      tbl.setBounds(0,0,500,400);
-//      
-//      
+      login_btn.addActionListener((a)-> login(username,pass));
+       
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setLayout(null);
       setSize(700,500);
@@ -69,19 +47,23 @@ public class Login extends JFrame {
   
   void login(String input_username, String input_password){
     int user_ID;
-    // Verify a password (do this during login)
+    
     try{
       sql = "SELECT * FROM users WHERE username = ?";
       pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, input_username);
       
+      //execute the sql command then store the result to ResultSet object
       rs = pstmt.executeQuery();
       
+      // if their`s a record 
       if(rs.next()){
         String hashed_password = rs.getString("password");
         
+        // hash the inputed password then compare to hashed password of that user istored in database 
         if (BCrypt.checkpw(input_password, hashed_password)) {
           user_ID = rs.getInt("userID");
+          
 //          sql = "INSERT INTO userlogs(userID) VALUES(?)";
 //          pstmt = conn.prepareStatement(sql);
 //          pstmt.setInt(1, user_ID);
@@ -89,16 +71,17 @@ public class Login extends JFrame {
 //          pstmt.executeUpdate();
           
           System.out.println("Login Successful!");
-          dispose();
           new Dashboard(user_ID, conn);
+          dispose();
           
-        } else {
-          System.out.println("Invalid Password.");
+        }else { 
+          System.out.println("Invalid Password."); 
         }
         
-      }else{
-        System.out.println("wrong credentials");
+      }else{ 
+        System.out.println("wrong credentials"); 
       }
+      
     }catch (Exception ex){
       System.out.print(ex.getCause());
     }

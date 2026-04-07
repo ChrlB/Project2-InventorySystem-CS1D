@@ -18,6 +18,7 @@ public class Project2InventorySystem {
   /**
    * @param args the command line arguments
    */
+  
   public static void main(String[] args) {
     
     try{
@@ -34,9 +35,7 @@ public class Project2InventorySystem {
 //      new Dashboard();
       System.out.println(conn);
       
-      
-      
-      
+    
     }catch(Exception ex){
       System.out.print(ex);
     }

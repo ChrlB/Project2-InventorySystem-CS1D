@@ -4,10 +4,19 @@
  */
 package project2_inventorysystem.Windows;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 /**
  *
  * @author user
  */
 public class User {
-  
+//  String hashed = BCrypt.hashpw("admin123", BCrypt.gensalt(12));
+//      String sql = "insert into users(username,password,fullname) values(?,?,?)";
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setString(1, "admin");
+//      pstmt.setString(2, hashed);
+//      pstmt.setString(3, "admin");
+//      
+//      pstmt.executeUpdate();
 }

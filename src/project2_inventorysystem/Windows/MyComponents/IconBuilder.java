@@ -22,15 +22,18 @@ import javax.swing.JLabel;
 //  }
 //}
 public class IconBuilder extends JLabel {
-    public IconBuilder(String path, int x, int y,int width, int height) {
-        URL url = IconBuilder.class.getResource(path);
-        if (url == null) {
-            System.err.println("Image not found: " + path);
-        } else {
-            ImageIcon icon = new ImageIcon(url);
-            Image scaledImg = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            setIcon(new ImageIcon(scaledImg));
-            setBounds(x, y, width, height);
-        }
+  
+  public IconBuilder(String path, int x, int y,int width, int height) {
+
+    URL url = IconBuilder.class.getResource(path);
+    if (url == null) {
+      System.err.println("Image not found: " + path);
+
+    } else {
+      ImageIcon icon = new ImageIcon(url);
+      Image scaledImg = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+      setIcon(new ImageIcon(scaledImg));
+      setBounds(x, y, width, height);
     }
+  }
 }
