@@ -5,6 +5,7 @@
 package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JButton;
 
 /**
@@ -13,10 +14,11 @@ import javax.swing.JButton;
  */
 public class ButtonBuilder extends JButton{
   
-  public ButtonBuilder(String label, int x, int y, int width, int height){
+  public ButtonBuilder(String label, int x, int y, int width, int height,int fontsize){
     
     setBounds(x, y, width, height);
     setFocusable(false);
+    setFont(new Font("Arial", Font.PLAIN, fontsize));
     setText(label);
     setForeground(Color.WHITE);
     setBackground(new Color(0x3D4D55));

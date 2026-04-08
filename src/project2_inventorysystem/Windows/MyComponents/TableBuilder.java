@@ -5,9 +5,12 @@
 package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author user
@@ -21,10 +24,16 @@ public class TableBuilder extends JTable{
   public TableBuilder(ResultSet rs){
     try{
       this.rs = rs;
-      
+      DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+      centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+
+      // Align only the first column (index 0)
+      setDefaultRenderer(Object.class, centerRenderer);
       setModel(buildModel(rs));
       //getTableHeader().setBackground(new Color(0X291C0E));
       //getTableHeader().setForeground(new Color(0xE1D4C2));
+      setRowHeight(25);
+      setFont(new Font("Arial", Font.PLAIN, 16));
       getTableHeader().setForeground(Color.WHITE);
       getTableHeader().setBackground(new Color(0x3D4D55));
       //setBounds(x,y,width, height);

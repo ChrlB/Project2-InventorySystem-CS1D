@@ -43,31 +43,41 @@ public class Dashboard extends JFrame{
       user_ID = userID;
       
       header = new JPanel();
-      header.setBounds(0,0,1070,100);
+      header.setBounds(0,0,1270,100);
       header.setBackground(new Color(0x10232A));
       header.setLayout(null);
       //header.setBackground(new Color(0X3E2522));
       
       button_panel = new JPanel();
       button_panel.setLayout(null);
-      button_panel.setBounds(0,100,400,450);
+      button_panel.setBounds(0,100,400,550);
       //button_panel.setBackground(new Color(0X8C6E63));
       button_panel.setBackground(new Color(0XB58863));
       
-      order_btn =   new ButtonBuilder("ORDER"   ,150,50,200,50);
-      product_btn = new ButtonBuilder("PRODUCT" ,150,125,200,50);
-      sales_btn =   new ButtonBuilder("SALES"   ,150,200,200,50);
-      user_btn =    new ButtonBuilder("USER"    ,150,275,200,50);
+//      order_btn =   new ButtonBuilder("ORDER"   ,150,50,200,50);
+//      product_btn = new ButtonBuilder("PRODUCT" ,150,125,200,50);
+//      sales_btn =   new ButtonBuilder("SALES"   ,150,200,200,50);
+//      user_btn =    new ButtonBuilder("USER"    ,150,275,200,50);
+      
+      order_btn =   new ButtonBuilder("ORDER"   ,160,50,220,70,20);
+      product_btn = new ButtonBuilder("PRODUCT" ,160,150,220,70,20);
+      sales_btn =   new ButtonBuilder("SALES"   ,160,250,220,70,20);
+      user_btn =    new ButtonBuilder("USER"    ,160,350,220,70,20);
       
       order_btn.addActionListener(e -> { new Order(user_ID, conn); dispose(); });
 //      product_btn.addActionListener(e -> new Product());
 //      sales_btn.addActionListener(e -> new Sales());
 //      user_btn.addActionListener(e -> new User());
       
-      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",40,40,80,70);
-      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",40,115,80,70);
-      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",40,190,80,70);
-      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",40,265,80,70);
+//      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",40,40,80,70);
+//      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",40,115,80,70);
+//      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",40,190,80,70);
+//      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",40,265,80,70);
+      
+      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
+      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",30,140,100,90);
+      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",30,240,100,90);
+      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
       logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
              
@@ -102,7 +112,7 @@ public class Dashboard extends JFrame{
       setTitle("DASHBOARD");
       setLayout(null);
       setResizable(false);
-      setSize(1070,550);
+      setSize(1270,650);
       getContentPane().setBackground(new Color(0xD3C3B9));
       //getContentPane().setBackground(new Color(0xFFE0B2));
       

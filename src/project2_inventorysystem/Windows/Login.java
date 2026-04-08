@@ -28,7 +28,7 @@ public class Login extends JFrame {
       String username = "admin";
       String pass = "admin123";
       
-      login_btn = new ButtonBuilder("LOGIN",5,10,100,50);
+      login_btn = new ButtonBuilder("LOGIN",5,10,100,50,14);
       login_btn.addActionListener((a)-> login(username,pass));
        
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
