@@ -5,10 +5,12 @@
 package project2_inventorysystem.Windows;
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.sql.*;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 
@@ -30,6 +32,8 @@ public class Dashboard extends JFrame{
               sales_icon,
               user_icon,
               logo_icon;
+  JLabel low_stocks_label,
+         best_products_label;
   
   int user_ID;
   PreparedStatement pstmt;
@@ -80,23 +84,28 @@ public class Dashboard extends JFrame{
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
       logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
+      
+      
              
       sql = """
         SELECT 
             productID,
             productName as name,
-            stockQuantity as stocks 
+            IF(stockQuantity = 0,'OUT OF STOCK',stockQuantity) as stocks 
         FROM products WHERE stockQuantity < 11""";
       
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       low_stocks_tbl= new JScrollPane(new TableBuilder(rs));
-      low_stocks_tbl.setBounds(420,150,300,350);
+      //low_stocks_tbl.setBounds(420,150,400,350);
+      low_stocks_tbl.setBounds(420,200,800,170);
+      
       
       sql = """
         SELECT 
             productID,
             productName as name,
+            unitPrice as price,
             categoryName as category 
         FROM products WHERE stockQuantity < 11""";
       
@@ -105,8 +114,16 @@ public class Dashboard extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
-      best_products_tbl.setBounds(730,150,300,350);
-
+      //best_products_tbl.setBounds(830,150,400,350);
+      best_products_tbl.setBounds(420,420,800,170);
+      
+      low_stocks_label = new JLabel("LOW STOCK PRODUCTS:");
+      low_stocks_label.setBounds(420,150,300,50);
+      low_stocks_label.setFont(new Font("Arial", Font.BOLD, 16));
+      
+      best_products_label = new JLabel("MONTHLY BEST PRODUCT:");
+      best_products_label.setBounds(420,370,300,50);
+      best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       setTitle("DASHBOARD");
@@ -138,6 +155,8 @@ public class Dashboard extends JFrame{
       add(low_stocks_tbl);
       add(best_products_tbl);
       
+      add(low_stocks_label);
+      add(best_products_label);
       add(header);
       add(button_panel);
       setVisible(true);

@@ -33,9 +33,12 @@ public class TableBuilder extends JTable{
       //getTableHeader().setBackground(new Color(0X291C0E));
       //getTableHeader().setForeground(new Color(0xE1D4C2));
       setRowHeight(25);
-      setFont(new Font("Arial", Font.PLAIN, 16));
+      setFont(new Font("Arial", Font.BOLD, 14));
+      setForeground(new Color(0x3D4D55));
+      
       getTableHeader().setForeground(Color.WHITE);
       getTableHeader().setBackground(new Color(0x3D4D55));
+      getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
       //setBounds(x,y,width, height);
       setVisible(true);
       
