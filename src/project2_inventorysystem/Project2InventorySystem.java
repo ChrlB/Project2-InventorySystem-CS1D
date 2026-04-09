@@ -12,7 +12,7 @@ import java.sql.*;
 /**
  *
  * @author 
- * Bonaobra
+ * Bonaobra, john chrl
  * Palado, Syrill John
  * Villanueva, Juan Victor 
  */
