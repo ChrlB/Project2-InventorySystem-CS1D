@@ -13,7 +13,7 @@ import java.sql.*;
  *
  * @author 
  * Bonaobra
- * Palado , Syrill John
+ * Palado, Syrill John
  * Villanueva
  */
 public class Project2InventorySystem {
