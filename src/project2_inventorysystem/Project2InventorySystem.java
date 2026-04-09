@@ -13,6 +13,7 @@ import java.sql.*;
  *
  * @author user
  * Palado
+ * Villanueva
  */
 public class Project2InventorySystem {
 
