@@ -14,7 +14,7 @@ import java.sql.*;
  * @author 
  * Bonaobra, john chrl
  * Palado, Syrill John
- * Villanueva, Juan Victor D.
+ * Villanueva, Juan Victor 
  */
 public class Project2InventorySystem {
 
