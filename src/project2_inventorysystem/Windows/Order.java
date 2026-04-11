@@ -5,11 +5,14 @@
 package project2_inventorysystem.Windows;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import project2_inventorysystem.Windows.Dashboard;
 import javax.swing.JFrame;
 import java.sql.*;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import project2_inventorysystem.Windows.MyComponents.*;
 
 /**
@@ -20,12 +23,20 @@ public class Order extends JFrame{
   int user_ID;
   Header header ;
   JPanel order_form_panel;
-  JScrollPane product_tbl;
+  TableBuilder product_tbl;
+  JScrollPane product_tbl_scrollpane;
+  
+  TextFieldBuilder customer_name_field,
+                   productID_field;
           
   PreparedStatement pstmt;
   Connection conn;
   ResultSet rs;
   String sql;
+  
+  String[] selected_record;
+  
+  //int selected_row;
   
   
   public Order(int userID,Connection conn){
@@ -51,8 +62,20 @@ public class Order extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       
-      product_tbl = new JScrollPane(new TableBuilder(rs));
-      product_tbl.setBounds(2,2,696,198);
+      product_tbl = new TableBuilder(rs);
+      product_tbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+          selected_record = product_tbl.getRecord();
+          showSelectedRecord();
+        }
+      });
+      
+      product_tbl_scrollpane = new JScrollPane(product_tbl);
+      product_tbl_scrollpane.setBounds(0,0,700,200);
+      
+      customer_name_field = new TextFieldBuilder(true,100,300,200,25);
+      productID_field = new TextFieldBuilder(false,100,350,200,25);
 
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("ORDER");
@@ -69,13 +92,23 @@ public class Order extends JFrame{
         }
       });
       
-      order_form_panel.add(product_tbl);
+      order_form_panel.add(product_tbl_scrollpane);
+      order_form_panel.add(customer_name_field);
+      order_form_panel.add(productID_field);
 
       this.add(header);
       this.add(order_form_panel);
       this.setVisible(true);
     }catch(Exception ex){
       System.out.println(ex);
+    }
+  }
+  
+  public void showSelectedRecord(){
+    try{
+      productID_field.setText(selected_record[0]);
+    }catch(Exception ex){
+      System.out.print(ex.getCause());
     }
   }
 }

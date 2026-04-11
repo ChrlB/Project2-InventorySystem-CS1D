@@ -6,6 +6,8 @@ package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import java.sql.*;
@@ -16,7 +18,8 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author user
  */
 public class TableBuilder extends JTable{
-  ResultSet rs;
+  public ResultSet rs;
+  int selected_row;
   DefaultTableModel tbl_model;
   
   int column_count;
@@ -28,19 +31,21 @@ public class TableBuilder extends JTable{
       centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
       // Align only the first column (index 0)
-      setDefaultRenderer(Object.class, centerRenderer);
-      setModel(buildModel(rs));
+      this.setDefaultRenderer(Object.class, centerRenderer);
+      this.setModel(buildModel(rs));
       //getTableHeader().setBackground(new Color(0X291C0E));
       //getTableHeader().setForeground(new Color(0xE1D4C2));
-      setRowHeight(25);
-      setFont(new Font("Arial", Font.BOLD, 14));
-      setForeground(new Color(0x3D4D55));
+      this.setRowHeight(25);
+      this.setFont(new Font("Arial", Font.BOLD, 14));
+      this.setForeground(new Color(0x3D4D55));
       
-      getTableHeader().setForeground(Color.WHITE);
-      getTableHeader().setBackground(new Color(0x3D4D55));
-      getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+      this.getTableHeader().setForeground(Color.WHITE);
+      this.getTableHeader().setBackground(new Color(0x3D4D55));
+      this.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
       //setBounds(x,y,width, height);
-      setVisible(true);
+      this.setVisible(true);
+      
+      
       
     }catch (Exception ex){
       System.out.print(ex.getCause());
@@ -83,5 +88,22 @@ public class TableBuilder extends JTable{
       System.out.print(ex.getCause());
     }
     return tbl_model;
+  }
+  
+  public String[] getRecord(){
+    String[] record = new String[column_count];
+    try{
+      selected_row = this.getSelectedRow();
+      
+      if (selected_row != -1) {
+        for(int column = 0; column < column_count; column++){
+          System.out.println(this.getValueAt(selected_row, column));
+          record[column] = ""+ this.getValueAt(selected_row, column);
+        }
+      }
+    }catch(Exception ex){
+      System.out.print(ex.getCause());
+    }
+    return record;
   }
 }
