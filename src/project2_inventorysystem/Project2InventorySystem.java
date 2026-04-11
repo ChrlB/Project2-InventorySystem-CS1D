@@ -11,7 +11,7 @@ import java.util.Properties;
 import java.sql.*;
 /**
  *
- * @author 
+ * @author user
  * Bonaobra, john chrl
  * Palado, Syrill John
  * Villanueva, Juan Victor 

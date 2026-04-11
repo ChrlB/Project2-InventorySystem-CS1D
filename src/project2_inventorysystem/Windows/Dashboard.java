@@ -19,8 +19,8 @@ import javax.swing.JScrollPane;
  * @author user
  */
 public class Dashboard extends JFrame{
-  JPanel header, 
-         button_panel;
+  Header header; 
+  JPanel button_panel;
   JScrollPane low_stocks_tbl , 
               best_products_tbl;
   ButtonBuilder order_btn,
@@ -30,8 +30,7 @@ public class Dashboard extends JFrame{
   IconBuilder order_icon,
               product_icon,
               sales_icon,
-              user_icon,
-              logo_icon;
+              user_icon;
   JLabel low_stocks_label,
          best_products_label;
   
@@ -44,12 +43,9 @@ public class Dashboard extends JFrame{
   public Dashboard(int userID, Connection conn){
     try{
       this.conn = conn;
-      user_ID = userID;
+      this.user_ID = userID;
       
-      header = new JPanel();
-      header.setBounds(0,0,1270,100);
-      header.setBackground(new Color(0x10232A));
-      header.setLayout(null);
+      header = new Header();
       //header.setBackground(new Color(0X3E2522));
       
       button_panel = new JPanel();
@@ -57,11 +53,6 @@ public class Dashboard extends JFrame{
       button_panel.setBounds(0,100,400,550);
       //button_panel.setBackground(new Color(0X8C6E63));
       button_panel.setBackground(new Color(0XB58863));
-      
-//      order_btn =   new ButtonBuilder("ORDER"   ,150,50,200,50);
-//      product_btn = new ButtonBuilder("PRODUCT" ,150,125,200,50);
-//      sales_btn =   new ButtonBuilder("SALES"   ,150,200,200,50);
-//      user_btn =    new ButtonBuilder("USER"    ,150,275,200,50);
       
       order_btn =   new ButtonBuilder("ORDER"   ,160,50,220,70,20);
       product_btn = new ButtonBuilder("PRODUCT" ,160,150,220,70,20);
@@ -73,17 +64,12 @@ public class Dashboard extends JFrame{
 //      sales_btn.addActionListener(e -> new Sales());
 //      user_btn.addActionListener(e -> new User());
       
-//      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",40,40,80,70);
-//      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",40,115,80,70);
-//      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",40,190,80,70);
-//      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",40,265,80,70);
-      
       order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
       product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",30,140,100,90);
       sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",30,240,100,90);
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
-      logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
+      
       
       
              
@@ -92,7 +78,8 @@ public class Dashboard extends JFrame{
             productID,
             productName as name,
             IF(stockQuantity = 0,'OUT OF STOCK',stockQuantity) as stocks 
-        FROM products WHERE stockQuantity < 11""";
+        FROM products WHERE stockQuantity < 11;
+        """;
       
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
@@ -107,7 +94,8 @@ public class Dashboard extends JFrame{
             productName as name,
             unitPrice as price,
             categoryName as category 
-        FROM products WHERE stockQuantity < 11""";
+        FROM products WHERE stockQuantity < 11;
+        """;
       
       //sql ="Select * from categories";
       
@@ -125,13 +113,13 @@ public class Dashboard extends JFrame{
       best_products_label.setBounds(420,370,300,50);
       best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
-      setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      setTitle("DASHBOARD");
-      setLayout(null);
-      setResizable(false);
-      setSize(1270,650);
-      getContentPane().setBackground(new Color(0xD3C3B9));
-      //getContentPane().setBackground(new Color(0xFFE0B2));
+      this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      this.setTitle("DASHBOARD");
+      this.setLayout(null);
+      this.setResizable(false);
+      this.setSize(1270,650);
+      this.getContentPane().setBackground(new Color(0xD3C3B9));
+      //this.getContentPane().setBackground(new Color(0xFFE0B2));
       
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -150,16 +138,16 @@ public class Dashboard extends JFrame{
       button_panel.add(sales_icon);
       button_panel.add(user_icon);
       
-      header.add(logo_icon);
       
-      add(low_stocks_tbl);
-      add(best_products_tbl);
       
-      add(low_stocks_label);
-      add(best_products_label);
-      add(header);
-      add(button_panel);
-      setVisible(true);
+      this.add(low_stocks_tbl);
+      this.add(best_products_tbl);
+      
+      this.add(low_stocks_label);
+      this.add(best_products_label);
+      this.add(header);
+      this.add(button_panel);
+      this.setVisible(true);
     }catch (Exception ex){
       System.out.print(ex);
     }
