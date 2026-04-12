@@ -16,7 +16,7 @@ public class TextFieldBuilder extends JTextField{
   public TextFieldBuilder(boolean isEditable,int x, int y,int width,int height){
     this.setBounds(x,y,width,height);
     this.setEditable(isEditable);
-    this.setFont(new Font("Arial", Font.BOLD, 14));
+    this.setFont(new Font("Arial", Font.BOLD, 15));
     this.setForeground(new Color(0x3D4D55));
   }
 }
