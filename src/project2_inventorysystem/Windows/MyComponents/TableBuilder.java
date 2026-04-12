@@ -90,15 +90,15 @@ public class TableBuilder extends JTable{
     return tbl_model;
   }
   
-  public String[] getRecord(){
-    String[] record = new String[column_count];
+  public Object[] getRecord(){
+    Object[] record = new Object[column_count];
     try{
       selected_row = this.getSelectedRow();
       
       if (selected_row != -1) {
         for(int column = 0; column < column_count; column++){
-          System.out.println(this.getValueAt(selected_row, column));
-          record[column] = ""+ this.getValueAt(selected_row, column);
+          //System.out.println(this.getValueAt(selected_row, column));
+          record[column] = this.getValueAt(selected_row, column);
         }
       }
     }catch(Exception ex){

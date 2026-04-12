@@ -5,14 +5,18 @@
 package project2_inventorysystem.Windows;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import project2_inventorysystem.Windows.Dashboard;
 import javax.swing.JFrame;
 import java.sql.*;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import project2_inventorysystem.Windows.MyComponents.*;
 
 /**
@@ -26,15 +30,18 @@ public class Order extends JFrame{
   TableBuilder product_tbl;
   JScrollPane product_tbl_scrollpane;
   
+  ComboBoxBuilder product_category_combobox;
+  SpinnerBuilder  quantity_spinner;
   TextFieldBuilder customer_name_field,
                    productID_field;
           
   PreparedStatement pstmt;
   Connection conn;
-  ResultSet rs;
+  ResultSet rs,
+            product_rs;
   String sql;
   
-  String[] selected_record;
+  Object[] selected_record;
   
   //int selected_row;
   
@@ -50,10 +57,34 @@ public class Order extends JFrame{
       order_form_panel.setLayout(null);
       order_form_panel.setBounds(0,100,700,550);
       order_form_panel.setBackground(new Color(0XB58863));
+      
+      
+      
+      
+      sql = """
+        SELECT 
+          DISTINCT products.categoryName
+        FROM products 
+        WHERE products.stockQuantity > 0; 
+      """;
 
+      pstmt = conn.prepareStatement(sql);
+      rs = pstmt.executeQuery();
+      
+      product_category_combobox = new ComboBoxBuilder("all",325,300,200,25);
+      while(rs.next()){
+        product_category_combobox.addItem(rs.getString("categoryName"));
+      }
+      //quntity_combobox = new ComboBoxBuilder(1,325,350,200,25);
+      quantity_spinner = new SpinnerBuilder();
+      quantity_spinner.setBounds(325,350,200,25);
+//      quantity_spinner.setFont(new Font("Arial", Font.BOLD, 14));
+//      quantity_spinner.setForeground(new Color(0x3D4D55));
+//      quantity_spinner.setFocusable(false);
       sql = """
         SELECT productID ,
                productName as name,
+               categoryName as category,
                unitPrice as price
         FROM products
         WHERE stockQuantity > 0;
@@ -62,17 +93,20 @@ public class Order extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       
+      
+      
       product_tbl = new TableBuilder(rs);
       product_tbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-          selected_record = product_tbl.getRecord();
           showSelectedRecord();
         }
       });
       
+      
       product_tbl_scrollpane = new JScrollPane(product_tbl);
       product_tbl_scrollpane.setBounds(0,0,700,200);
+      
       
       customer_name_field = new TextFieldBuilder(true,100,300,200,25);
       productID_field = new TextFieldBuilder(false,100,350,200,25);
@@ -91,7 +125,8 @@ public class Order extends JFrame{
           dispose();
         }
       });
-      
+      order_form_panel.add(product_category_combobox);
+      order_form_panel.add(quantity_spinner);
       order_form_panel.add(product_tbl_scrollpane);
       order_form_panel.add(customer_name_field);
       order_form_panel.add(productID_field);
@@ -106,7 +141,45 @@ public class Order extends JFrame{
   
   public void showSelectedRecord(){
     try{
-      productID_field.setText(selected_record[0]);
+      int row = product_tbl.getSelectedRow();
+
+      if (row != -1) {
+
+        selected_record = new Object[] {
+          product_tbl.getValueAt(row, 0), 
+          product_tbl.getValueAt(row, 1), 
+          product_tbl.getValueAt(row, 2), 
+          product_tbl.getValueAt(row, 3)  
+        };
+
+        //System.out.print(selected_record[0]);
+      }
+      
+      sql = """
+        SELECT 
+            products.productID as productID,
+            products.productName as productName,
+            products.categoryName as categoryName,
+            products.unitPrice as unitPrice,
+            products.stockQuantity as stockQuantity,
+            categories.unit as unit
+        FROM products
+        INNER JOIN categories 
+            ON products.categoryName = categories.categoryName
+        WHERE products.stockQuantity > 0 and products.productID = ?;
+      """;
+      
+      //System.out.println("ID "+(int)selected_record[0]);
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, (int)selected_record[0]);
+      product_rs = pstmt.executeQuery();
+      
+      if(product_rs.next()){
+        quantity_spinner.setMax(product_rs.getInt("stockQuantity"));
+        productID_field.setText(""+product_rs.getInt("productID"));
+      }
+      
+      
     }catch(Exception ex){
       System.out.print(ex.getCause());
     }
