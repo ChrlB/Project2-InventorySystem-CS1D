@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import project2_inventorysystem.Windows.Dashboard;
 import javax.swing.JFrame;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -57,15 +59,12 @@ public class Order extends JFrame{
       order_form_panel.setLayout(null);
       order_form_panel.setBounds(0,100,700,550);
       order_form_panel.setBackground(new Color(0XB58863));
-      
-      
-      
-      
+     
       sql = """
         SELECT 
-          DISTINCT products.categoryName
+          DISTINCT categoryName
         FROM products 
-        WHERE products.stockQuantity > 0; 
+        WHERE stockQuantity > 0; 
       """;
 
       pstmt = conn.prepareStatement(sql);
@@ -75,12 +74,11 @@ public class Order extends JFrame{
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
-      //quntity_combobox = new ComboBoxBuilder(1,325,350,200,25);
+      product_category_combobox.addActionListener((e) -> filterTable());
+      
       quantity_spinner = new SpinnerBuilder();
       quantity_spinner.setBounds(325,350,200,25);
-//      quantity_spinner.setFont(new Font("Arial", Font.BOLD, 14));
-//      quantity_spinner.setForeground(new Color(0x3D4D55));
-//      quantity_spinner.setFocusable(false);
+      
       sql = """
         SELECT productID ,
                productName as name,
@@ -138,6 +136,40 @@ public class Order extends JFrame{
       System.out.println(ex);
     }
   }
+  private void filterTable(){
+    try {
+      String selected_category = product_category_combobox.getSelectedItem().toString();
+      
+      if(selected_category.equals("all")){
+        sql = """
+        SELECT productID ,
+               productName as name,
+               categoryName as category,
+               unitPrice as price
+        FROM products
+        WHERE stockQuantity > 0 ;
+        """;
+        pstmt = conn.prepareStatement(sql);
+      }else{
+        sql = """
+        SELECT productID ,
+               productName as name,
+               categoryName as category,
+               unitPrice as price
+        FROM products
+        WHERE stockQuantity > 0 and categoryName = ?;
+        """;
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, selected_category);
+      }
+      
+      rs = pstmt.executeQuery();
+      product_tbl.refreshTable(rs);
+    } catch (SQLException ex) {
+      Logger.getLogger(Order.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+  }
   
   public void showSelectedRecord(){
     try{
@@ -184,4 +216,6 @@ public class Order extends JFrame{
       System.out.print(ex.getCause());
     }
   }
+  
+  
 }
