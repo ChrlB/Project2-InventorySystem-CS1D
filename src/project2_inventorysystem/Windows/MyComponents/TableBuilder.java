@@ -38,6 +38,7 @@ public class TableBuilder extends JTable{
       this.setRowHeight(25);
       this.setFont(new Font("Arial", Font.BOLD, 14));
       this.setForeground(new Color(0x3D4D55));
+      //this.setEditable(false);
       
       this.getTableHeader().setForeground(Color.WHITE);
       this.getTableHeader().setBackground(new Color(0x3D4D55));
@@ -50,6 +51,11 @@ public class TableBuilder extends JTable{
     }catch (Exception ex){
       System.out.print(ex.getCause());
     }
+  }
+  
+  @Override
+  public boolean isCellEditable(int row, int column) {
+      return false; 
   }
   
   public void refreshTable(ResultSet new_rs){
@@ -89,6 +95,8 @@ public class TableBuilder extends JTable{
     }
     return tbl_model;
   }
+  
+  
   
   public Object[] getRecord(){
     Object[] record = new Object[column_count];
