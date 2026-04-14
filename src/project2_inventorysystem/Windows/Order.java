@@ -31,16 +31,20 @@ import project2_inventorysystem.Windows.MyComponents.*;
  * @author user
  */
 public class Order extends JFrame{
+  Connection conn;
   int user_ID, total_order_price ;
   ArrayList<int[]> pendingItems ;
+  
   Header header ;
   JPanel order_form_panel;
+  
   TableBuilder product_tbl;
   JScrollPane product_tbl_scrollpane,
               order_list_scrollpane;
   
   ComboBoxBuilder product_category_combobox;
   SpinnerBuilder  quantity_spinner;
+  
   TextFieldBuilder customer_name_field,
                    productID_field,
                    productName_field;
@@ -50,22 +54,22 @@ public class Order extends JFrame{
                 total_order_price_label,
                 customer_name_field_label,
                 productID_field_label,
-                productName_field_label;
+                productName_field_label,
+                quantity_spinner_label,
+                product_category_combobox_label;
+  
   ButtonBuilder add_btn,
                 cancel_btn,
                 confirm_btn;
   
   PreparedStatement pstmt,
                     batch_pstmt;
-  Connection conn;
+  
   ResultSet rs,
             product_rs;
   String sql;
   
   Object[] selected_record;
-  
-  //int selected_row;
-  
   
   public Order(int userID,Connection conn){
     try{
@@ -115,8 +119,12 @@ public class Order extends JFrame{
       }
       product_category_combobox.addActionListener((e) -> filterTable());
       
+      
       quantity_spinner = new SpinnerBuilder();
       quantity_spinner.setBounds(325,250,150,40);
+      
+      product_category_combobox_label = new LabelBuilder(" Product Category:",500,220,150,30, 15);
+      quantity_spinner_label = new LabelBuilder(" Quantity:",325,220,150,30, 15);
       
       sql = """
         SELECT productID ,
@@ -130,8 +138,7 @@ public class Order extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       
-      
-      
+     
       product_tbl = new TableBuilder(rs);
       product_tbl.addMouseListener(new MouseAdapter() {
         @Override
@@ -145,7 +152,6 @@ public class Order extends JFrame{
       product_tbl_scrollpane.setBounds(0,0,700,200);
       
       
-      
       productID_field = new TextFieldBuilder(false,50,250,250,40);
       productName_field = new TextFieldBuilder(false,50,330,250,40);
       customer_name_field = new TextFieldBuilder(true,50,410,250,40);
@@ -154,12 +160,7 @@ public class Order extends JFrame{
       productName_field_label = new LabelBuilder(" Product name:",50,300,250,30,15);
       customer_name_field_label = new LabelBuilder(" Customer name:",50,380,250,30,15);
       
-      order_list = new JTextArea();
-      order_list.setText("");
       
-      order_list.setEditable(false);
-      order_list.setFont(new Font("Arial", Font.BOLD, 20));
-      order_list.setForeground(new Color(0x3D4D55));
       //order_list.setBackground(new Color(0xD3C3B9));
       
       order_list_label = new LabelBuilder(" ORDER LIST:",725, 125, 500, 50,25);
@@ -167,12 +168,20 @@ public class Order extends JFrame{
       order_list_label.setForeground(Color.WHITE);
       order_list_label.setBackground(new Color(0x3D4D55));
       
+      order_list = new JTextArea();
+      order_list.setText("");
+      order_list.setEditable(false);
+      order_list.setFont(new Font("Arial", Font.BOLD, 20));
+      order_list.setForeground(new Color(0x3D4D55));
+      
       order_list_scrollpane = new JScrollPane(order_list);
       order_list_scrollpane.setBounds(725, 175, 500, 320);
       
       total_order_price_label = new LabelBuilder(" TOTAL: ₱0",725, 500, 500, 50,25);
       total_order_price_label.setOpaque(true);
       total_order_price_label.setBackground(Color.WHITE);
+      
+      
       
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("ORDER");
@@ -184,10 +193,11 @@ public class Order extends JFrame{
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
-          new Dashboard(user_ID,conn); // Call your method here
+          new Dashboard(user_ID,conn); 
           dispose();
         }
       });
+      
       order_form_panel.add(product_category_combobox);
       order_form_panel.add(quantity_spinner);
       order_form_panel.add(product_tbl_scrollpane);
@@ -199,6 +209,8 @@ public class Order extends JFrame{
       order_form_panel.add(customer_name_field_label);
       order_form_panel.add(productID_field_label);
       order_form_panel.add(productName_field_label);
+      order_form_panel.add(quantity_spinner_label);
+      order_form_panel.add(product_category_combobox_label);
       
       order_form_panel.add(add_btn);
       order_form_panel.add(cancel_btn);
@@ -206,14 +218,17 @@ public class Order extends JFrame{
 
       this.add(header);
       this.add(order_form_panel);
-      this.add(order_list_scrollpane);
+      
       this.add(order_list_label);
+      this.add(order_list_scrollpane);
       this.add(total_order_price_label);
+      
       this.setVisible(true);
     }catch(Exception ex){
       System.out.println(ex);
     }
   }
+  
   private void filterTable(){
     try {
       String selected_category = product_category_combobox.getSelectedItem().toString();
@@ -261,8 +276,6 @@ public class Order extends JFrame{
 //          product_tbl.getValueAt(row, 2), 
 //          product_tbl.getValueAt(row, 3)  
         };
-
-        //System.out.print(selected_record[0]);
       }
       
       sql = """
@@ -297,8 +310,6 @@ public class Order extends JFrame{
       System.out.print(ex.getCause());
     }
   }
-  
-  
   
   public void addItemToOrder(){
     try{
@@ -347,6 +358,7 @@ public class Order extends JFrame{
       ex.printStackTrace(); 
     }
   }
+  
   public void confirmOrder(){
     
     try {
@@ -354,7 +366,7 @@ public class Order extends JFrame{
         JOptionPane.showMessageDialog(null, "No items added!");
         return;
       }else if(customer_name_field.getText().trim().equals("")){
-        JOptionPane.showMessageDialog(null, "customer name!");
+        JOptionPane.showMessageDialog(null, "customer name is required!");
         return;
       }
 
