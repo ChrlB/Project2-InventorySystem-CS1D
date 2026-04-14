@@ -6,17 +6,17 @@ package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 /**
  *
  * @author user
  */
-public class TextFieldBuilder extends JTextField{
-  public TextFieldBuilder(boolean isEditable,int x, int y,int width,int height){
+public class LabelBuilder extends JLabel{
+  public LabelBuilder(String label,int x, int y, int width, int height, int font_size){
+    this.setText(label);
     this.setBounds(x,y,width,height);
-    this.setEditable(isEditable);
-    this.setFont(new Font("Arial", Font.BOLD, 16));
     this.setForeground(new Color(0x3D4D55));
+    this.setFont(new Font("Arial", Font.BOLD, font_size));
   }
 }

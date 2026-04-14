@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -30,7 +31,7 @@ import project2_inventorysystem.Windows.MyComponents.*;
  * @author user
  */
 public class Order extends JFrame{
-  int user_ID, total_order_price = 0;
+  int user_ID, total_order_price ;
   ArrayList<int[]> pendingItems ;
   Header header ;
   JPanel order_form_panel;
@@ -45,6 +46,11 @@ public class Order extends JFrame{
                    productName_field;
   JTextArea order_list;
   
+  LabelBuilder  order_list_label,
+                total_order_price_label,
+                customer_name_field_label,
+                productID_field_label,
+                productName_field_label;
   ButtonBuilder add_btn,
                 cancel_btn,
                 confirm_btn;
@@ -65,6 +71,7 @@ public class Order extends JFrame{
     try{
       this.conn = conn;
       user_ID = userID;
+      total_order_price = 0;
       pendingItems = new ArrayList<>();
 
       header = new Header();
@@ -85,8 +92,10 @@ public class Order extends JFrame{
       
       add_btn = new ButtonBuilder("ADD",325,330,150,45,15);
       add_btn.addActionListener((a) -> addItemToOrder());
+      
       cancel_btn= new ButtonBuilder("CANCEL",500,330,150,45,15);
       cancel_btn.addActionListener((a) -> cancelOrder());
+      
       confirm_btn= new ButtonBuilder("CONFIRM ORDER",325,405,325,45,15);
       confirm_btn.addActionListener((a) -> confirmOrder());
      
@@ -137,23 +146,34 @@ public class Order extends JFrame{
       
       
       
-      //productID_field = new TextFieldBuilder(false,100,410,200,30);
-      productID_field = new TextFieldBuilder(false,100,250,200,40);
-      productName_field = new TextFieldBuilder(false,100,330,200,40);
-      customer_name_field = new TextFieldBuilder(true,100,410,200,40);
+      productID_field = new TextFieldBuilder(false,50,250,250,40);
+      productName_field = new TextFieldBuilder(false,50,330,250,40);
+      customer_name_field = new TextFieldBuilder(true,50,410,250,40);
+      
+      productID_field_label = new LabelBuilder(" ProductID:",50,220,250,30,15);
+      productName_field_label = new LabelBuilder(" Product name:",50,300,250,30,15);
+      customer_name_field_label = new LabelBuilder(" Customer name:",50,380,250,30,15);
       
       order_list = new JTextArea();
-      order_list.setText("ORDER LIST:");
+      order_list.setText("");
       
       order_list.setEditable(false);
       order_list.setFont(new Font("Arial", Font.BOLD, 20));
       order_list.setForeground(new Color(0x3D4D55));
-      order_list.setBackground(new Color(0xD3C3B9));
+      //order_list.setBackground(new Color(0xD3C3B9));
+      
+      order_list_label = new LabelBuilder(" ORDER LIST:",725, 125, 500, 50,25);
+      order_list_label.setOpaque(true); 
+      order_list_label.setForeground(Color.WHITE);
+      order_list_label.setBackground(new Color(0x3D4D55));
       
       order_list_scrollpane = new JScrollPane(order_list);
-      order_list_scrollpane.setBounds(725, 175, 500, 375);
+      order_list_scrollpane.setBounds(725, 175, 500, 320);
       
-
+      total_order_price_label = new LabelBuilder(" TOTAL: ₱0",725, 500, 500, 50,25);
+      total_order_price_label.setOpaque(true);
+      total_order_price_label.setBackground(Color.WHITE);
+      
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("ORDER");
       this.setLayout(null);
@@ -176,6 +196,10 @@ public class Order extends JFrame{
       order_form_panel.add(productName_field);
       order_form_panel.add(customer_name_field);
       
+      order_form_panel.add(customer_name_field_label);
+      order_form_panel.add(productID_field_label);
+      order_form_panel.add(productName_field_label);
+      
       order_form_panel.add(add_btn);
       order_form_panel.add(cancel_btn);
       order_form_panel.add(confirm_btn);
@@ -183,6 +207,8 @@ public class Order extends JFrame{
       this.add(header);
       this.add(order_form_panel);
       this.add(order_list_scrollpane);
+      this.add(order_list_label);
+      this.add(total_order_price_label);
       this.setVisible(true);
     }catch(Exception ex){
       System.out.println(ex);
@@ -272,6 +298,8 @@ public class Order extends JFrame{
     }
   }
   
+  
+  
   public void addItemToOrder(){
     try{
       int productID = product_rs.getInt("productID");
@@ -285,65 +313,79 @@ public class Order extends JFrame{
       int total_item_price = (unit_price * quantity);
       total_order_price += total_item_price;
       
-//      order_list.setText(
-//              order_list.getText() + "\n"+
-//              " "+quantity + unit+
-//              " | "+productName+
-//              " | total: "+total_item_price
-//      );
       order_list.setText(
-          order_list.getText() + "\n[" +
-          pendingItems.size() + "]  " +
-          quantity + unit + "  " +
-          productName + " - ₱" + total_item_price
+        order_list.getText() + "\n [" +
+        pendingItems.size() + "]  " +
+        quantity + unit + "  " +
+        productName + " - ₱" + total_item_price
       );
+      
+      total_order_price_label.setText(" TOTAL: ₱"+total_order_price);
     }catch(Exception ex){
       System.out.print(ex.getCause());
+      JOptionPane.showMessageDialog(null, "No items added!");
     }
   }
-  public void cancelOrder(){
+  
+  public void resetOrder(){
     try{
       total_order_price = 0;
       pendingItems.clear();
       batch_pstmt.clearBatch();
-      order_list.setText("ORDER LIST:");
+      order_list.setText("");
+      total_order_price_label.setText(" TOTAL: ₱"+total_order_price);
+    }catch(Exception ex){
+      ex.printStackTrace(); 
+    }
+  }
+  
+  public void cancelOrder(){
+    try{
+      resetOrder();
+      JOptionPane.showMessageDialog(null, "order canceled!");
     }catch(Exception ex){
       ex.printStackTrace(); 
     }
   }
   public void confirmOrder(){
-    if (pendingItems.isEmpty()) {
+    
+    try {
+      if (pendingItems.isEmpty()) {
         JOptionPane.showMessageDialog(null, "No items added!");
         return;
-    }
-    try {
-        // Insert order, get generated key
-        sql = "INSERT INTO orders(userID,customerName) VALUES (?,?)";
-      
-        pstmt = conn.prepareStatement(
-            sql,
-            Statement.RETURN_GENERATED_KEYS
-        );
-        pstmt.setInt(1, user_ID);
-        pstmt.setString(2,customer_name_field.getText());
-        pstmt.executeUpdate();
-        rs = pstmt.getGeneratedKeys();
+      }else if(customer_name_field.getText().trim().equals("")){
+        JOptionPane.showMessageDialog(null, "customer name!");
+        return;
+      }
 
-        if (rs.next()) {
-            int orderID = rs.getInt(1);
 
-            // Build batch
-            for (int[] item : pendingItems) {
-                batch_pstmt.setInt(1, orderID);   // orderID
-                batch_pstmt.setInt(2, (int)item[0]);   // productID
-                batch_pstmt.setInt(3, (int)item[1]);   // quantity
-                batch_pstmt.addBatch();
-            }
+      // Insert order, get generated key
+      sql = "INSERT INTO orders(userID,customerName) VALUES (?,?)";
+
+      pstmt = conn.prepareStatement(
+        sql,
+        Statement.RETURN_GENERATED_KEYS
+      );
+      pstmt.setInt(1, user_ID);
+      pstmt.setString(2,customer_name_field.getText().trim());
+      pstmt.executeUpdate();
+      rs = pstmt.getGeneratedKeys();
+
+      if (rs.next()) {
+        int orderID = rs.getInt(1);
+
+        // Build batch
+        for (int[] item : pendingItems) {
+          batch_pstmt.setInt(1, orderID);   // orderID
+          batch_pstmt.setInt(2, (int)item[0]);   // productID
+          batch_pstmt.setInt(3, (int)item[1]);   // quantity
+          batch_pstmt.addBatch();
         }
+      }
 
-        batch_pstmt.executeBatch();
-        JOptionPane.showMessageDialog(null, "Order confirmed!");
-        cancelOrder();
+      batch_pstmt.executeBatch();
+      JOptionPane.showMessageDialog(null, "Order confirmed!");
+      resetOrder();
     } catch (SQLException ex) {
         ex.printStackTrace();
     }
