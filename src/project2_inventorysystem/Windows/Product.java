@@ -22,10 +22,21 @@ public class Product extends JFrame{
                 restock_btn;
     Product(Connection conn){
       header = new Header();
+      
+      add_btn = new ButtonBuilder("ADD", 50, 50, 200, 50, 15);
+      delete_btn = new ButtonBuilder("DELETE", 50, 110, 200, 50, 15);
+      update_btn = new ButtonBuilder("UPDATE", 50, 170, 200, 50, 15);
+      restock_btn = new ButtonBuilder("RESTOCK", 50, 230, 200, 50, 15);
+      
       product_form_panel = new JPanel();
       product_form_panel.setBounds(0, 100, 500, 550);
-      product_form_panel.setBackground(Color.red);
+      product_form_panel.setBackground (new Color(0XB58863));
+      product_form_panel.setLayout(null);
       
+      product_form_panel.add(add_btn);
+      product_form_panel.add(delete_btn);
+      product_form_panel.add(update_btn);
+      product_form_panel.add(restock_btn);
       
       
       
