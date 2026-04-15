@@ -8,7 +8,7 @@ package project2_inventorysystem.Windows;
  *
  * @author user
  */
-import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
+import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
 import javax.swing.JFrame;
 import java.sql.*;
@@ -20,6 +20,7 @@ public class Login extends JFrame {
   ButtonBuilder login_btn;
   Connection conn;
   String sql;
+  TextFieldBuilder username_field;
   
   public Login(Connection conn){
     
@@ -28,8 +29,9 @@ public class Login extends JFrame {
       String username = "admin";
       String pass = "admin123";
       
-      login_btn = new ButtonBuilder("LOGIN",5,10,100,50,14);
+      login_btn = new ButtonBuilder("LOGIN",260,150,100,50,14);
       login_btn.addActionListener((a)-> login(username,pass));
+      username_field = new TextFieldBuilder (true ,50, 100 ,200,50);
        
       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       setLayout(null);
@@ -38,6 +40,7 @@ public class Login extends JFrame {
 
       add(login_btn);
       setVisible(true);
+      add (username_field);
       
       
     }catch(Exception ex){
