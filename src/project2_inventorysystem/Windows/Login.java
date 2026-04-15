@@ -36,12 +36,9 @@ public class Login extends JFrame {
       password_field = new JPasswordField (15);
       password_field.setEchoChar('*');
       password_field.setBounds(50, 160, 200, 50);
-      String username = username_field.getText();
-      String password = new String(password_field.getPassword());
-      
       
       login_btn = new ButtonBuilder("LOGIN",260,150,100,50,14);
-      login_btn.addActionListener((a)-> login(username,password));
+      login_btn.addActionListener((a)-> login());
       
      
        
@@ -52,14 +49,7 @@ public class Login extends JFrame {
       this.add(password_field);
       this.add(login_btn);
       this.setVisible(true);
-      setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      setLayout(null);
-      setSize(700,500);
-      getContentPane().setBackground(new Color(0x293A3E));
-
-      add(login_btn);
-      setVisible(true);
-      add (username_field);
+      this.add (username_field);
       
       
     }catch(Exception ex){
@@ -67,10 +57,13 @@ public class Login extends JFrame {
     }
   }
   
-  void login(String input_username, String input_password){
+  void login(){
     int user_ID;
     
     try{
+      String input_username = username_field.getText();
+      String input_password = new String(password_field.getPassword());
+      
       rs = getUserInfo(input_username);
       
       // if their`s a record 
