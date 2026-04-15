@@ -152,9 +152,9 @@ public class Order extends JFrame{
       product_tbl_scrollpane.setBounds(0,0,700,200);
       
       
-      productID_field = new TextFieldBuilder(false,50,250,250,40);
-      productName_field = new TextFieldBuilder(false,50,330,250,40);
-      customer_name_field = new TextFieldBuilder(true,50,410,250,40);
+      productID_field = new TextFieldBuilder(false,50,250,250,40,15);
+      productName_field = new TextFieldBuilder(false,50,330,250,40,15);
+      customer_name_field = new TextFieldBuilder(true,50,410,250,40,15);
       
       productID_field_label = new LabelBuilder(" ProductID:",50,220,250,30,15);
       productName_field_label = new LabelBuilder(" Product name:",50,300,250,30,15);
