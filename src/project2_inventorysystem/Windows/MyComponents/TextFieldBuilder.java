@@ -13,7 +13,7 @@ import javax.swing.JTextField;
  * @author user
  */
 public class TextFieldBuilder extends JTextField{
-  public TextFieldBuilder(boolean isEditable,int x, int y,int width,int height){
+  public TextFieldBuilder(boolean isEditable,int x, int y,int width,int height,int fontSize){
     this.setBounds(x,y,width,height);
     this.setEditable(isEditable);
     this.setFont(new Font("Arial", Font.BOLD, 16));
