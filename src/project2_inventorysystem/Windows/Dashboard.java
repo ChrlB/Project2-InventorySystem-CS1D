@@ -60,7 +60,7 @@ public class Dashboard extends JFrame{
       user_btn =    new ButtonBuilder("USER"    ,160,350,220,70,20);
       
       order_btn.addActionListener(e -> {  new Order(user_ID, conn); this.dispose();  });
-//      product_btn.addActionListener(e -> new Product());
+      product_btn.addActionListener(e -> {new Product(conn);this.dispose();});
 //      sales_btn.addActionListener(e -> new Sales());
 //      user_btn.addActionListener(e -> new User());
       
