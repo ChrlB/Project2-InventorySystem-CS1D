@@ -35,7 +35,7 @@ public class Login extends JFrame {
       this.setLayout(null);
       this.setSize(700,500);
       this.getContentPane().setBackground(new Color(0x293A3E));
-
+      
       this.add(login_btn);
       this.setVisible(true);
       

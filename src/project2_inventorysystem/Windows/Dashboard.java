@@ -59,7 +59,7 @@ public class Dashboard extends JFrame{
       sales_btn =   new ButtonBuilder("SALES"   ,160,250,220,70,20);
       user_btn =    new ButtonBuilder("USER"    ,160,350,220,70,20);
       
-      order_btn.addActionListener(e -> { new Order(user_ID, conn); dispose(); });
+      order_btn.addActionListener(e -> {  new Order(user_ID, conn); this.dispose();  });
 //      product_btn.addActionListener(e -> new Product());
 //      sales_btn.addActionListener(e -> new Sales());
 //      user_btn.addActionListener(e -> new User());
@@ -70,9 +70,6 @@ public class Dashboard extends JFrame{
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
       
-      
-      
-             
       sql = """
         SELECT 
             productID,
