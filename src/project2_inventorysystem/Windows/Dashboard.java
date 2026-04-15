@@ -62,7 +62,7 @@ public class Dashboard extends JFrame{
       order_btn.addActionListener(e -> {  new Order(user_ID, conn); this.dispose();  });
       product_btn.addActionListener(e -> {new Product(conn);this.dispose();});
 //      sales_btn.addActionListener(e -> new Sales());
-//      user_btn.addActionListener(e -> new User());
+      user_btn.addActionListener(e ->{new User(conn); this.dispose();});
       
       order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
       product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",30,140,100,90);
