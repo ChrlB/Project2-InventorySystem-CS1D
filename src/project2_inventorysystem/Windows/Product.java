@@ -23,7 +23,14 @@ public class Product extends JFrame{
                 update_btn,
                 restock_btn;
   TextFieldBuilder product_id_field, product_name_field, category_name_field, unit_price_field, stock_quantity_field;
+  String sql;
+  ResultSet rs;
+  PreparedStatement pstmt;
+  TableBuilder products_tbl;
+  JScrollPane product_tbl_scroll_pane;
+ 
     Product(int userID, Connection conn){
+      try{
       this.conn = conn;
       user_ID = userID;
       header = new Header();
@@ -55,8 +62,15 @@ public class Product extends JFrame{
       product_form_panel.add(update_btn);
       product_form_panel.add(restock_btn);
       
+      sql = """
+            SELECT * FROM products;
+            """;
+      pstmt = conn.prepareStatement(sql);
+      rs = pstmt.executeQuery();
       
-      
+      products_tbl = new TableBuilder(rs);
+      product_tbl_scroll_pane = new JScrollPane(products_tbl);
+      product_tbl_scroll_pane.setBounds(510, 150, 700, 400);
       
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -74,6 +88,11 @@ public class Product extends JFrame{
       this.getContentPane().setBackground(new Color(0xD3C3B9));
       this.add(header);
       this.add(product_form_panel);
+      this.add(product_tbl_scroll_pane);
       this.setVisible(true);
+      }
+      catch(Exception ex) {
+          
+      }
   }
 }
