@@ -15,24 +15,34 @@ import project2_inventorysystem.Windows.MyComponents.*;
  * @author user
  */
 public class User extends JFrame{
+    int user_ID;
+    Connection conn;
     Header header;
-    User(Connection conn){
-        header = new Header();
-        
-        
-        
-        
-        
-        
-        
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("User");
-        this.setLayout(null);
-        this.setResizable(false);
-        this.setSize(1270,650);
-        this.getContentPane().setBackground(new Color(0xD3C3B9));
-        this.add(header);
-        this.setVisible(true);
+    User(int userID,Connection conn){
+      this.conn = conn;
+      user_ID = userID;
+      header = new Header();
+
+
+
+
+
+      this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {
+          new Dashboard(user_ID,conn); 
+          dispose();
+        }
+      });
+
+      this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      this.setTitle("User");
+      this.setLayout(null);
+      this.setResizable(false);
+      this.setSize(1270,650);
+      this.getContentPane().setBackground(new Color(0xD3C3B9));
+      this.add(header);
+      this.setVisible(true);
     }
     
     

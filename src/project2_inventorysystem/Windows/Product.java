@@ -14,13 +14,17 @@ import java.sql.*;
  * @author user
  */
 public class Product extends JFrame{
+  int user_ID;
+  Connection conn;
   Header header;
   JPanel product_form_panel;
   ButtonBuilder add_btn,
                 delete_btn,
                 update_btn,
                 restock_btn;
-    Product(Connection conn){
+    Product(int userID, Connection conn){
+      this.conn = conn;
+      user_ID = userID;
       header = new Header();
       
       add_btn = new ButtonBuilder("ADD", 50, 50, 200, 50, 15);
@@ -41,9 +45,15 @@ public class Product extends JFrame{
       
       
       
+      this.addWindowListener(new java.awt.event.WindowAdapter() {
+        @Override
+        public void windowClosing(java.awt.event.WindowEvent e) {
+          new Dashboard(user_ID,conn); 
+          dispose();
+        }
+      });
       
-      
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("PRODUCT");
       this.setLayout(null);
       this.setResizable(false);
