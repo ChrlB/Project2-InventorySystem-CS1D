@@ -153,10 +153,10 @@ public class Dashboard extends JFrame{
   void logout(int user_ID){
     // Verify a password (do this during login)
     try{
-      sql = "UPDATE userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, user_ID);
-      pstmt.executeUpdate();
+//      sql = "UPDATE userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setInt(1, user_ID);
+//      pstmt.executeUpdate();
 //
       System.out.println("Logout Successful!");
       new Login(conn);
