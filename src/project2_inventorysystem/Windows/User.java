@@ -27,62 +27,92 @@ public class User extends JFrame{
                      username_field,
                      password_field,
                      full_name_field;
+    ResultSet rs;
+    String sql;
+    PreparedStatement pstmt;
+    
+    TableBuilder users_tbl;
+    JScrollPane users_tbl_scrollpane;
+    
+    
     User(int userID,Connection conn){
-      this.conn = conn;
-      user_ID = userID;
-      header = new Header();
-      add_btn = new ButtonBuilder("ADD",100, 50, 200, 50,14);
-      delete_btn = new ButtonBuilder("DELETE",100, 110, 200, 50,14);
-      update_btn = new ButtonBuilder("UPDATE",100, 170, 200, 50,14);
-      
-      
-      user_id_field = new TextFieldBuilder(false, 100, 280, 200, 50, 14);
-      username_field = new TextFieldBuilder(false, 100, 340, 200, 50, 14);
-      password_field = new TextFieldBuilder(false, 100, 400, 200, 50, 14);
-      full_name_field = new TextFieldBuilder(false, 100, 460, 200, 50, 14);
-      
-      
-      
-      
-      user_form_panel = new JPanel();
-      user_form_panel.setLayout(null);
-      user_form_panel.setBounds(0,100, 500, 550);
-      user_form_panel.setBackground(new Color(0XB58863));
-      
-      
-      
-      
-      user_form_panel.add(add_btn);
-      user_form_panel.add(delete_btn);
-      user_form_panel.add(update_btn);
-      user_form_panel.add(user_id_field);
-      user_form_panel.add(username_field);
-      user_form_panel.add(password_field);
-      user_form_panel.add(full_name_field);
-      
-      
+      try{
+        this.conn = conn;
+        user_ID = userID;
+        header = new Header();
+        add_btn = new ButtonBuilder("ADD",100, 50, 200, 50,14);
+        delete_btn = new ButtonBuilder("DELETE",100, 110, 200, 50,14);
+        update_btn = new ButtonBuilder("UPDATE",100, 170, 200, 50,14);
+
+
+        user_id_field = new TextFieldBuilder(false, 100, 280, 200, 50, 14);
+        username_field = new TextFieldBuilder(false, 100, 340, 200, 50, 14);
+        password_field = new TextFieldBuilder(false, 100, 400, 200, 50, 14);
+        full_name_field = new TextFieldBuilder(false, 100, 460, 200, 50, 14);
 
 
 
 
-      this.addWindowListener(new java.awt.event.WindowAdapter() {
-        @Override
-        public void windowClosing(java.awt.event.WindowEvent e) {
-          new Dashboard(user_ID,conn); 
-          dispose();
-        }
-      });
+        user_form_panel = new JPanel();
+        user_form_panel.setLayout(null);
+        user_form_panel.setBounds(0,100, 500, 550);
+        user_form_panel.setBackground(new Color(0XB58863));
 
-      this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      this.setTitle("User");
-      this.setLayout(null);
-      this.setResizable(false);
-      this.setSize(1270,650);
-      this.getContentPane().setBackground(new Color(0xD3C3B9));
-      this.add(header);
-      this.add(user_form_panel);
-      this.setVisible(true);
-      
+
+
+
+        user_form_panel.add(add_btn);
+        user_form_panel.add(delete_btn);
+        user_form_panel.add(update_btn);
+        user_form_panel.add(user_id_field);
+        user_form_panel.add(username_field);
+        user_form_panel.add(password_field);
+        user_form_panel.add(full_name_field);
+
+
+
+        sql = """
+              SELECT * 
+              FROM users
+              """;
+
+        pstmt = conn.prepareStatement(sql);
+        
+        rs = pstmt.executeQuery();
+        
+        users_tbl = new TableBuilder(rs);
+        
+        users_tbl_scrollpane = new JScrollPane(users_tbl);
+        users_tbl_scrollpane.setBounds(510,150,500,400);
+
+
+
+
+
+
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
+          @Override
+          public void windowClosing(java.awt.event.WindowEvent e) {
+            new Dashboard(user_ID,conn); 
+            dispose();
+          }
+        });
+
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.setTitle("User");
+        this.setLayout(null);
+        this.setResizable(false);
+        this.setSize(1270,650);
+        this.getContentPane().setBackground(new Color(0xD3C3B9));
+        
+        this.add(header);
+        this.add(user_form_panel);
+        this.add(users_tbl_scrollpane);
+        this.setVisible(true);
+        
+      }catch(Exception ex){
+        System.out.println(ex);
+      }
     }
     
     
