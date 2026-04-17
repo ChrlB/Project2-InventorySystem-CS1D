@@ -146,7 +146,6 @@ public class Order extends JFrame{
             showSelectedRecord();
         }
       });
-      product_tbl.setRowHeight(35);
       
       product_tbl_scrollpane = new JScrollPane(product_tbl);
       product_tbl_scrollpane.setBounds(0,0,700,200);

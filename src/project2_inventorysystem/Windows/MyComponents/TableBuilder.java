@@ -35,14 +35,15 @@ public class TableBuilder extends JTable{
       this.setModel(buildModel(rs));
       //getTableHeader().setBackground(new Color(0X291C0E));
       //getTableHeader().setForeground(new Color(0xE1D4C2));
-      this.setRowHeight(25);
+      this.setRowHeight(35);
       this.setFont(new Font("Arial", Font.BOLD, 14));
       this.setForeground(new Color(0x3D4D55));
       //this.setEditable(false);
-      
+      this.setDragEnabled(false);
       this.getTableHeader().setForeground(Color.WHITE);
       this.getTableHeader().setBackground(new Color(0x3D4D55));
       this.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+      this.getTableHeader().setReorderingAllowed(false);
       //setBounds(x,y,width, height);
       this.setVisible(true);
       

@@ -39,7 +39,6 @@ public class Login extends JFrame {
       
       login_btn = new ButtonBuilder("LOGIN",260,150,100,50,14);
       login_btn.addActionListener((a)-> login());
-      
      
        
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
