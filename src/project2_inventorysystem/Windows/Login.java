@@ -12,6 +12,7 @@ import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
 import javax.swing.JFrame;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -82,6 +83,7 @@ public class Login extends JFrame {
         }
         
       }else{ 
+        JOptionPane.showMessageDialog(null, "wrong credentials", "", JOptionPane.INFORMATION_MESSAGE);
         System.out.println("wrong credentials"); 
       }
       

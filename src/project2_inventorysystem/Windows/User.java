@@ -56,7 +56,6 @@ public class User extends JFrame{
         
         user_id_field = new TextFieldBuilder(false, 130, 50, 320, 50, 15);
         username_field = new TextFieldBuilder(true, 130, 130, 320, 50, 15);
-        //password_field = new TextFieldBuilder(false, 200, 210, 250, 50, 15);
         full_name_field = new TextFieldBuilder(true, 130, 210, 320, 50, 15);
         
         
@@ -65,7 +64,10 @@ public class User extends JFrame{
         change_password_btn = new ButtonBuilder("CHANGE PASSWORD",30, 450, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",250, 450, 200, 50,15);
         
-        
+        new_btn.addActionListener((a) -> {});
+        delete_btn.addActionListener((a) -> {});
+        change_password_btn.addActionListener((a) -> {});
+        update_btn.addActionListener((a) -> {updateRecord();});
 
         user_form_panel = new JPanel();
         user_form_panel.setLayout(null);
@@ -84,7 +86,6 @@ public class User extends JFrame{
         
         user_form_panel.add(user_id_field);
         user_form_panel.add(username_field);
-        //user_form_panel.add(password_field);
         user_form_panel.add(full_name_field);
 
 
@@ -93,13 +94,10 @@ public class User extends JFrame{
               SELECT * 
               FROM users
               """;
-
         pstmt = conn.prepareStatement(sql);
-        
         rs = pstmt.executeQuery();
         
         users_tbl = new TableBuilder(rs);
-        
         users_tbl.addMouseListener(new MouseAdapter() {
           @Override
           public void mouseReleased(MouseEvent e) {  
@@ -158,7 +156,75 @@ public class User extends JFrame{
       }
     };
     
-    
+    void updateRecord(){
+      int CANCEL = 2;
+      try {
+        
+        int row = users_tbl.getSelectedRow();
+        if (row != -1) {
+            selected_record = new Object[]{
+                users_tbl.getValueAt(row, 0)
+            };
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "Please select a record to update.",
+                    "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+          
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed updating this record?",
+                "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+        );
+        if (command == CANCEL) return;
+
+
+
+        String user_id = user_id_field.getText().trim();
+        String new_username = username_field.getText().trim();
+        String new_fullname = full_name_field.getText().trim();
+
+
+        if (new_username.isEmpty() || new_fullname.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Username and Full Name cannot be empty.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+
+
+        sql = """
+              UPDATE users
+              SET username = ?,
+                  fullname = ?
+              WHERE userID = ?
+              """;
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, new_username);
+        pstmt.setString(2, new_fullname);
+        pstmt.setInt(3, (int) selected_record[0]);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Record updated successfully.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No record was updated. The user may not exist.",
+                    "Update Failed", JOptionPane.WARNING_MESSAGE);
+        }
+      }catch(Exception ex){
+        JOptionPane.showMessageDialog(null,
+            "Error updating record: " + ex.getMessage(),
+            "Database Error",
+            JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+      }
+    }
 //  String hashed = BCrypt.hashpw("admin123", BCrypt.gensalt(12));
 //      String sql = "insert into users(username,password,fullname) values(?,?,?)";
 //      pstmt = conn.prepareStatement(sql);
