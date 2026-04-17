@@ -64,7 +64,7 @@ public class User extends JFrame{
         change_password_btn = new ButtonBuilder("CHANGE PASSWORD",30, 450, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",250, 450, 200, 50,15);
         
-        new_btn.addActionListener((a) -> {});
+        new_btn.addActionListener((a) -> {addUser();});
         delete_btn.addActionListener((a) -> {});
         change_password_btn.addActionListener((a) -> {});
         update_btn.addActionListener((a) -> {updateRecord();});
@@ -144,7 +144,6 @@ public class User extends JFrame{
           selected_record = new Object[] {
             users_tbl.getValueAt(row, 0),
             users_tbl.getValueAt(row, 1), 
-            users_tbl.getValueAt(row, 2), 
             users_tbl.getValueAt(row, 3)  
           };
         }
@@ -155,6 +154,15 @@ public class User extends JFrame{
         System.out.print(ex.getCause());
       }
     };
+    
+    void addUser(){
+      try{
+        this.setEnabled(false);
+        new NewUser(this,conn);
+      }catch(Exception ex){
+        
+      }
+    }
     
     void updateRecord(){
       int CANCEL = 2;
@@ -177,8 +185,6 @@ public class User extends JFrame{
                 "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
         );
         if (command == CANCEL) return;
-
-
 
         String user_id = user_id_field.getText().trim();
         String new_username = username_field.getText().trim();
@@ -212,6 +218,8 @@ public class User extends JFrame{
             JOptionPane.showMessageDialog(null,
                     "Record updated successfully.",
                     "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+            
         } else {
             JOptionPane.showMessageDialog(null,
                     "No record was updated. The user may not exist.",
@@ -223,6 +231,22 @@ public class User extends JFrame{
             "Database Error",
             JOptionPane.ERROR_MESSAGE);
         ex.printStackTrace();
+      }
+    }
+    
+    void deleteRecord(){}
+    
+    void refreshTable(){
+      try{
+        sql = """
+              SELECT * 
+              FROM users
+              """;
+        pstmt = conn.prepareStatement(sql);
+        users_tbl.refreshTable(pstmt.executeQuery());
+        
+      }catch(Exception ex){
+        
       }
     }
 //  String hashed = BCrypt.hashpw("admin123", BCrypt.gensalt(12));
