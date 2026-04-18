@@ -13,12 +13,13 @@ import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 import java.sql.*;
+import org.mindrot.jbcrypt.BCrypt;
 /**
  *
  * @author user
  */
 public class NewUser extends JFrame{
-  JFrame parent;
+  User parent;
   Connection conn;
   TextFieldBuilder username_field,
                    full_name_field,
@@ -36,14 +37,14 @@ public class NewUser extends JFrame{
   ButtonBuilder confirm_btn, 
                 cancel_btn;
   
-  NewUser(JFrame parent,Connection conn){
+  NewUser(User parent,Connection conn){
     this.conn = conn;
     this.parent = parent;
     
-    username_field = new TextFieldBuilder(false, 130, 50, 320, 50, 15);
-    full_name_field = new TextFieldBuilder(false, 130, 130, 320, 50, 15);
-    password_field = new TextFieldBuilder(false, 130, 210, 320, 50, 15);
-    confirm_password_field = new TextFieldBuilder(false, 130, 290, 320, 50, 15);
+    username_field = new TextFieldBuilder(true, 130, 50, 320, 50, 15);
+    full_name_field = new TextFieldBuilder(true, 130, 130, 320, 50, 15);
+    password_field = new TextFieldBuilder(true, 130, 210, 320, 50, 15);
+    confirm_password_field = new TextFieldBuilder(true, 130, 290, 320, 50, 15);
     
     username_field_label = new LabelBuilder("Username: ",30,50,100,50,15);
     full_name_field_label= new LabelBuilder("Full name: ",30,130,100,50,15);
@@ -57,7 +58,9 @@ public class NewUser extends JFrame{
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 370, 200, 50,15);
     cancel_btn = new ButtonBuilder("CANCEL",250, 370, 200, 50,15);
-    cancel_btn.addActionListener((a) -> {cancelAndClose();});
+    
+    cancel_btn.addActionListener((a) -> {Close();});
+    confirm_btn.addActionListener((a) -> {addUser();});
     
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
@@ -68,7 +71,7 @@ public class NewUser extends JFrame{
     this.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent e) {
-        cancelAndClose();
+        Close();
       }
     });
     
@@ -89,8 +92,61 @@ public class NewUser extends JFrame{
 //    this.add (username_field);
   }
   
-  void cancelAndClose(){
+  void Close(){
     parent.setEnabled(true);
     dispose();
+  }
+  
+  void addUser(){
+    try{
+      String  username = username_field.getText().trim();
+      String  full_name = full_name_field.getText().trim();
+      String  password = password_field.getText().trim();
+      String  confirm_password = confirm_password_field.getText().trim();
+      
+      if(
+          username.isEmpty() ||
+          full_name.isEmpty() ||
+          password.isEmpty() ||
+          confirm_password.isEmpty()
+        ){
+        JOptionPane.showMessageDialog(null, "input needed");
+        return;
+        
+      }else if( !(password.equals(confirm_password)) ){
+        JOptionPane.showMessageDialog(null, "password confirmation not match");
+        return;
+      }
+      
+      if( !(parent.isUsernameAvailable(username)) ) return;
+      
+      String hashed_password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+      
+      sql = """
+            INSERT INTO users
+              (username, password, fullname)
+            values(?,?,?);
+            """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1,username);
+      pstmt.setString(2, hashed_password);
+      pstmt.setString(3, full_name);
+      int rowsAffected = pstmt.executeUpdate();
+
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "New User is successfully added.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          parent.refreshTable();
+          Close();
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "No User is added.",
+                  "Failed", JOptionPane.WARNING_MESSAGE);
+          Close();
+      }
+    }catch (Exception ex){
+      JOptionPane.showMessageDialog(null, "input needed");
+    }
   }
 }

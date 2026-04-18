@@ -64,7 +64,10 @@ public class User extends JFrame{
         change_password_btn = new ButtonBuilder("CHANGE PASSWORD",30, 450, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",250, 450, 200, 50,15);
         
-        new_btn.addActionListener((a) -> {addUser();});
+        new_btn.addActionListener((a) -> {
+          this.setEnabled(false);
+          new NewUser(this,conn);
+        });
         delete_btn.addActionListener((a) -> {});
         change_password_btn.addActionListener((a) -> {});
         update_btn.addActionListener((a) -> {updateRecord();});
@@ -149,20 +152,19 @@ public class User extends JFrame{
         }
         user_id_field.setText(""+selected_record[0]);
         username_field.setText(""+selected_record[1]);
-        full_name_field.setText(""+selected_record[3]);
+        full_name_field.setText(""+selected_record[2]);
       }catch(Exception ex){
         System.out.print(ex.getCause());
       }
     };
     
-    void addUser(){
-      try{
-        this.setEnabled(false);
-        new NewUser(this,conn);
-      }catch(Exception ex){
-        
-      }
-    }
+//    void addUser(){
+//      try{
+//        
+//      }catch(Exception ex){
+//        
+//      }
+//    }
     
     void updateRecord(){
       int CANCEL = 2;
@@ -198,7 +200,7 @@ public class User extends JFrame{
             return;
         }
 
-
+        if( !(isUsernameAvailable(new_username)) ) return;
 
         sql = """
               UPDATE users
@@ -236,7 +238,27 @@ public class User extends JFrame{
     
     void deleteRecord(){}
     
-    void refreshTable(){
+    public boolean isUsernameAvailable(String new_username){
+      try{
+        sql = """
+              SELECT * FROM users 
+              WHERE username = ?
+              """;
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,new_username);
+        rs = pstmt.executeQuery();
+
+        if(rs.next()){
+          JOptionPane.showMessageDialog(null, "username is already been used","Warning",JOptionPane.WARNING_MESSAGE);
+          return false;
+        }
+        return true;
+      }catch(Exception ex){
+        return false;
+      }
+    }
+    
+    public void refreshTable(){
       try{
         sql = """
               SELECT * 
@@ -249,12 +271,5 @@ public class User extends JFrame{
         
       }
     }
-//  String hashed = BCrypt.hashpw("admin123", BCrypt.gensalt(12));
-//      String sql = "insert into users(username,password,fullname) values(?,?,?)";
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setString(1, "admin");
-//      pstmt.setString(2, hashed);
-//      pstmt.setString(3, "admin");
-//      
-//      pstmt.executeUpdate();
+
 }
