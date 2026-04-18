@@ -98,7 +98,12 @@ public class NewUser extends JFrame{
   }
   
   void addUser(){
+    
     try{
+      
+      
+      
+      
       String  username = username_field.getText().trim();
       String  full_name = full_name_field.getText().trim();
       String  password = password_field.getText().trim();

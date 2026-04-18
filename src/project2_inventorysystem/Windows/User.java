@@ -68,7 +68,7 @@ public class User extends JFrame{
           this.setEnabled(false);
           new NewUser(this,conn);
         });
-        delete_btn.addActionListener((a) -> {});
+        delete_btn.addActionListener((a) -> {deleteRecord();});
         change_password_btn.addActionListener((a) -> {});
         update_btn.addActionListener((a) -> {updateRecord();});
 
@@ -173,11 +173,13 @@ public class User extends JFrame{
         int row = users_tbl.getSelectedRow();
         if (row != -1) {
             selected_record = new Object[]{
-                users_tbl.getValueAt(row, 0)
+                users_tbl.getValueAt(row, 0),
+                users_tbl.getValueAt(row, 1),
+                users_tbl.getValueAt(row, 2)
             };
         } else {
             JOptionPane.showMessageDialog(null,
-                    "Please select a record to update.",
+                    "Please select a record first.",
                     "No Selection", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -199,9 +201,17 @@ public class User extends JFrame{
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if( !(isUsernameAvailable(new_username)) ) return;
-
+        
+        if( 
+            new_username.equals(selected_record[1]) || 
+            new_fullname.equals(selected_record[2]) 
+          ){
+          JOptionPane.showMessageDialog(null,
+                    "No changes to update.",
+                    "Message", JOptionPane.INFORMATION_MESSAGE);
+          return;
+        }else  if(!(isUsernameAvailable(new_username)) ) return;
+        
         sql = """
               UPDATE users
               SET username = ?,
@@ -236,7 +246,60 @@ public class User extends JFrame{
       }
     }
     
-    void deleteRecord(){}
+    void deleteRecord(){
+      int CANCEL = 2;
+      try{
+        int row = users_tbl.getSelectedRow();
+        if (row != -1) {
+            selected_record = new Object[]{
+                users_tbl.getValueAt(row, 0)
+            };
+        } else {
+            JOptionPane.showMessageDialog(null,
+                "Please select a record first.",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        if( ((int)selected_record[0]) == 1){
+          JOptionPane.showMessageDialog(null,
+                    "Cannot delete admin user.",
+                    "Failed", JOptionPane.WARNING_MESSAGE);
+          return ;
+        }
+        
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed deleting this record?",
+                "DELETE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION 
+        );
+        if (command == CANCEL) return;
+        
+        sql = """
+              DELETE FROM users
+              WHERE userID = ?;
+              """;
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, (int) selected_record[0]);
+        
+        int rowsAffected = pstmt.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "User "+ selected_record[0] +" successfully deleted.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No User is added.",
+                    "Failed", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    
+    }
     
     public boolean isUsernameAvailable(String new_username){
       try{
