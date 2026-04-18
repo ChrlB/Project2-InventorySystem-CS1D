@@ -10,12 +10,14 @@ import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 import project2_inventorysystem.Windows.User;
-
+import java.sql.*;
+import org.mindrot.jbcrypt.BCrypt;
 /**
  *
  * @author user
  */
 public class ChangePassword extends JFrame{
+  Connection conn;
   User user_window;
   int userID;
   
@@ -29,40 +31,43 @@ public class ChangePassword extends JFrame{
                 confirm_password_field_label;
   
   
+  String sql;
+  PreparedStatement pstmt;
+  ResultSet rs;
   
-  public ChangePassword(User user_window,int userID){
+  public ChangePassword(User user_window,int userID, Connection conn){
+    this.conn = conn;
     this.user_window = user_window;
     this.userID = userID;
     
     
-    password_field = new TextFieldBuilder(true, 130, 50, 320, 50, 15);
-    confirm_password_field = new TextFieldBuilder(true, 130, 130, 320, 50, 15);
+    password_field = new TextFieldBuilder(true, 180, 50, 320, 50, 15);
+    confirm_password_field = new TextFieldBuilder(true, 180, 130, 320, 50, 15);
     
-    password_field_label= new LabelBuilder("New Password: ",30,50,100,50,15);
-    confirm_password_field_label= new LabelBuilder("Confirm: ",30,130,100,50,15);
+    password_field_label= new LabelBuilder("New Password: ",30,50,200,50,15);
+    confirm_password_field_label= new LabelBuilder("Confirm: ",30,130,200,50,15);
     
     password_field_label.setForeground(new Color(0XB58863));
     confirm_password_field_label.setForeground(new Color(0XB58863));
     
-    confirm_btn = new ButtonBuilder("CONFIRM",30, 210, 200, 50,15);
-    cancel_btn = new ButtonBuilder("CANCEL",250, 210, 200, 50,15);
+    confirm_btn = new ButtonBuilder("CONFIRM",30, 210, 225, 50,15);
+    cancel_btn = new ButtonBuilder("CANCEL",275, 210, 225, 50,15);
     
     cancel_btn.addActionListener((a) -> {close();});
-    confirm_btn.addActionListener((a) -> {addUser();});
+    confirm_btn.addActionListener((a) -> {changeUserPassword();});
     
     
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
     this.setTitle("CHANGE PASSWORD FORM");
-    this.setSize(500,330);
+    this.setSize(550,330);
     this.getContentPane().setBackground(new Color(0x293A3E));
     this.setResizable(false);
     
     this.addWindowListener(new java.awt.event.WindowAdapter() {
       @Override
       public void windowClosing(java.awt.event.WindowEvent e) {
-        user_window.setEnabled(true);
-        dispose();
+        close();
       }
     });
     
@@ -78,10 +83,54 @@ public class ChangePassword extends JFrame{
   }
   
   void close(){
-    
+    user_window.setEnabled(true);
+    dispose();
   }
   
-  void addUser(){
-    
+  void changeUserPassword(){
+    try{
+      
+      String  password = password_field.getText().trim();
+      String  confirm_password = confirm_password_field.getText().trim();
+      
+      if( password.isEmpty() || confirm_password.isEmpty() ){
+        JOptionPane.showMessageDialog(null, "input needed");
+        return;
+        
+      }else if( !(password.equals(confirm_password)) ){
+        JOptionPane.showMessageDialog(null, "password confirmation not match");
+        return;
+      }
+      
+      String hashed_password = BCrypt.hashpw(password, BCrypt.gensalt(12));
+      
+      
+      sql = """
+            UPDATE users
+            SET password = ?
+            WHERE userID = ?;
+            """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1,hashed_password);
+      pstmt.setInt(2,userID);
+      
+      int rowsAffected = pstmt.executeUpdate();
+      
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "User Password successfully Change.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          user_window.refreshTable();
+          close();
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "Changing Password Unsuccessfull.",
+                  "Failed", JOptionPane.WARNING_MESSAGE);
+          close();
+      }
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
   }
+  
 }

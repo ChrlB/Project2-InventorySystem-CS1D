@@ -104,7 +104,7 @@ public class User extends JFrame{
         
         users_tbl = new TableBuilder(rs);
         users_tbl.addMouseListener(new MouseAdapter() {
-          @Override
+         @Override
           public void mouseReleased(MouseEvent e) {  
               showSelectedRecord();
           }
@@ -310,7 +310,7 @@ public class User extends JFrame{
           users_tbl.getValueAt(row, 0)
         };
         
-        new ChangePassword(this, (int)selected_record[0]);
+        new ChangePassword(this, (int)selected_record[0], conn);
         this.setEnabled(false);
         
       }catch(Exception ex){
