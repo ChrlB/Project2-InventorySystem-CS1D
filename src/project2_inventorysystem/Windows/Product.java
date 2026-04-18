@@ -21,7 +21,8 @@ public class Product extends JFrame{
   ButtonBuilder add_btn,
                 delete_btn,
                 update_btn,
-                restock_btn;
+                restock_btn,
+                add_category_btn;
   TextFieldBuilder product_id_field,
                    product_name_field, 
                    category_name_field,
@@ -49,6 +50,7 @@ public class Product extends JFrame{
       delete_btn = new ButtonBuilder("DELETE", 250, 370, 200, 50,15);
       update_btn = new ButtonBuilder("UPDATE", 30, 450, 200, 50,15);
       restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
+      add_category_btn = new ButtonBuilder("ADD CATEGORY", 1040, 25, 200, 50,15);
       
       product_id_field = new TextFieldBuilder(false, 200, 50, 250, 50, 15); 
       product_name_field = new TextFieldBuilder(true, 200, 110, 250, 50, 15);
@@ -62,7 +64,8 @@ public class Product extends JFrame{
       category_name_field_label = new LabelBuilder("Category Name: ",30,170,200,50,15);
       unit_price_field_label = new LabelBuilder("Unit Price: ",30,230,200,50,15);
       stock_quantity_field_label = new LabelBuilder("Stock: ",30,290,200,50,15);
-                   
+      
+      header.add(add_category_btn);             
                    
       product_form_panel = new JPanel();
       product_form_panel.setBounds(0, 100, 500, 550);
