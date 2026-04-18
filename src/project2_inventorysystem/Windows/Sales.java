@@ -19,7 +19,11 @@ public class Sales extends JFrame{
     Header header;
     
    public Sales(int userID,Connection conn){
-      try{   
+      try{            
+        this.conn = conn;
+        user_ID = userID;
+        header = new Header();
+          
          this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
           public void windowClosing(java.awt.event.WindowEvent e) {
@@ -28,17 +32,15 @@ public class Sales extends JFrame{
           }
         });
           
-          
-        this.conn = conn;
-        user_ID = userID;
-        header = new Header();
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("USER");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(1270,700);
         this.getContentPane().setBackground(new Color(0xD3C3B9));
-      
+        
+        
+        this.add (header);
         this.setVisible(true);
       }catch(Exception ex){
         System.out.println(ex);
