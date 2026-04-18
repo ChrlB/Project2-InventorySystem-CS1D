@@ -24,7 +24,8 @@ public class Login extends JFrame {
   String sql;
   TextFieldBuilder username_field;
   JPasswordField password_field;
-  
+  Header header;
+  IconBuilder logo_icon;
   
   public Login(Connection conn){
     
@@ -32,25 +33,28 @@ public class Login extends JFrame {
       this.conn = conn;
 //      String username = "admin";
 //      String pass = "admin123";
+      //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
+      header = new Header();
       
-      username_field = new TextFieldBuilder (true ,50, 100 ,200,50,15);
+      username_field = new TextFieldBuilder (true ,200, 150 ,200,50,15);
       password_field = new JPasswordField (15);
       password_field.setEchoChar('*');
-      password_field.setBounds(50, 160, 200, 50);
+      password_field.setBounds(200, 210, 200, 50);
       
-      login_btn = new ButtonBuilder("LOGIN",260,150,100,50,14);
+      login_btn = new ButtonBuilder("LOGIN",200,280,200,50,14);
       login_btn.addActionListener((a)-> login());
      
        
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);
       this.setSize(700,500);
-      this.getContentPane().setBackground(new Color(0x293A3E));
+      this.getContentPane().setBackground(new Color(0XB58863));
       this.add(password_field);
       this.add(login_btn);
       this.setVisible(true);
       this.add (username_field);
-      
+      this.add(header);
+      //this.add(logo_icon);
       
     }catch(Exception ex){
       System.out.print(ex.getCause());
