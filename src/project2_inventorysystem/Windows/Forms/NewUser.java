@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.Windows.Forms;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,6 +14,7 @@ import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
+import project2_inventorysystem.Windows.User;
 /**
  *
  * @author user
@@ -37,7 +38,7 @@ public class NewUser extends JFrame{
   ButtonBuilder confirm_btn, 
                 cancel_btn;
   
-  NewUser(User parent,Connection conn){
+  public NewUser(User parent,Connection conn){
     this.conn = conn;
     this.parent = parent;
     
@@ -64,6 +65,7 @@ public class NewUser extends JFrame{
     
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
+    this.setTitle("NEW USER FORM");
     this.setSize(500,500);
     this.getContentPane().setBackground(new Color(0x293A3E));
     this.setResizable(false);
@@ -100,10 +102,6 @@ public class NewUser extends JFrame{
   void addUser(){
     
     try{
-      
-      
-      
-      
       String  username = username_field.getText().trim();
       String  full_name = full_name_field.getText().trim();
       String  password = password_field.getText().trim();

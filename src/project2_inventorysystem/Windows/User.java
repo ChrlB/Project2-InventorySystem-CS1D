@@ -4,12 +4,14 @@
  */
 package project2_inventorysystem.Windows;
 
+import project2_inventorysystem.Windows.Forms.NewUser;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
+import project2_inventorysystem.Windows.Forms.ChangePassword;
 import project2_inventorysystem.Windows.MyComponents.*;
 
 
@@ -69,7 +71,7 @@ public class User extends JFrame{
           new NewUser(this,conn);
         });
         delete_btn.addActionListener((a) -> {deleteRecord();});
-        change_password_btn.addActionListener((a) -> {});
+        change_password_btn.addActionListener((a) -> {changePassword();});
         update_btn.addActionListener((a) -> {updateRecord();});
 
         user_form_panel = new JPanel();
@@ -94,7 +96,7 @@ public class User extends JFrame{
 
 
         sql = """
-              SELECT * 
+              SELECT *
               FROM users
               """;
         pstmt = conn.prepareStatement(sql);
@@ -122,7 +124,7 @@ public class User extends JFrame{
         });
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setTitle("User");
+        this.setTitle("USER");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(1270,700);
@@ -158,31 +160,23 @@ public class User extends JFrame{
       }
     };
     
-//    void addUser(){
-//      try{
-//        
-//      }catch(Exception ex){
-//        
-//      }
-//    }
     
     void updateRecord(){
       int CANCEL = 2;
       try {
-        
         int row = users_tbl.getSelectedRow();
-        if (row != -1) {
-            selected_record = new Object[]{
-                users_tbl.getValueAt(row, 0),
-                users_tbl.getValueAt(row, 1),
-                users_tbl.getValueAt(row, 2)
-            };
-        } else {
-            JOptionPane.showMessageDialog(null,
-                    "Please select a record first.",
-                    "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+        
+        selected_record = new Object[]{
+          users_tbl.getValueAt(row, 0),
+          users_tbl.getValueAt(row, 1),
+          users_tbl.getValueAt(row, 2)
+        };
           
         int command = JOptionPane.showConfirmDialog(null,
                 "Do you want to proceed updating this record?",
@@ -250,16 +244,16 @@ public class User extends JFrame{
       int CANCEL = 2;
       try{
         int row = users_tbl.getSelectedRow();
-        if (row != -1) {
-            selected_record = new Object[]{
-                users_tbl.getValueAt(row, 0)
-            };
-        } else {
-            JOptionPane.showMessageDialog(null,
-                "Please select a record first.",
-                "No Selection", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+        
+        selected_record = new Object[]{
+          users_tbl.getValueAt(row, 0)
+        };
         
         if( ((int)selected_record[0]) == 1){
           JOptionPane.showMessageDialog(null,
@@ -284,14 +278,15 @@ public class User extends JFrame{
         int rowsAffected = pstmt.executeUpdate();
         
         if (rowsAffected > 0) {
-            JOptionPane.showMessageDialog(null,
-                    "User "+ selected_record[0] +" successfully deleted.",
-                    "Success", JOptionPane.INFORMATION_MESSAGE);
-            refreshTable();
+          JOptionPane.showMessageDialog(null,
+                ("User "+ selected_record[0] +" successfully deleted."),
+                "Success", JOptionPane.INFORMATION_MESSAGE);
+          
+          refreshTable();
         } else {
-            JOptionPane.showMessageDialog(null,
-                    "No User is added.",
-                    "Failed", JOptionPane.WARNING_MESSAGE);
+          JOptionPane.showMessageDialog(null,
+                "No User is added.",
+                "Failed", JOptionPane.WARNING_MESSAGE);
         }
         
         
@@ -299,6 +294,28 @@ public class User extends JFrame{
         ex.printStackTrace();
       }
     
+    }
+    
+    void changePassword(){
+      try{
+        int row = users_tbl.getSelectedRow();
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+        
+        selected_record = new Object[]{
+          users_tbl.getValueAt(row, 0)
+        };
+        
+        new ChangePassword(this, (int)selected_record[0]);
+        this.setEnabled(false);
+        
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
     }
     
     public boolean isUsernameAvailable(String new_username){
