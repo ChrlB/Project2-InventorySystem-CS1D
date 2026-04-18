@@ -26,6 +26,8 @@ public class Login extends JFrame {
   JPasswordField password_field;
   Header header;
   IconBuilder logo_icon;
+  LabelBuilder username_label,
+               password_label;
   
   public Login(Connection conn){
     
@@ -43,11 +45,16 @@ public class Login extends JFrame {
       
       login_btn = new ButtonBuilder("LOGIN",200,280,200,50,14);
       login_btn.addActionListener((a)-> login());
+      
+      username_label = new LabelBuilder("Username: ",30,150,200,50,15);
+      password_label = new LabelBuilder("Password: ",30,210,200,50,15);
      
        
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);
-      this.setSize(700,500);
+      this.setSize(500,500);
+      this.setResizable(false);
+      this.setTitle("LOGIN");
       this.getContentPane().setBackground(new Color(0XB58863));
       this.add(password_field);
       this.add(login_btn);
@@ -55,6 +62,8 @@ public class Login extends JFrame {
       this.add (username_field);
       this.add(header);
       //this.add(logo_icon);
+      this.add(username_label);
+      this.add(password_label);
       
     }catch(Exception ex){
       System.out.print(ex.getCause());
