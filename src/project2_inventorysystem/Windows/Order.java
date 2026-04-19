@@ -188,6 +188,7 @@ public class Order extends JFrame{
       this.setResizable(false);
       this.setSize(1270,650);
       this.getContentPane().setBackground(new Color(0xD3C3B9));
+      this.setLocationRelativeTo(null);
 
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override

@@ -55,7 +55,7 @@ public class Login extends JFrame {
       show_password_btn = new JButton(null,scaled_hidden_icon);
       show_password_btn.setBounds(378,220,32,50);
       show_password_btn.setFocusable(false);
-      show_password_btn.addActionListener((a) -> {showHidePassword();});
+      show_password_btn.addActionListener((a) -> showHidePassword());
       
       username_field = new TextFieldBuilder (true ,125, 150 ,285,50,15);
       password_field = new JPasswordField (15);
@@ -65,26 +65,32 @@ public class Login extends JFrame {
       password_field.setForeground(new Color(0x10232A));
       
       login_btn = new ButtonBuilder("LOGIN",30,290,380,60,17);
-      login_btn.addActionListener((a)-> login());
+      login_btn.addActionListener((a)->  login() );
       
       username_label = new LabelBuilder("Username: ",30,150,200,50,17);
       password_label = new LabelBuilder("Password: ",30,220,200,50,17);
      
-       
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);
       this.setSize(470,420);
       this.setResizable(false);
       this.setTitle("LOGIN");
       this.getContentPane().setBackground(new Color(0XB58863));
-      this.add(password_field);
-      this.add(login_btn);
-      this.setVisible(true);
-      this.add (username_field);
+      this.setLocationRelativeTo(null);
+      
       this.add(header);
+      
+      this.add(password_field);
+      this.add (username_field);
+      
+      this.add(login_btn);
       this.add(show_password_btn);
+      
       this.add(username_label);
       this.add(password_label);
+      
+      this.setVisible(true);
+      
       
     }catch(Exception ex){
       System.out.print(ex.getCause());

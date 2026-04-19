@@ -61,10 +61,10 @@ public class User extends JFrame{
         full_name_field = new TextFieldBuilder(true, 130, 210, 320, 50, 15);
         
         
-        new_btn = new ButtonBuilder("NEW",30, 370, 200, 50,15);
-        update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
-        change_password_btn = new ButtonBuilder("CHANGE PASSWORD",30, 450, 200, 50,15);
-        delete_btn = new ButtonBuilder("DELETE",250, 450, 200, 50,15);
+        new_btn = new ButtonBuilder("NEW",30, 290, 200, 50,15);
+        update_btn = new ButtonBuilder("UPDATE",250, 290, 200, 50,15);
+        change_password_btn = new ButtonBuilder("CHANGE PASSWORD",30, 370, 200, 50,15);
+        delete_btn = new ButtonBuilder("DELETE",250, 370, 200, 50,15);
         
         new_btn.addActionListener((a) -> {
           this.setEnabled(false);
@@ -76,7 +76,7 @@ public class User extends JFrame{
 
         user_form_panel = new JPanel();
         user_form_panel.setLayout(null);
-        user_form_panel.setBounds(0,100, 480, 650);
+        user_form_panel.setBounds(0,100, 480, 450);
         user_form_panel.setBackground(new Color(0XB58863));
 
 
@@ -111,7 +111,7 @@ public class User extends JFrame{
         });
         
         users_tbl_scrollpane = new JScrollPane(users_tbl);
-        users_tbl_scrollpane.setBounds(500,150,725,500);
+        users_tbl_scrollpane.setBounds(500,150,725,350);
 
 
 
@@ -127,8 +127,9 @@ public class User extends JFrame{
         this.setTitle("USER");
         this.setLayout(null);
         this.setResizable(false);
-        this.setSize(1270,700);
+        this.setSize(1270,580);
         this.getContentPane().setBackground(new Color(0xD3C3B9));
+        this.setLocationRelativeTo(null);
         
         this.add(header);
         this.add(user_form_panel);
@@ -329,7 +330,9 @@ public class User extends JFrame{
         rs = pstmt.executeQuery();
 
         if(rs.next()){
-          JOptionPane.showMessageDialog(null, "username is already been used","Warning",JOptionPane.WARNING_MESSAGE);
+          JOptionPane.showMessageDialog(null, 
+                  "username is already been used",
+                  "Warning",JOptionPane.WARNING_MESSAGE);
           return false;
         }
         return true;

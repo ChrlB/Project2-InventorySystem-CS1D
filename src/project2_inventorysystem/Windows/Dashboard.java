@@ -116,6 +116,7 @@ public class Dashboard extends JFrame{
       this.setResizable(false);
       this.setSize(1270,650);
       this.getContentPane().setBackground(new Color(0xD3C3B9));
+      this.setLocationRelativeTo(null);
       //this.getContentPane().setBackground(new Color(0xFFE0B2));
       
       this.addWindowListener(new java.awt.event.WindowAdapter() {

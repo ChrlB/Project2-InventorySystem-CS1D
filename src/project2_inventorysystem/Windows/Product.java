@@ -6,6 +6,8 @@ package project2_inventorysystem.Windows;
 
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
 
@@ -22,14 +24,16 @@ public class Product extends JFrame{
                 delete_btn,
                 update_btn,
                 restock_btn,
-                add_category_btn,
+                category_window_btn,
                 add_product_btn;
+  
   TextFieldBuilder product_id_field,
                    product_name_field, 
                    unit_price_field, 
                    stock_quantity_field;
   String sql;
-  ResultSet rs;
+  ResultSet rs,
+            products_rs;
   PreparedStatement pstmt;
   TableBuilder products_tbl;
   JScrollPane product_tbl_scroll_pane;
@@ -41,6 +45,7 @@ public class Product extends JFrame{
                    stock_quantity_field_label;
   
   ComboBoxBuilder product_category_combobox;
+  Object[] selected_record;
   
   Product(int userID, Connection conn){
     try{
@@ -63,14 +68,21 @@ public class Product extends JFrame{
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
       
-      add_category_btn = new ButtonBuilder("PRODUCT CATEGORY", 1040, 25, 200, 50,15);
+      category_window_btn = new ButtonBuilder("PRODUCT CATEGORY", 1040, 25, 200, 50,15);
       add_product_btn = new ButtonBuilder("ADD PRODUCT", 800, 25, 200, 50,15);
 
-//      add_btn = new ButtonBuilder("ADD", 30, 370, 200, 50,15);
       delete_btn = new ButtonBuilder("DELETE", 30, 370, 200, 50,15);
       update_btn = new ButtonBuilder("UPDATE", 250, 370, 200, 50,15);
       deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 200, 50,15);
       restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
+      
+      category_window_btn.addActionListener((a) -> { });
+      add_product_btn.addActionListener((a) -> {});
+      
+      deduct_btn.addActionListener((a) -> {});
+      delete_btn.addActionListener((a) -> {});
+      update_btn.addActionListener((a) -> {});
+      restock_btn.addActionListener((a) -> {});
       
 
       product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 
@@ -85,11 +97,11 @@ public class Product extends JFrame{
       unit_price_field_label = new LabelBuilder("Unit Price: ",30,230,200,50,15);
       stock_quantity_field_label = new LabelBuilder("Stock: ",30,290,200,50,15);
 
-      header.add(add_category_btn);   
+      header.add(category_window_btn);   
       header.add(add_product_btn);
 
       product_form_panel = new JPanel();
-      product_form_panel.setBounds(0, 100, 500, 550);
+      product_form_panel.setBounds(0, 100, 480, 550);
       product_form_panel.setBackground (new Color(0XB58863));
       product_form_panel.setLayout(null);
 
@@ -126,11 +138,19 @@ public class Product extends JFrame{
       """;
       
       pstmt = conn.prepareStatement(sql);
-      rs = pstmt.executeQuery();
+      products_rs = pstmt.executeQuery();
 
-      products_tbl = new TableBuilder(rs);
+      products_tbl = new TableBuilder(products_rs);
+      
+      products_tbl.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseReleased(MouseEvent e) {  
+            showSelectedRecord();
+        }
+      });
+      
       product_tbl_scroll_pane = new JScrollPane(products_tbl);
-      product_tbl_scroll_pane.setBounds(510, 150, 700, 400);
+      product_tbl_scroll_pane.setBounds(490, 150, 740, 455);
 
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -145,8 +165,10 @@ public class Product extends JFrame{
       this.setTitle("PRODUCT");
       this.setLayout(null);
       this.setResizable(false);
-      this.setSize(1270,650);
+      this.setSize(1270,680);
       this.getContentPane().setBackground(new Color(0xD3C3B9));
+      this.setLocationRelativeTo(null);
+      
       this.add(header);
       this.add(product_form_panel);
       this.add(product_tbl_scroll_pane);
@@ -155,6 +177,34 @@ public class Product extends JFrame{
 
     } catch(Exception ex) {
 
+    }
+  }
+  
+  public void showSelectedRecord(){
+    try{
+      int row = products_tbl.getSelectedRow();
+
+      if (row != -1) {
+
+        selected_record = new Object[] {
+          products_tbl.getValueAt(row, 0),
+          products_tbl.getValueAt(row, 1), 
+          products_tbl.getValueAt(row, 2), 
+          products_tbl.getValueAt(row, 3),
+          products_tbl.getValueAt(row, 5)  
+        };
+      }
+      
+      product_id_field.setText(""+selected_record[0]);
+      product_name_field.setText(""+selected_record[1]);
+      product_category_combobox.setSelectedItem(selected_record[2]);
+      unit_price_field.setText(""+selected_record[3]);
+      stock_quantity_field.setText(""+selected_record[4]);
+        
+      
+      
+    }catch(Exception ex){
+      System.out.print(ex.getCause());
     }
   }
   
