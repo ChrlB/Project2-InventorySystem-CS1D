@@ -5,9 +5,7 @@
 package project2_inventorysystem.Windows.Forms;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import javax.swing.*;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -26,7 +24,7 @@ public class NewUser extends JFrame{
                    full_name_field,
                    password_field,
                    confirm_password_field;
-  ResultSet rs;
+  
   String sql;
   PreparedStatement pstmt;
   

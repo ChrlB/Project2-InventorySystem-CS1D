@@ -10,8 +10,11 @@ package project2_inventorysystem.Windows;
  */
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
+import java.awt.Image;
 import javax.swing.JFrame;
 import java.sql.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
@@ -20,14 +23,20 @@ public class Login extends JFrame {
   PreparedStatement pstmt;
   ResultSet rs ;
   ButtonBuilder login_btn;
+  JButton show_password_btn;
   Connection conn;
   String sql;
   TextFieldBuilder username_field;
   JPasswordField password_field;
   Header header;
-  IconBuilder logo_icon;
+  IconBuilder hidden_icon,
+          logo_icon;
   LabelBuilder username_label,
                password_label;
+  
+  ImageIcon scaled_hidden_icon,
+            scaled_show_icon;
+  boolean isPasswordHidden = true;
   
   public Login(Connection conn){
     
@@ -36,23 +45,36 @@ public class Login extends JFrame {
 //      String username = "admin";
 //      String pass = "admin123";
       //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
+      
       header = new Header();
       
-      username_field = new TextFieldBuilder (true ,200, 150 ,200,50,15);
+      //hidden_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/hidden.png",10,10,40,40);
+      ImageIcon hidden_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/hidden.png"));
+      ImageIcon show_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/show.png"));
+      
+      scaled_hidden_icon = new ImageIcon(hidden_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
+      scaled_show_icon = new ImageIcon(show_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
+      
+      show_password_btn = new JButton(null,scaled_hidden_icon);
+      show_password_btn.setBounds(378,220,32,50);
+      show_password_btn.setFocusable(false);
+      show_password_btn.addActionListener((a) -> {showHidePassword();});
+      
+      username_field = new TextFieldBuilder (true ,125, 150 ,285,50,15);
       password_field = new JPasswordField (15);
       password_field.setEchoChar('*');
-      password_field.setBounds(200, 210, 200, 50);
+      password_field.setBounds(125, 220, 250, 50);
       
-      login_btn = new ButtonBuilder("LOGIN",200,280,200,50,14);
+      login_btn = new ButtonBuilder("LOGIN",30,290,380,60,17);
       login_btn.addActionListener((a)-> login());
       
-      username_label = new LabelBuilder("Username: ",30,150,200,50,15);
-      password_label = new LabelBuilder("Password: ",30,210,200,50,15);
+      username_label = new LabelBuilder("Username: ",30,150,200,50,17);
+      password_label = new LabelBuilder("Password: ",30,220,200,50,17);
      
        
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);
-      this.setSize(500,500);
+      this.setSize(470,420);
       this.setResizable(false);
       this.setTitle("LOGIN");
       this.getContentPane().setBackground(new Color(0XB58863));
@@ -61,12 +83,24 @@ public class Login extends JFrame {
       this.setVisible(true);
       this.add (username_field);
       this.add(header);
-      //this.add(logo_icon);
+      this.add(show_password_btn);
       this.add(username_label);
       this.add(password_label);
       
     }catch(Exception ex){
       System.out.print(ex.getCause());
+    }
+  }
+  
+  void showHidePassword(){
+    if(isPasswordHidden){
+      show_password_btn.setIcon(scaled_show_icon);
+      isPasswordHidden = false;
+      password_field.setEchoChar((char)0);
+    }else{
+      show_password_btn.setIcon(scaled_hidden_icon);
+      isPasswordHidden = true;
+      password_field.setEchoChar('*');
     }
   }
   

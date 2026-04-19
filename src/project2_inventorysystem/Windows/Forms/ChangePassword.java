@@ -33,7 +33,6 @@ public class ChangePassword extends JFrame{
   
   String sql;
   PreparedStatement pstmt;
-  ResultSet rs;
   
   public ChangePassword(User user_window,int userID, Connection conn){
     this.conn = conn;
