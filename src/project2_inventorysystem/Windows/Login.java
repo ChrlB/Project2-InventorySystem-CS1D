@@ -10,6 +10,7 @@ package project2_inventorysystem.Windows;
  */
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import javax.swing.JFrame;
 import java.sql.*;
@@ -42,13 +43,9 @@ public class Login extends JFrame {
     
     try{
       this.conn = conn;
-//      String username = "admin";
-//      String pass = "admin123";
-      //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
       
       header = new Header();
       
-      //hidden_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/hidden.png",10,10,40,40);
       ImageIcon hidden_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/hidden.png"));
       ImageIcon show_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/show.png"));
       
@@ -64,6 +61,8 @@ public class Login extends JFrame {
       password_field = new JPasswordField (15);
       password_field.setEchoChar('*');
       password_field.setBounds(125, 220, 250, 50);
+      password_field.setFont(new Font("Arial", Font.BOLD, 16));
+      password_field.setForeground(new Color(0x10232A));
       
       login_btn = new ButtonBuilder("LOGIN",30,290,380,60,17);
       login_btn.addActionListener((a)-> login());
