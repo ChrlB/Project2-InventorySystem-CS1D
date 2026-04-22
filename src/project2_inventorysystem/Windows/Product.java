@@ -51,6 +51,7 @@ public class Product extends JFrame{
     try{
       this.conn = conn;
       user_ID = userID;
+      
       header = new Header();
 
 
@@ -76,13 +77,13 @@ public class Product extends JFrame{
       deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 200, 50,15);
       restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
       
-      category_window_btn.addActionListener((a) -> { });
-      add_product_btn.addActionListener((a) -> {});
+      category_window_btn.addActionListener( (a) -> { new Category();} );
+      add_product_btn.addActionListener( (a) -> {} );
       
-      deduct_btn.addActionListener((a) -> {});
-      delete_btn.addActionListener((a) -> {});
-      update_btn.addActionListener((a) -> {});
-      restock_btn.addActionListener((a) -> {});
+      deduct_btn.addActionListener( (a) -> {} );
+      delete_btn.addActionListener( (a) -> {} );
+      update_btn.addActionListener( (a) -> {} );
+      restock_btn.addActionListener( (a) -> {} );
       
 
       product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 

@@ -70,13 +70,22 @@ public class Dashboard extends JFrame{
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
       
+//      sql = """
+//        SELECT 
+//            productID,
+//            productName as name,
+//            IF(stockQuantity = 0,'OUT OF STOCK',stockQuantity) as stocks 
+//        FROM products WHERE stockQuantity < 11;
+//        """;
       sql = """
         SELECT 
-            productID,
-            productName as name,
-            IF(stockQuantity = 0,'OUT OF STOCK',stockQuantity) as stocks 
-        FROM products WHERE stockQuantity < 11;
-        """;
+            p.productID,
+            p.productName as name,
+            IF(p.stockQuantity = 0,'OUT OF STOCK',p.stockQuantity) as stocks 
+        FROM products as p 
+        inner join categories as c on p.categoryName = c.categoryName
+        WHERE p.stockQuantity < c.lowStockthreshold;
+       """;
       
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
@@ -85,15 +94,49 @@ public class Dashboard extends JFrame{
       low_stocks_tbl.setBounds(420,200,800,170);
       
       
+//      sql = """
+//        SELECT 
+//            productID,
+//            productName as name,
+//            unitPrice as price,
+//            categoryName as category 
+//        FROM products WHERE stockQuantity < 11;
+//        """;
+      
       sql = """
         SELECT 
-            productID,
-            productName as name,
-            unitPrice as price,
-            categoryName as category 
-        FROM products WHERE stockQuantity < 11;
-        """;
-      
+          P.productID,
+          P.productName       AS name,
+          P.unitPrice         AS price,
+          P.categoryName      AS category,
+          S.total_sale
+        FROM products AS P
+        
+        INNER JOIN (
+        
+          SELECT
+              productID,
+              SUM(quantity) AS total_sale
+          FROM sales
+          GROUP BY productID
+        ) AS S ON P.productID = S.productID
+        
+        WHERE S.total_sale = (
+          SELECT MAX(sales.total_sale)
+          FROM products AS product
+
+          INNER JOIN (
+            SELECT
+              productID,
+              SUM(quantity) AS total_sale
+            FROM sales
+            GROUP BY productID
+          ) AS sales ON product.productID = sales.productID
+
+          WHERE product.categoryName = P.categoryName  
+        );
+      """;
+
       //sql ="Select * from categories";
       
       pstmt = conn.prepareStatement(sql);
