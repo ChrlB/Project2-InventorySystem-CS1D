@@ -61,7 +61,7 @@ public class Product extends JFrame{
       sql = """
         SELECT 
           categoryName
-        FROM categories;
+        FROM tbl_categories;
       """;
 
       pstmt = conn.prepareStatement(sql);
@@ -135,8 +135,8 @@ public class Product extends JFrame{
             c.unit,
             p.stockQuantity as stock,
             DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-        FROM products as p
-        inner join categories as c 
+        FROM tbl_products as p
+        inner join tbl_categories as c 
             on  p.categoryName = c.categoryName
         WHERE p.isActive = 1;
       """;
@@ -223,8 +223,8 @@ public class Product extends JFrame{
             c.unit,
             p.stockQuantity as stock,
             DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-        FROM products as p
-        inner join categories as c 
+        FROM tbl_products as p
+        inner join tbl_categories as c 
             on  p.categoryName = c.categoryName
         WHERE p.isActive = 1;
       """;
@@ -333,7 +333,7 @@ public class Product extends JFrame{
       }
       
       sql = """
-            UPDATE products
+            UPDATE tbl_products
             SET
               productName = ?,
               categoryName = ?,
@@ -399,14 +399,14 @@ public class Product extends JFrame{
       
       if(command == 0){
         sql = """
-          UPDATE products
+          UPDATE tbl_products
           SET isActive = 0
           WHERE productID = ?;
         """;
         message = "Product successfully Archive.";
       }else{
         sql = """
-          DELETE products
+          DELETE tbl_products
           WHERE productID = ?;
         """;
         message = "Product successfully deleted.";

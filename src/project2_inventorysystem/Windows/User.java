@@ -97,7 +97,7 @@ public class User extends JFrame{
 
         sql = """
               SELECT *
-              FROM users
+              FROM tbl_users
               """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
@@ -208,7 +208,7 @@ public class User extends JFrame{
         }else  if(!(isUsernameAvailable(new_username)) ) return;
         
         sql = """
-              UPDATE users
+              UPDATE tbl_users
               SET username = ?,
                   fullname = ?
               WHERE userID = ?
@@ -270,7 +270,7 @@ public class User extends JFrame{
         if (command == CANCEL) return;
         
         sql = """
-              DELETE FROM users
+              DELETE FROM tbl_users
               WHERE userID = ?;
               """;
         pstmt = conn.prepareStatement(sql);
@@ -322,7 +322,7 @@ public class User extends JFrame{
     public boolean isUsernameAvailable(String new_username){
       try{
         sql = """
-              SELECT * FROM users 
+              SELECT * FROM tbl_users 
               WHERE username = ?
               """;
         pstmt = conn.prepareStatement(sql);
@@ -345,7 +345,7 @@ public class User extends JFrame{
       try{
         sql = """
               SELECT * 
-              FROM users
+              FROM tbl_users
               """;
         pstmt = conn.prepareStatement(sql);
         users_tbl.refreshTable(pstmt.executeQuery());

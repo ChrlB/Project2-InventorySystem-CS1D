@@ -87,7 +87,7 @@ public class Order extends JFrame{
       order_form_panel.setBackground(new Color(0XB58863));
       
       sql = """
-            INSERT INTO  sales(
+            INSERT INTO  tbl_sales(
                   orderID, 
                   productID,
                   quantity) 
@@ -96,7 +96,7 @@ public class Order extends JFrame{
       insert_sales_pstmt = conn.prepareStatement(sql);
       
       sql = """
-            UPDATE  products
+            UPDATE  tbl_products
             SET stockQuantity = stockQuantity - ?
             WHERE productID = ?;
             """;
@@ -114,7 +114,7 @@ public class Order extends JFrame{
       sql = """
         SELECT 
           DISTINCT categoryName
-        FROM products 
+        FROM tbl_products 
         WHERE stockQuantity > 0; 
       """;
 
@@ -139,7 +139,7 @@ public class Order extends JFrame{
                productName as name,
                categoryName as category,
                unitPrice as price
-        FROM products
+        FROM tbl_products
         WHERE stockQuantity > 0;
         """;
 
@@ -247,7 +247,7 @@ public class Order extends JFrame{
                productName as name,
                categoryName as category,
                unitPrice as price
-        FROM products
+        FROM tbl_products
         WHERE stockQuantity > 0 ;
         """;
         pstmt = conn.prepareStatement(sql);
@@ -257,7 +257,7 @@ public class Order extends JFrame{
                productName as name,
                categoryName as category,
                unitPrice as price
-        FROM products
+        FROM tbl_products
         WHERE stockQuantity > 0 and categoryName = ?;
         """;
         pstmt = conn.prepareStatement(sql);
@@ -288,16 +288,16 @@ public class Order extends JFrame{
       
       sql = """
         SELECT 
-            products.productID as productID,
-            products.productName as productName,
-            products.categoryName as categoryName,
-            products.unitPrice as unitPrice,
-            products.stockQuantity as stockQuantity,
-            categories.unit as unit
-        FROM products
-        INNER JOIN categories 
-            ON products.categoryName = categories.categoryName
-        WHERE products.stockQuantity > 0 and products.productID = ?;
+            tbl_products.productID as productID,
+            tbl_products.productName as productName,
+            tbl_products.categoryName as categoryName,
+            tbl_products.unitPrice as unitPrice,
+            tbl_products.stockQuantity as stockQuantity,
+            tbl_categories.unit as unit
+        FROM tbl_products
+        INNER JOIN tbl_categories 
+            ON tbl_products.categoryName = tbl_categories.categoryName
+        WHERE tbl_products.stockQuantity > 0 and tbl_products.productID = ?;
       """;
       
       //System.out.println("ID "+(int)selected_record[0]);
@@ -382,7 +382,7 @@ public class Order extends JFrame{
 
 
       // Insert order, get generated key
-      sql = "INSERT INTO orders(userID,customerName) VALUES (?,?)";
+      sql = "INSERT INTO tbl_orders(userID,customerName) VALUES (?,?)";
 
       pstmt = conn.prepareStatement(
         sql,

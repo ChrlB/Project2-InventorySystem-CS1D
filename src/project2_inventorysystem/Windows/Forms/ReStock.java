@@ -89,7 +89,7 @@ public class ReStock extends JFrame{
       }
       
       sql = """
-        UPDATE products
+        UPDATE tbl_products
         SET stockQuantity = stockQuantity + ?
         WHERE productID = ?;
       """;

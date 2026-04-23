@@ -83,8 +83,8 @@ public class Dashboard extends JFrame{
             p.productID,
             p.productName as name,
             IF(p.stockQuantity = 0,'OUT OF STOCK',p.stockQuantity) as stocks 
-        FROM products as p 
-        inner join categories as c on p.categoryName = c.categoryName
+        FROM tbl_products as p 
+        inner join tbl_categories as c on p.categoryName = c.categoryName
         WHERE p.stockQuantity < c.lowStockthreshold;
        """;
       
@@ -95,14 +95,6 @@ public class Dashboard extends JFrame{
       low_stocks_tbl.setBounds(420,200,800,170);
       
       
-//      sql = """
-//        SELECT 
-//            productID,
-//            productName as name,
-//            unitPrice as price,
-//            categoryName as category 
-//        FROM products WHERE stockQuantity < 11;
-//        """;
       
       sql = """
         SELECT 
@@ -111,26 +103,26 @@ public class Dashboard extends JFrame{
           P.unitPrice         AS price,
           P.categoryName      AS category,
           S.total_sale
-        FROM products AS P
+        FROM tbl_products AS P
         
         INNER JOIN (
         
           SELECT
               productID,
               SUM(quantity) AS total_sale
-          FROM sales
+          FROM tbl_sales
           GROUP BY productID
         ) AS S ON P.productID = S.productID
         
         WHERE S.total_sale = (
           SELECT MAX(sales.total_sale)
-          FROM products AS product
+          FROM tbl_products AS product
 
           INNER JOIN (
             SELECT
               productID,
               SUM(quantity) AS total_sale
-            FROM sales
+            FROM tbl_sales
             GROUP BY productID
           ) AS sales ON product.productID = sales.productID
 
@@ -206,7 +198,7 @@ public class Dashboard extends JFrame{
       if (command == CANCEL) return;
       
       
-//      sql = "UPDATE userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
+//      sql = "UPDATE tbl_userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
 //      pstmt = conn.prepareStatement(sql);
 //      pstmt.setInt(1, user_ID);
 //      pstmt.executeUpdate();

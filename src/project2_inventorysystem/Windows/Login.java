@@ -146,7 +146,7 @@ public class Login extends JFrame {
   
   ResultSet getUserInfo(String input_username){
     try{
-      sql = "SELECT * FROM users WHERE username = ?";
+      sql = "SELECT * FROM tbl_users WHERE username = ?";
       pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, input_username);
       
@@ -161,7 +161,7 @@ public class Login extends JFrame {
   
   void recordUserLog(int user_ID){
     try{
-      sql = "INSERT INTO userlogs(userID) VALUES(?)";
+      sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";
       pstmt = conn.prepareStatement(sql);
       pstmt.setInt(1, user_ID);
 

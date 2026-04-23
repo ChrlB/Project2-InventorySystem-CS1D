@@ -106,7 +106,7 @@ public class ChangePassword extends JFrame{
       
       
       sql = """
-            UPDATE users
+            UPDATE tbl_users
             SET password = ?
             WHERE userID = ?;
             """;

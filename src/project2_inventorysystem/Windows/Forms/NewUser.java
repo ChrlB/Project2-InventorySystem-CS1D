@@ -125,7 +125,7 @@ public class NewUser extends JFrame{
       String hashed_password = BCrypt.hashpw(password, BCrypt.gensalt(12));
       
       sql = """
-            INSERT INTO users
+            INSERT INTO tbl_users
               (username, password, fullname)
             values(?,?,?);
             """;
