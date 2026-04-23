@@ -18,6 +18,7 @@ import project2_inventorysystem.Windows.Forms.DeductStock;
  * @author user
  */
 public class Product extends JFrame{
+  final int CANCEL = 2;
   int user_ID;
   Connection conn;
   Header header;
@@ -82,10 +83,10 @@ public class Product extends JFrame{
       category_window_btn.addActionListener( (a) -> { new Category();} );
       add_product_btn.addActionListener( (a) -> {} );
       
-      deduct_btn.addActionListener( (a) -> { deduct();} );
-      delete_btn.addActionListener( (a) -> {} );
-      update_btn.addActionListener( (a) -> {} );
-      restock_btn.addActionListener( (a) -> { restock();} );
+      deduct_btn.addActionListener( (a) -> { deductProduct();} );
+      delete_btn.addActionListener( (a) -> { deleteProduct();} );
+      update_btn.addActionListener( (a) -> { updateProduct();} );
+      restock_btn.addActionListener( (a) -> { restockProduct();} );
       
 
       product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 
@@ -235,7 +236,7 @@ public class Product extends JFrame{
     }
   }
   
-  void deduct(){
+  void deductProduct(){
     try{
       int row = products_tbl.getSelectedRow();
       if (row == -1) {
@@ -257,7 +258,33 @@ public class Product extends JFrame{
     }
   }
           
-  void restock(){
+  void restockProduct(){
+    try{
+      int row = products_tbl.getSelectedRow();
+      if (row == -1) {
+        JOptionPane.showMessageDialog(null,
+          "Please select a record first.",
+          "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+      } 
+      
+      selected_record = new Object[]{
+        products_tbl.getValueAt(row, 0)
+      };
+      
+      new ReStock(this, (int)selected_record[0], conn);
+      this.setEnabled(false);
+    }catch(Exception ex){
+      ex.printStackTrace();
+    
+    }
+  }
+  
+  void updateProduct(){
+    
+  }
+  
+  void deleteProduct(){
     try{
       int row = products_tbl.getSelectedRow();
       if (row == -1) {
@@ -269,10 +296,56 @@ public class Product extends JFrame{
       
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0),
+        products_tbl.getValueAt(row, 5)
       };
       
-      new ReStock(this, (int)selected_record[0], conn);
-      this.setEnabled(false);
+      String message = ((int)selected_record[1] > 0)?
+              "This product is currently in stock. Are you sure you want to delete it?":
+              "Do you want to proceed deleting this Product?" ;
+      
+      Object[] option = {"To Archive","Hard Delete","Cancel"};
+      int command = JOptionPane.showOptionDialog(null,
+                message, "DELETE CONFIRMATION", 
+                JOptionPane.OK_CANCEL_OPTION ,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                option,
+                option[2]
+      );
+      if (command == CANCEL) return;
+      
+      if(command == 0){
+        sql = """
+          UPDATE products
+          SET isActive = 0
+          WHERE productID = ?;
+        """;
+        message = "Product successfully Archive.";
+      }else{
+        sql = """
+          DELETE products
+          WHERE productID = ?;
+        """;
+        message = "Product successfully deleted.";
+      }
+      
+      
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, (int)selected_record[0]);
+      
+      int rowsAffected = pstmt.executeUpdate();
+      
+      
+      if (rowsAffected > 0) {
+        JOptionPane.showMessageDialog(null,
+              message, "Success", JOptionPane.INFORMATION_MESSAGE);
+
+        refreshTable();
+      } else {
+        JOptionPane.showMessageDialog(null,
+              "No Product deleted.",
+              "Failed", JOptionPane.WARNING_MESSAGE);
+      }
     }catch(Exception ex){
       ex.printStackTrace();
     
