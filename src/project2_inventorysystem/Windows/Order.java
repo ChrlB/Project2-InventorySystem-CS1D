@@ -63,7 +63,8 @@ public class Order extends JFrame{
                 confirm_btn;
   
   PreparedStatement pstmt,
-                    batch_pstmt;
+                    insert_sales_pstmt,
+                    deduct_stock_pstmt;
   
   ResultSet rs,
             product_rs;
@@ -92,7 +93,14 @@ public class Order extends JFrame{
                   quantity) 
             VALUES (?, ?, ?)
             """;
-      batch_pstmt = conn.prepareStatement(sql);
+      insert_sales_pstmt = conn.prepareStatement(sql);
+      
+      sql = """
+            UPDATE  products
+            SET stockQuantity = stockQuantity - ?
+            WHERE productID = ?;
+            """;
+      deduct_stock_pstmt = conn.prepareStatement(sql);
       
       add_btn = new ButtonBuilder("ADD",325,330,150,45,15);
       add_btn.addActionListener((a) -> addItemToOrder());
@@ -314,7 +322,8 @@ public class Order extends JFrame{
   public void addItemToOrder(){
     try{
       int productID = product_rs.getInt("productID");
-      int quantity = (int)(quantity_spinner.getValue()); // or however you get qty
+      int quantity = (int)(quantity_spinner.getValue()); 
+      
       pendingItems.add(new int[]{productID, quantity});
       
       String productName = product_rs.getString("productName");
@@ -342,7 +351,8 @@ public class Order extends JFrame{
     try{
       total_order_price = 0;
       pendingItems.clear();
-      batch_pstmt.clearBatch();
+      insert_sales_pstmt.clearBatch();
+      deduct_stock_pstmt.clearBatch();
       order_list.setText("");
       total_order_price_label.setText(" TOTAL: ₱"+total_order_price);
     }catch(Exception ex){
@@ -388,14 +398,19 @@ public class Order extends JFrame{
 
         // Build batch
         for (int[] item : pendingItems) {
-          batch_pstmt.setInt(1, orderID);   // orderID
-          batch_pstmt.setInt(2, (int)item[0]);   // productID
-          batch_pstmt.setInt(3, (int)item[1]);   // quantity
-          batch_pstmt.addBatch();
+          insert_sales_pstmt.setInt(1, orderID);   // orderID
+          insert_sales_pstmt.setInt(2, (int)item[0]);   // productID
+          insert_sales_pstmt.setInt(3, (int)item[1]);   // quantity
+          insert_sales_pstmt.addBatch();
+          
+          deduct_stock_pstmt.setInt(1, (int)item[1]);
+          deduct_stock_pstmt.setInt(2, (int)item[0]);
+          deduct_stock_pstmt.addBatch();
         }
       }
-
-      batch_pstmt.executeBatch();
+      int rowsAffected = deduct_stock_pstmt.executeUpdate();
+      insert_sales_pstmt.executeBatch();
+      
       JOptionPane.showMessageDialog(null, "Order confirmed!");
       resetOrder();
     } catch (SQLException ex) {
