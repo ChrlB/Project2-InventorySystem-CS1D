@@ -5,12 +5,18 @@
 package project2_inventorysystem.Windows;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
+import project2_inventorysystem.Windows.MyComponents.TableBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 
 /**
@@ -27,14 +33,24 @@ public class Category extends JFrame{
                      discription_field,
                      unit_field,
                      lowStockThreshold_field;
+    
     LabelBuilder  category_name_field_label,
                   discription_field_label,
                   unit_field_label,
                   lowStockThreshold_field_label,
                   lowStockThreshold2_field_label;
+    
     ButtonBuilder new_btn, 
                   delete_btn,
                   update_btn;
+    
+    TableBuilder category_tbl;
+    JScrollPane category_tbl_scrollpane;
+    
+    ResultSet rs;
+    String sql;
+    PreparedStatement pstmt;
+    
     
     public Category(int userID,Connection conn){
       try{
@@ -83,7 +99,24 @@ public class Category extends JFrame{
         category_form_panel.add(update_btn);
         
         
+         sql = """
+              SELECT *
+              FROM tbl_categories
+              """;
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
         
+        category_tbl = new TableBuilder(rs);
+        category_tbl.addMouseListener(new MouseAdapter() {
+         @Override
+          public void mouseReleased(MouseEvent e) {  
+              //showSelectedRecord();
+          }
+        });
+        
+        category_tbl_scrollpane = new JScrollPane(category_tbl);
+        category_tbl_scrollpane.setBounds(500,150,725,350);
+
         
         
         
@@ -107,6 +140,7 @@ public class Category extends JFrame{
         
         this.add(header);
         this.add(category_form_panel);
+        this.add(category_tbl_scrollpane);
         this.setVisible(true);
         
         
