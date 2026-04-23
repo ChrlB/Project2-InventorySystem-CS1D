@@ -5,6 +5,7 @@
 package project2_inventorysystem.Windows;
 
 import project2_inventorysystem.Windows.MyComponents.*;
+import project2_inventorysystem.Windows.Forms.ReStock;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -83,7 +84,7 @@ public class Product extends JFrame{
       deduct_btn.addActionListener( (a) -> {} );
       delete_btn.addActionListener( (a) -> {} );
       update_btn.addActionListener( (a) -> {} );
-      restock_btn.addActionListener( (a) -> {} );
+      restock_btn.addActionListener( (a) -> { restock();} );
       
 
       product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 
@@ -209,4 +210,49 @@ public class Product extends JFrame{
     }
   }
   
+  public void refreshTable(){
+    try{
+      sql = """
+        SELECT 
+            p.productID as ID,
+            p.productName,
+            p.categoryName as category,
+            p.unitPrice,
+            c.unit,
+            p.stockQuantity as stock,
+            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
+        FROM products as p
+        inner join categories as c 
+            on  p.categoryName = c.categoryName
+        WHERE p.isActive = 1;
+      """;
+      
+      pstmt = conn.prepareStatement(sql);
+      products_tbl.refreshTable(pstmt.executeQuery());
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+  
+  void restock(){
+    try{
+      int row = products_tbl.getSelectedRow();
+      if (row == -1) {
+        JOptionPane.showMessageDialog(null,
+          "Please select a record first.",
+          "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+      } 
+      
+      selected_record = new Object[]{
+        products_tbl.getValueAt(row, 0),
+      };
+      
+      new ReStock(this, (int)selected_record[0], conn);
+      this.setEnabled(false);
+    }catch(Exception ex){
+      ex.printStackTrace();
+    
+    }
+  }
 }

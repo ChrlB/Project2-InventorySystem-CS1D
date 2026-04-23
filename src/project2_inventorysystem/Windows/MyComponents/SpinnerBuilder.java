@@ -6,8 +6,11 @@ package project2_inventorysystem.Windows.MyComponents;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 
 /**
@@ -18,22 +21,47 @@ public class SpinnerBuilder extends JSpinner {
 
   public SpinnerBuilder() {
     super(new SpinnerNumberModel(1, 1, 1, 1));
-    applyStyle();
+    applyStyle(false);
+  }
+  
+  public SpinnerBuilder(boolean isEditable) {
+    super(new SpinnerNumberModel(1, 1, 1, 1));
+    applyStyle(true);
   }
 
   public void setMax(int max) {
     setModel(new SpinnerNumberModel(1, 1, max, 1));
-    applyStyle();
   }
 
-  private void applyStyle() {
+  private void applyStyle(boolean isEditable) {
     JComponent editor = this.getEditor();
     if (editor instanceof JSpinner.DefaultEditor) {
-      ((JSpinner.DefaultEditor) editor)
-          .getTextField()
-          .setEditable(false);
+        JTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
+        textField.setEditable(isEditable);
+
+        if (isEditable) {
+          textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+              char c = e.getKeyChar();
+              if (!Character.isDigit(c)) {
+                e.consume(); // block non-numeric input
+              }
+            }
+          });
+        }
+      }
+
+      this.setFont(new Font("Arial", Font.BOLD, 17));
+      this.setForeground(new Color(0x3D4D55));
     }
-    this.setFont(new Font("Arial", Font.BOLD, 14));
-    this.setForeground(new Color(0x3D4D55));
-  }
+//    JComponent editor = this.getEditor();
+//    if (editor instanceof JSpinner.DefaultEditor) {
+//      ((JSpinner.DefaultEditor) editor)
+//          .getTextField()
+//          .setEditable(isEditable);
+//    }
+//    this.setFont(new Font("Arial", Font.BOLD, 14));
+//    this.setForeground(new Color(0x3D4D55));
+ // }
 }
