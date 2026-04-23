@@ -198,7 +198,7 @@ public class User extends JFrame{
         }
         
         if( 
-            new_username.equals(selected_record[1]) || 
+            new_username.equals(selected_record[1]) &&
             new_fullname.equals(selected_record[2]) 
           ){
           JOptionPane.showMessageDialog(null,

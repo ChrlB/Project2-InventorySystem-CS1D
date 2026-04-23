@@ -281,7 +281,90 @@ public class Product extends JFrame{
   }
   
   void updateProduct(){
-    
+    try{
+      int row = products_tbl.getSelectedRow();
+      if (row == -1) {
+        JOptionPane.showMessageDialog(null,
+          "Please select a record first.",
+          "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+      } 
+      
+      selected_record = new Object[]{
+        products_tbl.getValueAt(row, 0),
+        products_tbl.getValueAt(row, 1),
+        products_tbl.getValueAt(row, 2),
+        products_tbl.getValueAt(row, 3),
+        products_tbl.getValueAt(row, 5)
+      };
+      
+      int command = JOptionPane.showConfirmDialog(null,
+              "Do you want to proceed updating this record?",
+              "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+      );
+      if (command == CANCEL) return;
+      
+      String new_product_name = product_name_field.getText().trim(); 
+      String new_product_category = product_category_combobox.getSelectedItem().toString().trim();
+      double new_unit_price = Double.parseDouble(
+              (unit_price_field.getText().trim().isEmpty())? 
+                      "0": 
+                      unit_price_field.getText().trim()
+      ); 
+     
+      
+      
+      if (new_product_name.isEmpty() || new_unit_price == 0) {
+          JOptionPane.showMessageDialog(null,
+                  "Unit Price and Product Name cannot be empty or 0.",
+                  "Validation Error", JOptionPane.WARNING_MESSAGE);
+          return;
+      }
+      
+      if( 
+          new_product_name.equals(selected_record[1]) && 
+          new_product_category.equals(selected_record[2]) && 
+          new_unit_price == ((Number) selected_record[3]).doubleValue()
+        ){
+        JOptionPane.showMessageDialog(null,
+                  "No changes to update.",
+                  "Message", JOptionPane.INFORMATION_MESSAGE);
+        return;
+      }
+      
+      sql = """
+            UPDATE products
+            SET
+              productName = ?,
+              categoryName = ?,
+              unitPrice = ?
+            WHERE productID = ?;
+            """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, new_product_name);
+      pstmt.setString(2, new_product_category);
+      pstmt.setDouble(3, new_unit_price);
+      pstmt.setInt(4, (int) selected_record[0]);
+
+      int rowsAffected = pstmt.executeUpdate();
+
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "Record updated successfully.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          refreshTable();
+
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "No record was updated. The user may not exist.",
+                  "Update Failed", JOptionPane.WARNING_MESSAGE);
+      }
+      
+    }catch(Exception ex ){
+      ex.printStackTrace();
+          
+    }
   }
   
   void deleteProduct(){
