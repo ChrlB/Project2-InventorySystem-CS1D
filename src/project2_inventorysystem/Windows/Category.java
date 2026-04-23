@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
@@ -31,6 +32,9 @@ public class Category extends JFrame{
                   unit_field_label,
                   lowStockThreshold_field_label,
                   lowStockThreshold2_field_label;
+    ButtonBuilder new_btn, 
+                  delete_btn,
+                  update_btn;
     
     public Category(int userID,Connection conn){
       try{
@@ -44,10 +48,16 @@ public class Category extends JFrame{
         discription_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
         unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
         lowStockThreshold_field = new TextFieldBuilder(true, 180, 290, 270, 50, 15);
+        
+        new_btn = new ButtonBuilder("NEW",500, 30, 200, 50,15);
+        update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
+        delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
       
         this.conn = conn;
         user_ID = userID;
         header = new Header();
+        
+        header.add(new_btn);
         
         
         category_form_panel = new JPanel();
@@ -55,10 +65,12 @@ public class Category extends JFrame{
         category_form_panel.setBounds(0,100, 480, 450);
         category_form_panel.setBackground(new Color(0XB58863));
         
+        
         category_form_panel.add(category_name_field);
         category_form_panel.add(discription_field);
         category_form_panel.add(unit_field);
         category_form_panel.add(lowStockThreshold_field);
+        
         
         category_form_panel.add(category_name_field_label);
         category_form_panel.add(discription_field_label);
@@ -66,7 +78,9 @@ public class Category extends JFrame{
         category_form_panel.add(lowStockThreshold_field_label);
         category_form_panel.add(lowStockThreshold2_field_label);
         
-        
+       
+        category_form_panel.add(delete_btn);
+        category_form_panel.add(update_btn);
         
         
         
