@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
+import project2_inventorysystem.Windows.Forms.DeductStock;
 
 /**
  *
@@ -81,7 +82,7 @@ public class Product extends JFrame{
       category_window_btn.addActionListener( (a) -> { new Category();} );
       add_product_btn.addActionListener( (a) -> {} );
       
-      deduct_btn.addActionListener( (a) -> {} );
+      deduct_btn.addActionListener( (a) -> { deduct();} );
       delete_btn.addActionListener( (a) -> {} );
       update_btn.addActionListener( (a) -> {} );
       restock_btn.addActionListener( (a) -> { restock();} );
@@ -234,6 +235,28 @@ public class Product extends JFrame{
     }
   }
   
+  void deduct(){
+    try{
+      int row = products_tbl.getSelectedRow();
+      if (row == -1) {
+        JOptionPane.showMessageDialog(null,
+          "Please select a record first.",
+          "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+      } 
+      
+      selected_record = new Object[]{
+        products_tbl.getValueAt(row, 0),
+      };
+      
+      new DeductStock(this, (int)selected_record[0], conn);
+      this.setEnabled(false);
+    }catch(Exception ex){
+      ex.printStackTrace();
+    
+    }
+  }
+          
   void restock(){
     try{
       int row = products_tbl.getSelectedRow();
