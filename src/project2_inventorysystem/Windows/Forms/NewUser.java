@@ -66,6 +66,7 @@ public class NewUser extends JFrame{
     this.setTitle("NEW USER FORM");
     this.setSize(500,500);
     this.getContentPane().setBackground(new Color(0x293A3E));
+    this.setLocationRelativeTo(null);
     this.setResizable(false);
     
     this.addWindowListener(new java.awt.event.WindowAdapter() {

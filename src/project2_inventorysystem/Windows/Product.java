@@ -351,13 +351,13 @@ public class Product extends JFrame{
 
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
-                  "Record updated successfully.",
+                  "Product Record updated successfully.",
                   "Success", JOptionPane.INFORMATION_MESSAGE);
           refreshTable();
 
       } else {
           JOptionPane.showMessageDialog(null,
-                  "No record was updated. The user may not exist.",
+                  "No record was updated. The Product may not exist.",
                   "Update Failed", JOptionPane.WARNING_MESSAGE);
       }
       

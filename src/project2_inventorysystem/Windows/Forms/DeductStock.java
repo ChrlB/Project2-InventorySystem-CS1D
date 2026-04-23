@@ -41,8 +41,7 @@ public class DeductStock extends JFrame{
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
     stock_label.setForeground(new Color(0XB58863));
     
-    restock_spinner = new SpinnerBuilder(true);
-    restock_spinner.setMax(1000);
+    restock_spinner = new SpinnerBuilder(true,1000);
     restock_spinner.setBounds(150,50,300,50);
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 130, 200, 50,15);
@@ -56,6 +55,7 @@ public class DeductStock extends JFrame{
     this.setTitle("DEDUCT STOCK");
     this.setSize(500,270);
     this.getContentPane().setBackground(new Color(0x293A3E));
+    this.setLocationRelativeTo(null);
     this.setResizable(false);
     
     this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -79,7 +79,15 @@ public class DeductStock extends JFrame{
   
   void deductStock(){
     try{
-      int stock_to_add = (int)restock_spinner.getValue();
+      int stock_to_deduct = (int)restock_spinner.getValue();
+      
+      if(stock_to_deduct < 1){
+        JOptionPane.showMessageDialog(null,
+                "Stock to Deduct cannot be less than 1.",
+                "INVALID INPUT", JOptionPane.INFORMATION_MESSAGE);
+        return;
+      }
+      
       sql = """
         UPDATE products
         SET stockQuantity = stockQuantity - ?
@@ -87,7 +95,7 @@ public class DeductStock extends JFrame{
       """;
       
       pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, stock_to_add);
+      pstmt.setInt(1, stock_to_deduct);
       pstmt.setInt(2, productID);
       
       int rowsAffected = pstmt.executeUpdate();

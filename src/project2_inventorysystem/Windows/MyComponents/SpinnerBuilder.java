@@ -24,9 +24,9 @@ public class SpinnerBuilder extends JSpinner {
     applyStyle(false);
   }
   
-  public SpinnerBuilder(boolean isEditable) {
-    super(new SpinnerNumberModel(1, 1, 1, 1));
-    applyStyle(true);
+  public SpinnerBuilder(boolean isEditable, int max) {
+    super(new SpinnerNumberModel(0, 0, max, 1));
+    applyStyle(isEditable);
   }
 
   public void setMax(int max) {

@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import java.sql.*;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 
@@ -195,8 +196,16 @@ public class Dashboard extends JFrame{
   }
   
   void logout(int user_ID){
-    // Verify a password (do this during login)
+    int CANCEL = 2;
     try{
+      
+      int command = JOptionPane.showConfirmDialog(null,
+              "Are you sure you want to log out?",
+              "Log Out", JOptionPane.OK_CANCEL_OPTION
+      );
+      if (command == CANCEL) return;
+      
+      
 //      sql = "UPDATE userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
 //      pstmt = conn.prepareStatement(sql);
 //      pstmt.setInt(1, user_ID);

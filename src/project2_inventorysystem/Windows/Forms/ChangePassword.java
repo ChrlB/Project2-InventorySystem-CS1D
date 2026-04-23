@@ -61,6 +61,7 @@ public class ChangePassword extends JFrame{
     this.setTitle("CHANGE PASSWORD FORM");
     this.setSize(550,330);
     this.getContentPane().setBackground(new Color(0x293A3E));
+    this.setLocationRelativeTo(null);
     this.setResizable(false);
     
     this.addWindowListener(new java.awt.event.WindowAdapter() {
