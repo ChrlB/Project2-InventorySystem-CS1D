@@ -80,7 +80,7 @@ public class Product extends JFrame{
       deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 200, 50,15);
       restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
       
-      category_window_btn.addActionListener( (a) -> { new Category();} );
+      category_window_btn.addActionListener( (a) -> { new Category(user_ID, conn);dispose();} );
       add_product_btn.addActionListener( (a) -> {} );
       
       deduct_btn.addActionListener( (a) -> { deductProduct();} );

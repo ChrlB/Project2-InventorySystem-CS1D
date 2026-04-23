@@ -4,10 +4,20 @@
  */
 package project2_inventorysystem.Windows.Forms;
 
+import java.sql.Connection;
+import javax.swing.*;
+import project2_inventorysystem.Windows.User;
+
 /**
  *
  * @author user
  */
-public class NewProduct {
+public class NewProduct extends JFrame {
+     public NewProduct(User parent,Connection conn){
+         
+     }
+    
+    
+    
   
 }
