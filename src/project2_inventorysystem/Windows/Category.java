@@ -9,6 +9,8 @@ import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import project2_inventorysystem.Windows.MyComponents.Header;
+import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
+import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 
 /**
  *
@@ -19,9 +21,29 @@ public class Category extends JFrame{
     Connection conn;
     Header header;
     JPanel category_form_panel;
+    
+    TextFieldBuilder category_name_field,
+                     discription_field,
+                     unit_field,
+                     lowStockThreshold_field;
+    LabelBuilder  category_name_field_label,
+                  discription_field_label,
+                  unit_field_label,
+                  lowStockThreshold_field_label,
+                  lowStockThreshold2_field_label;
+    
     public Category(int userID,Connection conn){
       try{
-          
+        category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
+        discription_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
+        unit_field_label= new LabelBuilder("Unit Field: ",30,210,150,50,15);
+        lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
+        lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
+        
+        category_name_field = new TextFieldBuilder(false, 180, 50, 270, 50, 15);
+        discription_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
+        unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
+        lowStockThreshold_field = new TextFieldBuilder(true, 180, 290, 270, 50, 15);
       
         this.conn = conn;
         user_ID = userID;
@@ -32,6 +54,17 @@ public class Category extends JFrame{
         category_form_panel.setLayout(null);
         category_form_panel.setBounds(0,100, 480, 450);
         category_form_panel.setBackground(new Color(0XB58863));
+        
+        category_form_panel.add(category_name_field);
+        category_form_panel.add(discription_field);
+        category_form_panel.add(unit_field);
+        category_form_panel.add(lowStockThreshold_field);
+        
+        category_form_panel.add(category_name_field_label);
+        category_form_panel.add(discription_field_label);
+        category_form_panel.add(unit_field_label);
+        category_form_panel.add(lowStockThreshold_field_label);
+        category_form_panel.add(lowStockThreshold2_field_label);
         
         
         
