@@ -62,6 +62,7 @@ public class NewProduct extends JFrame {
       
       product_name_field = new TextFieldBuilder(true, 175, 50, 275, 50, 15);
       unit_price_field = new TextFieldBuilder(true, 175, 190, 275, 50, 15);
+      
       stock_quantity_spinner = new SpinnerBuilder(true,1000);
       stock_quantity_spinner.setBounds(175, 260, 275, 50);
 
@@ -78,7 +79,7 @@ public class NewProduct extends JFrame {
       confirm_btn = new ButtonBuilder("CONFIRM",30, 330, 200, 50,15);
       cancel_btn = new ButtonBuilder("CANCEL",250, 330, 200, 50,15);
 
-      cancel_btn.addActionListener((a) -> {close();});
+      cancel_btn.addActionListener((a) -> {closeWindow();});
       confirm_btn.addActionListener((a) -> {addProduct();});
       
       
@@ -93,7 +94,7 @@ public class NewProduct extends JFrame {
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
-          close();
+          closeWindow();
         }
       });
       
@@ -116,13 +117,98 @@ public class NewProduct extends JFrame {
     }
   }
   
-   void close(){
+   void closeWindow(){
     parent.setEnabled(true);
     dispose();
   }
    
   void addProduct(){
-    
+    int CANCEL = 2;
+    try{
+      String new_product_name = product_name_field.getText().trim();
+      int new_stock_quantity = ((Number) stock_quantity_spinner.getValue()).intValue();
+      String new_product_category = product_category_combobox.getSelectedItem().toString().trim();
+      double new_unit_price =  Double.parseDouble(
+              (unit_price_field.getText().trim().isEmpty())? 
+                  "0": 
+                  unit_price_field.getText().trim()
+      ); 
+      
+      if (new_product_name.isEmpty() || new_unit_price == 0){
+        JOptionPane.showMessageDialog(null,
+                "Unit Price and Product Name cannot be empty or 0.",
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+        return;
+      }
+      
+      sql = """
+        SELECT *
+        FROM tbl_products
+        WHERE   productName = LOWER(?)
+            AND categoryName = ? ;
+      """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1,new_product_name);
+      pstmt.setString(2,new_product_category);
+      
+      rs = pstmt.executeQuery();
+      
+      if(rs.next()){
+        JOptionPane.showMessageDialog(null,
+                "\"" + new_product_name + "\" already exists in the " + new_product_category + " category.\n"
+                + "It may be active or archived. Please check your product list.",
+              "Product Already Exists", JOptionPane.WARNING_MESSAGE);
+        return;
+      }
+      
+      int command = JOptionPane.showConfirmDialog(null,
+              "Do you want to proceed Adding this product?",
+              "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+      );
+      if (command == CANCEL) return;
+      
+      
+      sql = """
+        INSERT INTO tbl_products(
+            productName,
+            categoryName,
+            unitPrice,
+            stockQuantity
+          )
+        VALUES(LOWER(?),?,?,?);
+      """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1,new_product_name);
+      pstmt.setString(2,new_product_category);
+      pstmt.setDouble(3,new_unit_price);
+      pstmt.setInt(4,new_stock_quantity);
+      
+      int rowsAffected = pstmt.executeUpdate();
+      
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "Product successfully added.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          parent.refreshTable();
+          closeWindow();
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "No Product is added.",
+                  "Failed", JOptionPane.WARNING_MESSAGE);
+          closeWindow();
+      }
+      
+      
+      
+    }catch(NumberFormatException num_ex){
+      JOptionPane.showMessageDialog(null,
+                  "Invalid input. Please enter a valid number for product price.",
+                  "Update Failed", JOptionPane.WARNING_MESSAGE);
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
   }
     
     

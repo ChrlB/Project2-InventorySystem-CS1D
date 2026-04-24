@@ -312,8 +312,6 @@ public class Product extends JFrame{
                       "0": 
                       unit_price_field.getText().trim()
       ); 
-     
-      
       
       if (new_product_name.isEmpty() || new_unit_price == 0) {
           JOptionPane.showMessageDialog(null,
@@ -362,6 +360,10 @@ public class Product extends JFrame{
                   "Update Failed", JOptionPane.WARNING_MESSAGE);
       }
       
+    }catch(NumberFormatException num_ex){
+      JOptionPane.showMessageDialog(null,
+                  "Invalid input. Please enter a valid number for product price.",
+                  "Update Failed", JOptionPane.WARNING_MESSAGE);
     }catch(Exception ex ){
       ex.printStackTrace();
           
