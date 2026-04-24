@@ -51,6 +51,7 @@ public class Category extends JFrame{
     String sql;
     PreparedStatement pstmt;
     
+    Object[] selected_record;
     
     public Category(int userID,Connection conn){
       try{
@@ -76,7 +77,7 @@ public class Category extends JFrame{
         delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
         
         new_btn.addActionListener((a) -> {} );
-        update_btn.addActionListener((a) -> {} );
+        update_btn.addActionListener((a) -> { updateCategory();} );
         delete_btn.addActionListener((a) -> {} );
                 
         header.add(new_btn);
@@ -115,7 +116,7 @@ public class Category extends JFrame{
         category_tbl.addMouseListener(new MouseAdapter() {
          @Override
           public void mouseReleased(MouseEvent e) {  
-              //showSelectedRecord();
+              showSelectedRecord();
           }
         });
         
@@ -152,6 +153,38 @@ public class Category extends JFrame{
         
       }catch(Exception ex){
         System.out.println(ex);
+      }
+    }
+    
+    void showSelectedRecord(){
+      try{
+        int row = category_tbl.getSelectedRow();
+
+        if (row != -1) {
+
+          selected_record = new Object[] {
+            category_tbl.getValueAt(row, 0),
+            category_tbl.getValueAt(row, 1), 
+            category_tbl.getValueAt(row, 2), 
+            category_tbl.getValueAt(row, 3)
+          };
+        }
+        
+        category_name_field.setText(""+selected_record[0]);
+        discription_field.setText(""+selected_record[1]);
+        unit_field.setText(""+selected_record[2]);
+        lowStockThreshold_field.setText(""+selected_record[3]);
+        
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+    
+    void updateCategory(){
+      try{
+        
+      }catch(Exception ex){
+        ex.printStackTrace();
       }
     }
     
