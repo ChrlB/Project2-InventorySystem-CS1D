@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
 import project2_inventorysystem.Windows.Forms.DeductStock;
+import project2_inventorysystem.Windows.Forms.NewProduct;
 
 /**
  *
@@ -81,7 +82,7 @@ public class Product extends JFrame{
       restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
       
       category_window_btn.addActionListener( (a) -> { new Category(user_ID, conn);dispose();} );
-      add_product_btn.addActionListener( (a) -> {} );
+      add_product_btn.addActionListener( (a) -> { new NewProduct(this , conn); this.setEnabled(false);  } );
       
       deduct_btn.addActionListener( (a) -> { deductProduct();} );
       delete_btn.addActionListener( (a) -> { deleteProduct();} );

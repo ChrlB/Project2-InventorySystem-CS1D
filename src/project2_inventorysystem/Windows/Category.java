@@ -54,6 +54,12 @@ public class Category extends JFrame{
     
     public Category(int userID,Connection conn){
       try{
+        this.conn = conn;
+        user_ID = userID;
+        header = new Header();
+        
+        
+        
         category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
         discription_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
         unit_field_label= new LabelBuilder("Unit Field: ",30,210,150,50,15);
@@ -68,13 +74,12 @@ public class Category extends JFrame{
         new_btn = new ButtonBuilder("NEW",500, 30, 200, 50,15);
         update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
-      
-        this.conn = conn;
-        user_ID = userID;
-        header = new Header();
         
+        new_btn.addActionListener((a) -> {} );
+        update_btn.addActionListener((a) -> {} );
+        delete_btn.addActionListener((a) -> {} );
+                
         header.add(new_btn);
-        
         
         category_form_panel = new JPanel();
         category_form_panel.setLayout(null);
@@ -99,10 +104,10 @@ public class Category extends JFrame{
         category_form_panel.add(update_btn);
         
         
-         sql = """
-              SELECT *
-              FROM tbl_categories
-              """;
+        sql = """
+             SELECT *
+             FROM tbl_categories
+             """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         
@@ -123,7 +128,7 @@ public class Category extends JFrame{
         this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
           public void windowClosing(java.awt.event.WindowEvent e) {
-            new Dashboard(user_ID,conn); 
+            new Product(user_ID,conn); 
             dispose();
           }
         });
@@ -141,6 +146,7 @@ public class Category extends JFrame{
         this.add(header);
         this.add(category_form_panel);
         this.add(category_tbl_scrollpane);
+        
         this.setVisible(true);
         
         

@@ -90,7 +90,6 @@ public class NewUser extends JFrame{
     this.add(cancel_btn);
     
     this.setVisible(true);
-//    this.add (username_field);
   }
   
   void Close(){
