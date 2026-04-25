@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import static javax.swing.SwingConstants.CENTER;
 
 
 /**
@@ -28,13 +29,16 @@ public class Dashboard extends JFrame{
                 product_btn,
                 sales_btn,
                 user_btn;
-  IconBuilder order_icon,
+  IconBuilder barista_icon,
+              order_icon,
               product_icon,
               sales_icon,
               user_icon;
   JLabel low_stocks_label,
          best_products_label;
   
+  LabelBuilder     user_fullname_label;
+          
   int user_ID;
   PreparedStatement pstmt;
   Connection conn;
@@ -49,11 +53,24 @@ public class Dashboard extends JFrame{
       header = new Header();
       //header.setBackground(new Color(0X3E2522));
       
+      sql = "SELECT * FROM tbl_users WHERE userID = ?";
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, userID);
+      rs = pstmt.executeQuery();
+      rs.next();
+      
+      
+      System.out.println(rs.getString("fullname"));
+      
       button_panel = new JPanel();
       button_panel.setLayout(null);
       button_panel.setBounds(0,100,400,550);
       //button_panel.setBackground(new Color(0X8C6E63));
       button_panel.setBackground(new Color(0XB58863));
+      
+      user_fullname_label = new LabelBuilder(rs.getString("fullname"),1100,55,140,30,15);
+      user_fullname_label.setForeground(new Color(0XB58863));
+      user_fullname_label.setHorizontalAlignment(CENTER);
       
       order_btn =   new ButtonBuilder("ORDER"   ,160,50,220,70,20);
       product_btn = new ButtonBuilder("PRODUCT" ,160,150,220,70,20);
@@ -65,11 +82,25 @@ public class Dashboard extends JFrame{
       sales_btn.addActionListener(e -> {new Sales(user_ID,conn);this.dispose();});
       user_btn.addActionListener(e ->{new User(user_ID,conn); this.dispose();});
       
+      barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/barista.png",1150,15,40,40);
       order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
       product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",30,140,100,90);
       sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",30,240,100,90);
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
+      
+      header.add(barista_icon);
+      header.add(user_fullname_label);
+      
+      
+      
+      low_stocks_label = new JLabel("LOW STOCK PRODUCTS:");
+      low_stocks_label.setBounds(420,150,300,50);
+      low_stocks_label.setFont(new Font("Arial", Font.BOLD, 16));
+      
+      best_products_label = new JLabel("MONTHLY BEST PRODUCT:");
+      best_products_label.setBounds(420,370,300,50);
+      best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
 //      sql = """
 //        SELECT 
@@ -131,20 +162,11 @@ public class Dashboard extends JFrame{
       """;
 
       //sql ="Select * from categories";
-      
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
-      //best_products_tbl.setBounds(830,150,400,350);
       best_products_tbl.setBounds(420,420,800,170);
       
-      low_stocks_label = new JLabel("LOW STOCK PRODUCTS:");
-      low_stocks_label.setBounds(420,150,300,50);
-      low_stocks_label.setFont(new Font("Arial", Font.BOLD, 16));
-      
-      best_products_label = new JLabel("MONTHLY BEST PRODUCT:");
-      best_products_label.setBounds(420,370,300,50);
-      best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("DASHBOARD");

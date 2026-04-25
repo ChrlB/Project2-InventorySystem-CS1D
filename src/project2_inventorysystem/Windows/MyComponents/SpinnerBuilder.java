@@ -8,6 +8,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import javax.swing.JComponent;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -19,25 +20,28 @@ import javax.swing.SpinnerNumberModel;
  */
 public class SpinnerBuilder extends JSpinner {
   int min = 0;
+  boolean isEditable = false;
   public SpinnerBuilder() {
     this.min = 1;
     setModel(new SpinnerNumberModel(1, 1, 1, 1));
-    applyStyle(false);
+    applyStyle(isEditable);
   }
   
   public SpinnerBuilder(int min) {
     super(new SpinnerNumberModel(min, min, 1, 1));
     this.min = min;
-    applyStyle(false);
+    applyStyle(isEditable);
   }
   
   public SpinnerBuilder(boolean isEditable, int max) {
+    this.isEditable = isEditable;
     setModel(new SpinnerNumberModel(min, min, max, 1));
     applyStyle(isEditable);
   }
 
   public void setMax(int max) {
     setModel(new SpinnerNumberModel(min, min, max, 1));
+    applyStyle(isEditable);
   }
 
   private void applyStyle(boolean isEditable) {
@@ -46,17 +50,25 @@ public class SpinnerBuilder extends JSpinner {
         JTextField textField = ((JSpinner.DefaultEditor) editor).getTextField();
         textField.setEditable(isEditable);
 
-        if (isEditable) {
-          textField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-              char c = e.getKeyChar();
-              if (!Character.isDigit(c)) {
-                e.consume(); // block non-numeric input
-              }
+        if (isEditable)  textField.addKeyListener(new KeyAdapter() {
+          @Override
+          public void keyTyped(KeyEvent e) {
+            char c = e.getKeyChar();
+            if (!Character.isDigit(c)) {
+              e.consume(); // block non-numeric input
             }
-          });
-        }
+          }
+
+          @Override
+          public void keyReleased(KeyEvent e) {
+            try {
+              commitEdit(); 
+            } catch (ParseException ex) {
+              // invalid input, ignore
+            }
+          }
+        });
+        
       }
 
       this.setFont(new Font("Arial", Font.BOLD, 17));
