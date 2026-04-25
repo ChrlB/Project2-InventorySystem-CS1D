@@ -53,7 +53,7 @@ public class Sales extends JFrame{
         });
         
         sales_tbl_scrollpane = new JScrollPane(sales_tbl);
-        sales_tbl_scrollpane.setBounds(500,150,725,350);
+        sales_tbl_scrollpane.setBounds(30,160,1200,480);
           
          this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
@@ -64,7 +64,7 @@ public class Sales extends JFrame{
         });
           
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setTitle("USER");
+        this.setTitle("SALES");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(1270,700);

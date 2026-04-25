@@ -18,19 +18,26 @@ import javax.swing.SpinnerNumberModel;
  * @author user
  */
 public class SpinnerBuilder extends JSpinner {
-
+  int min = 0;
   public SpinnerBuilder() {
-    super(new SpinnerNumberModel(1, 1, 1, 1));
+    this.min = 1;
+    setModel(new SpinnerNumberModel(1, 1, 1, 1));
+    applyStyle(false);
+  }
+  
+  public SpinnerBuilder(int min) {
+    super(new SpinnerNumberModel(min, min, 1, 1));
+    this.min = min;
     applyStyle(false);
   }
   
   public SpinnerBuilder(boolean isEditable, int max) {
-    super(new SpinnerNumberModel(0, 0, max, 1));
+    setModel(new SpinnerNumberModel(min, min, max, 1));
     applyStyle(isEditable);
   }
 
   public void setMax(int max) {
-    setModel(new SpinnerNumberModel(1, 1, max, 1));
+    setModel(new SpinnerNumberModel(min, min, max, 1));
   }
 
   private void applyStyle(boolean isEditable) {

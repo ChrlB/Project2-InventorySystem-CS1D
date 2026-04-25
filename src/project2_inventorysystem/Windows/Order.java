@@ -33,7 +33,7 @@ import project2_inventorysystem.Windows.MyComponents.*;
 public class Order extends JFrame{
   Connection conn;
   int user_ID, total_order_price ;
-  ArrayList<int[]> pendingItems ;
+  ArrayList<Object[]> pendingItems ;
   
   Header header ;
   JPanel order_form_panel;
@@ -90,8 +90,9 @@ public class Order extends JFrame{
             INSERT INTO  tbl_sales(
                   orderID, 
                   productID,
+                  salePrice,
                   quantity) 
-            VALUES (?, ?, ?)
+            VALUES (?, ?, ?, ?)
             """;
       insert_sales_pstmt = conn.prepareStatement(sql);
       
@@ -125,10 +126,10 @@ public class Order extends JFrame{
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
-      product_category_combobox.addActionListener((e) -> filterTable());
+      product_category_combobox.addActionListener((e) -> updateTable());
       
       
-      quantity_spinner = new SpinnerBuilder();
+      quantity_spinner = new SpinnerBuilder(0);
       quantity_spinner.setBounds(325,250,150,40);
       
       product_category_combobox_label = new LabelBuilder(" Product Category:",500,220,150,30, 15);
@@ -138,7 +139,8 @@ public class Order extends JFrame{
         SELECT productID ,
                productName as name,
                categoryName as category,
-               unitPrice as price
+               unitPrice as price,
+               stockQuantity as stock
         FROM tbl_products
         WHERE stockQuantity > 0;
         """;
@@ -237,7 +239,7 @@ public class Order extends JFrame{
     }
   }
   
-  private void filterTable(){
+  private void updateTable(){
     try {
       String selected_category = product_category_combobox.getSelectedItem().toString();
       
@@ -246,7 +248,8 @@ public class Order extends JFrame{
         SELECT productID ,
                productName as name,
                categoryName as category,
-               unitPrice as price
+               unitPrice as price,
+               stockQuantity as stock
         FROM tbl_products
         WHERE stockQuantity > 0 ;
         """;
@@ -256,7 +259,8 @@ public class Order extends JFrame{
         SELECT productID ,
                productName as name,
                categoryName as category,
-               unitPrice as price
+               unitPrice as price,
+               stockQuantity as stock
         FROM tbl_products
         WHERE stockQuantity > 0 and categoryName = ?;
         """;
@@ -305,8 +309,18 @@ public class Order extends JFrame{
       pstmt.setInt(1, (int)selected_record[0]);
       product_rs = pstmt.executeQuery();
       
+      
+      
       if(product_rs.next()){
-        quantity_spinner.setMax(product_rs.getInt("stockQuantity"));
+        int availableStock = product_rs.getInt("stockQuantity");
+        for (Object[] item : pendingItems) {
+          if((int)selected_record[0] == (int) item[0]){
+            availableStock -= (int)item[2];
+            break;
+          }
+        }
+        
+        quantity_spinner.setMax(availableStock);
         
         productID_field.setText(""+product_rs.getInt("productID"));
         
@@ -323,8 +337,28 @@ public class Order extends JFrame{
     try{
       int productID = product_rs.getInt("productID");
       int quantity = (int)(quantity_spinner.getValue()); 
+      double salePrice = product_rs.getDouble("unitPrice");
+      boolean isItemAlreadyAdded = false;
       
-      pendingItems.add(new int[]{productID, quantity});
+      if(quantity < 1){
+        JOptionPane.showMessageDialog(null,
+                "Quantity cannot be 0.",
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+        return;
+      }
+      
+      for (Object[] item : pendingItems) {
+        if(productID == (int) item[0]){
+          item[2] = ((int)item[2] + quantity);
+          isItemAlreadyAdded = true;
+          break;
+        }
+      }
+      
+      if(!isItemAlreadyAdded) {
+        System.out.print("added");
+        pendingItems.add(new Object[]{productID,salePrice, quantity});
+      }
       
       String productName = product_rs.getString("productName");
       String unit = product_rs.getString("unit");
@@ -341,6 +375,7 @@ public class Order extends JFrame{
       );
       
       total_order_price_label.setText(" TOTAL: ₱"+total_order_price);
+      showSelectedRecord();
     }catch(Exception ex){
       System.out.print(ex.getCause());
       JOptionPane.showMessageDialog(null, "No items added!");
@@ -363,6 +398,7 @@ public class Order extends JFrame{
   public void cancelOrder(){
     try{
       resetOrder();
+      showSelectedRecord();
       JOptionPane.showMessageDialog(null, "order canceled!");
     }catch(Exception ex){
       ex.printStackTrace(); 
@@ -397,21 +433,23 @@ public class Order extends JFrame{
         int orderID = rs.getInt(1);
 
         // Build batch
-        for (int[] item : pendingItems) {
+        for (Object[] item : pendingItems) {
           insert_sales_pstmt.setInt(1, orderID);   // orderID
           insert_sales_pstmt.setInt(2, (int)item[0]);   // productID
-          insert_sales_pstmt.setInt(3, (int)item[1]);   // quantity
+          insert_sales_pstmt.setDouble(3, (double)item[1]);
+          insert_sales_pstmt.setInt(4, (int)item[2]);   // quantity
           insert_sales_pstmt.addBatch();
           
-          deduct_stock_pstmt.setInt(1, (int)item[1]);
+          deduct_stock_pstmt.setInt(1, (int)item[2]);
           deduct_stock_pstmt.setInt(2, (int)item[0]);
           deduct_stock_pstmt.addBatch();
         }
       }
-      int rowsAffected = deduct_stock_pstmt.executeUpdate();
+      int[] rowsAffected = deduct_stock_pstmt.executeBatch();
       insert_sales_pstmt.executeBatch();
       
       JOptionPane.showMessageDialog(null, "Order confirmed!");
+      updateTable();
       resetOrder();
     } catch (SQLException ex) {
         ex.printStackTrace();
