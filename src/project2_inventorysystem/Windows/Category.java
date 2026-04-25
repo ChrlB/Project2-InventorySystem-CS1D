@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import project2_inventorysystem.Windows.Forms.NewCategory;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -81,7 +82,7 @@ public class Category extends JFrame{
         update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
         
-        new_btn.addActionListener((a) -> {} );
+        new_btn.addActionListener((a) -> { new NewCategory(this, conn);this.setEnabled(true);} );
         update_btn.addActionListener((a) -> { updateCategory();} );
         delete_btn.addActionListener((a) -> { deleteCategory();} );
                 
@@ -128,7 +129,6 @@ public class Category extends JFrame{
         category_tbl_scrollpane = new JScrollPane(category_tbl);
         category_tbl_scrollpane.setBounds(500,150,725,350);
 
-        
         
         
         this.addWindowListener(new java.awt.event.WindowAdapter() {
