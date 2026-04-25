@@ -303,12 +303,12 @@ public class Category extends JFrame{
 
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(null,
-                    "Product successfully added.",
+                    "Category successfully Updated.",
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             refreshTable();
         } else {
             JOptionPane.showMessageDialog(null,
-                    "No Product is added.",
+                    "No Category is Updated.",
                     "Failed", JOptionPane.WARNING_MESSAGE);
         }
       
@@ -368,9 +368,27 @@ public class Category extends JFrame{
         if (command == CANCEL) return;
         
         
+        sql = """
+           DELETE
+           FROM tbl_products
+           WHERE categoryName = ?;
+        """;
         
-        System.out.println("deleted");
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,selected_record[0].toString());
         
+        int rowsAffected = pstmt.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Category successfully Deleted.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No Category is Deleted.",
+                    "Failed", JOptionPane.WARNING_MESSAGE);
+        }
         
       }catch(Exception ex){
         ex.printStackTrace();
