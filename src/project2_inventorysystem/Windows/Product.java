@@ -389,16 +389,15 @@ public class Product extends JFrame{
               "This product is currently in stock. Are you sure you want to delete it?":
               "Do you want to proceed deleting this Product?" ;
       
-      Object[] option = {"To Archive","Hard Delete","Cancel"};
+      Object[] option = {"To Archive","Cancel"};
       int command = JOptionPane.showOptionDialog(null,
                 message, "DELETE CONFIRMATION", 
                 JOptionPane.OK_CANCEL_OPTION ,
                 JOptionPane.WARNING_MESSAGE,
                 null,
                 option,
-                option[2]
+                option[1]
       );
-      if (command == CANCEL) return;
       
       if(command == 0){
         sql = """
@@ -406,13 +405,9 @@ public class Product extends JFrame{
           SET isActive = 0
           WHERE productID = ?;
         """;
-        message = "Product successfully Archive.";
+        message = "Product successfully Archived.";
       }else{
-        sql = """
-          DELETE tbl_products
-          WHERE productID = ?;
-        """;
-        message = "Product successfully deleted.";
+        return;
       }
       
       
@@ -434,7 +429,9 @@ public class Product extends JFrame{
       }
     }catch(Exception ex){
       ex.printStackTrace();
-    
+      JOptionPane.showMessageDialog(null,
+              "No Product deleted.",
+              "Failed", JOptionPane.WARNING_MESSAGE);
     }
   }
 }
