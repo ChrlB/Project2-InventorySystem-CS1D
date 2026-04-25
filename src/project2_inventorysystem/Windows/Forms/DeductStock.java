@@ -26,7 +26,7 @@ public class DeductStock extends JFrame{
   ButtonBuilder confirm_btn, 
                 cancel_btn;
   
-  SpinnerBuilder restock_spinner;
+  SpinnerBuilder deduct_spinner;
   LabelBuilder stock_label;
   
   String sql;
@@ -41,8 +41,8 @@ public class DeductStock extends JFrame{
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
     stock_label.setForeground(new Color(0XB58863));
     
-    restock_spinner = new SpinnerBuilder(true,1000);
-    restock_spinner.setBounds(150,50,300,50);
+    deduct_spinner = new SpinnerBuilder(true,1000 );
+    deduct_spinner.setBounds(150,50,300,50);
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 130, 200, 50,15);
     cancel_btn = new ButtonBuilder("CANCEL",250, 130, 200, 50,15);
@@ -65,7 +65,7 @@ public class DeductStock extends JFrame{
       }
     });
     this.add(stock_label);
-    this.add(restock_spinner);
+    this.add(deduct_spinner);
     this.add(confirm_btn);
     this.add(cancel_btn);
     
@@ -79,7 +79,7 @@ public class DeductStock extends JFrame{
   
   void deductStock(){
     try{
-      int stock_to_deduct = (int)restock_spinner.getValue();
+      int stock_to_deduct = (int)deduct_spinner.getValue();
       
       if(stock_to_deduct < 1){
         JOptionPane.showMessageDialog(null,

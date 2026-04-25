@@ -10,12 +10,15 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Objects;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
+import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
 import project2_inventorysystem.Windows.MyComponents.TableBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 
@@ -30,12 +33,12 @@ public class Category extends JFrame{
     JPanel category_form_panel;
     
     TextFieldBuilder category_name_field,
-                     discription_field,
-                     unit_field,
-                     lowStockThreshold_field;
+                     description_field,
+                     unit_field;
+    SpinnerBuilder lowStockThreshold_spinner;
     
     LabelBuilder  category_name_field_label,
-                  discription_field_label,
+                  description_field_label,
                   unit_field_label,
                   lowStockThreshold_field_label,
                   lowStockThreshold2_field_label;
@@ -62,15 +65,17 @@ public class Category extends JFrame{
         
         
         category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
-        discription_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
+        description_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
         unit_field_label= new LabelBuilder("Unit Field: ",30,210,150,50,15);
         lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
         lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
         
-        category_name_field = new TextFieldBuilder(false, 180, 50, 270, 50, 15);
-        discription_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
+        category_name_field = new TextFieldBuilder(true, 180, 50, 270, 50, 15);
+        description_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
         unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
-        lowStockThreshold_field = new TextFieldBuilder(true, 180, 290, 270, 50, 15);
+        
+        lowStockThreshold_spinner = new SpinnerBuilder(true,300);
+        lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
         
         new_btn = new ButtonBuilder("NEW",500, 30, 200, 50,15);
         update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
@@ -78,7 +83,7 @@ public class Category extends JFrame{
         
         new_btn.addActionListener((a) -> {} );
         update_btn.addActionListener((a) -> { updateCategory();} );
-        delete_btn.addActionListener((a) -> {} );
+        delete_btn.addActionListener((a) -> { deleteCategory();} );
                 
         header.add(new_btn);
         
@@ -89,13 +94,13 @@ public class Category extends JFrame{
         
         
         category_form_panel.add(category_name_field);
-        category_form_panel.add(discription_field);
+        category_form_panel.add(description_field);
         category_form_panel.add(unit_field);
-        category_form_panel.add(lowStockThreshold_field);
+        category_form_panel.add(lowStockThreshold_spinner);
         
         
         category_form_panel.add(category_name_field_label);
-        category_form_panel.add(discription_field_label);
+        category_form_panel.add(description_field_label);
         category_form_panel.add(unit_field_label);
         category_form_panel.add(lowStockThreshold_field_label);
         category_form_panel.add(lowStockThreshold2_field_label);
@@ -137,7 +142,7 @@ public class Category extends JFrame{
       
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setTitle("USER");
+        this.setTitle("PRODUCT CATEGORIES");
         this.setLayout(null);
         this.setResizable(false);
         this.setSize(1270,580);
@@ -156,6 +161,20 @@ public class Category extends JFrame{
       }
     }
     
+    public void refreshTable(){
+      try{
+        sql = """
+          SELECT *
+          FROM tbl_categories
+        """;
+
+        pstmt = conn.prepareStatement(sql);
+        category_tbl.refreshTable(pstmt.executeQuery());
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+    
     void showSelectedRecord(){
       try{
         int row = category_tbl.getSelectedRow();
@@ -171,9 +190,9 @@ public class Category extends JFrame{
         }
         
         category_name_field.setText(""+selected_record[0]);
-        discription_field.setText(""+selected_record[1]);
+        description_field.setText((selected_record[1] == null)? "" : String.valueOf(selected_record[1]));
         unit_field.setText(""+selected_record[2]);
-        lowStockThreshold_field.setText(""+selected_record[3]);
+        lowStockThreshold_spinner.setValue((int)selected_record[3]);
         
       }catch(Exception ex){
         ex.printStackTrace();
@@ -181,7 +200,177 @@ public class Category extends JFrame{
     }
     
     void updateCategory(){
+      int CANCEL = 2;
       try{
+        int row = category_tbl.getSelectedRow();
+        
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+      
+        selected_record = new Object[]{
+          category_tbl.getValueAt(row, 0),
+          category_tbl.getValueAt(row, 1),
+          category_tbl.getValueAt(row, 2),
+          category_tbl.getValueAt(row, 3)
+        };
+
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed updating this Category?",
+                "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+        );
+        if (command == CANCEL) return;
+
+        category_name_field.setText(category_name_field.getText().trim().toUpperCase());
+
+        String new_category_name = category_name_field.getText().trim(); 
+        String new_description = description_field.getText().trim(); 
+        String new_unit = unit_field.getText().trim(); 
+        int new_lowStockThreshold = ((Number) lowStockThreshold_spinner.getValue()).intValue();
+
+        if(new_description.isEmpty()) new_description = null;
+
+        if (new_category_name.isEmpty() ||  new_unit.isEmpty()) {
+            JOptionPane.showMessageDialog(null,
+                    "Category Name and Unit cannot be empty.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        boolean is_category_name_not_changed = new_category_name.equals(selected_record[0]);
+
+        if( 
+            is_category_name_not_changed && 
+            Objects.equals(new_description, selected_record[1]) && 
+            new_unit.equals(selected_record[2]) && 
+            new_lowStockThreshold == ((Number) selected_record[3]).intValue()
+          ){
+          JOptionPane.showMessageDialog(null,
+                    "No changes to update.",
+                    "Message", JOptionPane.INFORMATION_MESSAGE);
+          return;
+        }
+        
+        if( !is_category_name_not_changed ){
+          sql = """
+            SELECT *
+            FROM tbl_categories
+            WHERE  categoryName = UPPER(?);
+          """;
+
+          pstmt = conn.prepareStatement(sql);
+          pstmt.setString(1,new_category_name);
+
+          rs = pstmt.executeQuery();
+
+          if(rs.next()){
+            JOptionPane.showMessageDialog(null,
+                    "\"" + new_category_name + "\" already exists in the category. Please check your Category list.",
+                  "Category Already Exists", JOptionPane.WARNING_MESSAGE);
+            return;
+          }
+        }
+
+        if(new_lowStockThreshold < 5 ){
+          JOptionPane.showMessageDialog(null,
+                    "Minimum lowStockThreshold is 5.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        //System.out.println("updated");
+        
+        sql = """
+            UPDATE tbl_categories
+            SET categoryName = UPPER(?),
+                description = LOWER(?),
+                unit = LOWER(?),
+                lowStockThreshold = ?
+            WHERE categoryName = UPPER(?);
+        """;
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,new_category_name);
+        pstmt.setString(2,new_description);
+        pstmt.setString(3,new_unit);
+        pstmt.setInt(4,new_lowStockThreshold);
+        pstmt.setString(5,""+selected_record[0]);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Product successfully added.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No Product is added.",
+                    "Failed", JOptionPane.WARNING_MESSAGE);
+        }
+      
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+    
+    void deleteCategory(){
+      int CANCEL = 2;
+      try{
+        int row = category_tbl.getSelectedRow();
+        
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+      
+        selected_record = new Object[]{
+          category_tbl.getValueAt(row, 0),
+          category_tbl.getValueAt(row, 1),
+          category_tbl.getValueAt(row, 2),
+          category_tbl.getValueAt(row, 3)
+        };
+        
+        category_name_field.setText(selected_record[0].toString());
+        
+        sql = """
+           SELECT *
+           FROM tbl_products
+           WHERE categoryName = ?;
+        """;
+        
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,selected_record[0].toString());
+        
+        rs = pstmt.executeQuery();
+        
+        if(rs.next()){
+          JOptionPane.showMessageDialog(null,
+                "Cannot delete this category because it has existing products associated with it.\n"+
+                        "Please remove or reassign all products (active and archived) before deleting this category.",
+                "Deletion Not Allowed", 
+                JOptionPane.WARNING_MESSAGE
+          );
+          return;
+        }
+        
+
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed deleting this Category('" + selected_record[0] + "')?",
+                "DELETE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE
+        );
+        if (command == CANCEL) return;
+        
+        
+        
+        System.out.println("deleted");
+        
         
       }catch(Exception ex){
         ex.printStackTrace();

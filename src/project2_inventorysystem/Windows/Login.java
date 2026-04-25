@@ -131,12 +131,13 @@ public class Login extends JFrame {
           new Dashboard(user_ID, conn);
           this.dispose();
         }else { 
-          System.out.println("Invalid Password."); 
+          JOptionPane.showMessageDialog(null, "Your Password Is Wrong", "LOGIN FAILED", JOptionPane.INFORMATION_MESSAGE);
+          //System.out.println("Invalid Password."); 
         }
         
       }else{ 
-        JOptionPane.showMessageDialog(null, "wrong credentials", "", JOptionPane.INFORMATION_MESSAGE);
-        System.out.println("wrong credentials"); 
+        JOptionPane.showMessageDialog(null, "Wrong Credentials", "LOGIN FAILED", JOptionPane.INFORMATION_MESSAGE);
+        //System.out.println("wrong credentials"); 
       }
       
     }catch (Exception ex){
