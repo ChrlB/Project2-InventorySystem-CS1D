@@ -12,7 +12,7 @@ import javax.swing.JPanel;
  * @author user
  */
 public class Header extends JPanel{
-  IconBuilder logo_icon;
+  public IconBuilder logo_icon;
   
   public Header(){
     logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",30,5,340,90);
