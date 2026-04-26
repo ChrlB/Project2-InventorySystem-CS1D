@@ -60,7 +60,7 @@ public class Login extends JFrame {
       barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",-10,40,400,400);
       //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",280,0,370,120);
       //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",460,15,420,160);
-      logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",330,5,430,170);
+      logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",280,5,480,170);
       
       ImageIcon hidden_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/hidden.png"));
       ImageIcon show_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/show.png"));

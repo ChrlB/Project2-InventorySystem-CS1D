@@ -63,7 +63,7 @@ public class NewProduct extends JFrame {
       product_name_field = new TextFieldBuilder(true, 175, 50, 275, 50, 15);
       unit_price_field = new TextFieldBuilder(true, 175, 190, 275, 50, 15);
       
-      stock_quantity_spinner = new SpinnerBuilder(true,1000);
+      stock_quantity_spinner = new SpinnerBuilder(true,0,1000);
       stock_quantity_spinner.setBounds(175, 260, 275, 50);
 
       product_name_field_label = new LabelBuilder("Product Name: ",30,50,200,50,15);

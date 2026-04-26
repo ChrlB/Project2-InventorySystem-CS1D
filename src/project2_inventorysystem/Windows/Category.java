@@ -75,10 +75,10 @@ public class Category extends JFrame{
         description_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
         unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
         
-        lowStockThreshold_spinner = new SpinnerBuilder(true,300);
+        lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
         lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
         
-        new_btn = new ButtonBuilder("NEW",500, 30, 200, 50,15);
+        new_btn = new ButtonBuilder("NEW CATEGORY",800, 30, 200, 50,15);
         update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
         

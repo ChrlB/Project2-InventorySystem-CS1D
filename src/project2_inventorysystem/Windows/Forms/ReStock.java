@@ -40,7 +40,7 @@ public class ReStock extends JFrame{
     stock_label = new LabelBuilder("Add Stock: ",30,50,100,50,15);
     stock_label.setForeground(new Color(0XB58863));
     
-    restock_spinner = new SpinnerBuilder(true,1000);
+    restock_spinner = new SpinnerBuilder(true,0,1000);
     restock_spinner.setBounds(130,50,320,50);
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 130, 200, 50,15);

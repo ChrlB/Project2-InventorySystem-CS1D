@@ -57,7 +57,7 @@ public class NewCategory extends JFrame{
     description_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
     unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
 
-    lowStockThreshold_spinner = new SpinnerBuilder(true,300);
+    lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
     lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 370, 200, 50,15);

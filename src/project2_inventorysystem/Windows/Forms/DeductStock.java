@@ -41,7 +41,7 @@ public class DeductStock extends JFrame{
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
     stock_label.setForeground(new Color(0XB58863));
     
-    deduct_spinner = new SpinnerBuilder(true,1000 );
+    deduct_spinner = new SpinnerBuilder(true,0,1000 );
     deduct_spinner.setBounds(150,50,300,50);
     
     confirm_btn = new ButtonBuilder("CONFIRM",30, 130, 200, 50,15);

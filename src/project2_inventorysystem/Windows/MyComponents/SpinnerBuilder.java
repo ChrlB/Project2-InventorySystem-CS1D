@@ -20,26 +20,30 @@ import javax.swing.SpinnerNumberModel;
  */
 public class SpinnerBuilder extends JSpinner {
   int min = 0;
+  int max = 1;
   boolean isEditable = false;
   public SpinnerBuilder() {
     this.min = 1;
-    setModel(new SpinnerNumberModel(1, 1, 1, 1));
+    setModel(new SpinnerNumberModel(min, min, max, 1));
     applyStyle(isEditable);
   }
   
   public SpinnerBuilder(int min) {
-    super(new SpinnerNumberModel(min, min, 1, 1));
+    setModel(new SpinnerNumberModel(min, min, max, 1));
     this.min = min;
     applyStyle(isEditable);
   }
   
-  public SpinnerBuilder(boolean isEditable, int max) {
+  public SpinnerBuilder(boolean isEditable,int min, int max) {
+    this.min = min;
+    this.max = max;
     this.isEditable = isEditable;
     setModel(new SpinnerNumberModel(min, min, max, 1));
     applyStyle(isEditable);
   }
 
   public void setMax(int max) {
+    this.max = max;
     setModel(new SpinnerNumberModel(min, min, max, 1));
     applyStyle(isEditable);
   }
