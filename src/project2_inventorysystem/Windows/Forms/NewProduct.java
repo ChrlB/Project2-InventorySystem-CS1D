@@ -164,7 +164,7 @@ public class NewProduct extends JFrame {
       
       int command = JOptionPane.showConfirmDialog(null,
               "Do you want to proceed Adding this product?",
-              "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+              "NEW PRODUCT CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
       );
       if (command == CANCEL) return;
       

@@ -6,7 +6,10 @@ package project2_inventorysystem.Windows.Forms;
 
 import java.awt.Color;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import project2_inventorysystem.Windows.Category;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -35,6 +38,10 @@ public class NewCategory extends JFrame{
   
   ButtonBuilder confirm_btn, 
                 cancel_btn;
+  
+  String sql;
+  ResultSet rs;
+  PreparedStatement pstmt;
   
   public NewCategory(Category parent,Connection conn){
     this.parent = parent;
@@ -105,6 +112,78 @@ public class NewCategory extends JFrame{
   }
   
   void addCategory(){
+      int CANCEL = 2;
+      try{
+         String new_category_name = category_name_field.getText().trim();
+         int new_lowStockThreshold = ((Number) lowStockThreshold_spinner.getValue()).intValue();
+         String new_description = description_field.getText().trim();
+         String new_unit = unit_field.getText().trim();
+         
+        if (new_category_name.isEmpty() || new_lowStockThreshold == 0 || new_unit.isEmpty()){
+             JOptionPane.showMessageDialog(null,
+                "Category Name Unit and LowStockThreshold cannot be empty or 0.",
+                "Validation Error", JOptionPane.WARNING_MESSAGE);
+         return;
+        }
+        
+        sql = """
+            SELECT *
+            FROM tbl_categories
+            WHERE   categoryName = UPPER(?);       
+          """;
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1,new_category_name);
+        
+        rs = pstmt.executeQuery();
+        
+        if(rs.next()){
+            JOptionPane.showMessageDialog(null,
+                    "\"" + new_category_name + "\" already exists in the category.\n"
+                    + "Please check your category table.",
+                  "Category Already Exists", JOptionPane.WARNING_MESSAGE);
+        return;
+        }
+        
+        int command = JOptionPane.showConfirmDialog(null,
+              "Do you want to proceed Adding this category?",
+              "NEW CATEGORY CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+        );
+       if (command == CANCEL) return;
+       
+       sql = """
+            INSERT INTO tbl_categories(
+                categoryName,
+                description,
+                unit,
+                lowStockThreshold
+              )
+            VALUES(UPPER(?),?,?,?);
+          """;
+
+       pstmt = conn.prepareStatement(sql);
+       pstmt.setString(1,new_category_name);
+       pstmt.setString(2,new_description);
+       pstmt.setString(3,new_unit);
+       pstmt.setInt(4,new_lowStockThreshold);
+       
+      int rowsAffected = pstmt.executeUpdate();
+      
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "Category successfully added.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          parent.refreshTable();
+          closeWindow();
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "No Category is added.",
+                  "Failed", JOptionPane.WARNING_MESSAGE);
+          closeWindow();
+      }
+      }catch(Exception ex){
+          ex.printStackTrace();
+      }
     
   }
   
