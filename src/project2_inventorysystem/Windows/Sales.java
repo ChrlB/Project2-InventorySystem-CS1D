@@ -98,6 +98,19 @@ public class Sales extends JFrame{
         
         sales_tbl_scrollpane = new JScrollPane(sales_tbl);
         sales_tbl_scrollpane.setBounds(30,160,1200,410);
+        
+        sql = """
+              SELECT 
+                 SUM(salePrice) AS TOTAL_SALE_PRICE, 
+                 SUM(quantity) AS TOTAL_QUANTITY
+              FROM tbl_sales AS S
+            
+              """;
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+        rs.next();
+        total_sales_field.setText(rs.getString("TOTAL_SALE_PRICE"));
+        total_quantity_field.setText(rs.getString("TOTAL_QUANTITY"));
           
          this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
