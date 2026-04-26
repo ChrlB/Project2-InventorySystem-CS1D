@@ -71,23 +71,29 @@ public class Sales extends JFrame{
         total_sales_field.setText("₱");
         
         sql = """
-              SELECT 
-                S.saleID,
-                S.orderID,
-                U.username AS user,
-                O.customerName,
-                S.productID,
-                P.productName,
-                S.salePrice,
-                S.quantity               
-              FROM tbl_sales AS S
-              INNER JOIN tbl_products AS P
-                ON S.productID = P.productID
-              INNER JOIN tbl_orders AS O
-                ON S.orderID = O.orderID
-              INNER JOIN tbl_users AS U
-                ON O.userID = U.userID
-              """;
+          SELECT 
+              S.saleID,
+              S.orderID,
+              U.username      AS user,
+              O.customerName,
+              S.productID,
+              P.productName,
+              P.categoryName  AS category,
+              S.salePrice,
+              S.quantity               
+          FROM tbl_sales AS S
+              
+          INNER JOIN tbl_products AS P
+              ON S.productID = P.productID
+              
+          INNER JOIN tbl_orders AS O
+              ON S.orderID = O.orderID
+              
+          INNER JOIN tbl_users AS U
+              ON O.userID = U.userID
+              
+          ORDER BY S.orderID DESC;
+        """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         
@@ -104,7 +110,7 @@ public class Sales extends JFrame{
         
         sql = """
               SELECT 
-                 SUM(salePrice) AS TOTAL_SALE_PRICE, 
+                 SUM(salePrice * quantity) AS TOTAL_SALE_PRICE, 
                  SUM(quantity) AS TOTAL_QUANTITY
               FROM tbl_sales AS S
             
