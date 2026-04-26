@@ -71,8 +71,19 @@ public class Sales extends JFrame{
         total_sales_field.setText("₱");
         
         sql = """
-              SELECT *
-              FROM tbl_sales
+              SELECT 
+                S.saleID,
+                S.orderID,
+                O.customerName,
+                S.productID,
+                P.productName,
+                S.salePrice,
+                S.quantity             
+              FROM tbl_sales AS S
+              INNER JOIN tbl_products AS P
+              ON S.productID = P.productID
+              INNER JOIN tbl_orders AS O
+              ON S.orderID = O.orderID
               """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
