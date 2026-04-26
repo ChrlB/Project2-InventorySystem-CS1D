@@ -111,6 +111,18 @@ public class Sales extends JFrame{
         rs.next();
         total_sales_field.setText(rs.getString("TOTAL_SALE_PRICE"));
         total_quantity_field.setText(rs.getString("TOTAL_QUANTITY"));
+        
+        sql = """
+              SELECT 
+                 COUNT(DISTINCT orderID) AS TOTAL_ORDERS
+                
+              FROM tbl_sales AS S
+            
+              """;
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+        rs.next();
+        total_orders_field.setText(rs.getString("TOTAL_ORDERS"));
           
          this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
