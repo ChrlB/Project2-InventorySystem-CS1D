@@ -74,16 +74,19 @@ public class Sales extends JFrame{
               SELECT 
                 S.saleID,
                 S.orderID,
+                U.username AS user,
                 O.customerName,
                 S.productID,
                 P.productName,
                 S.salePrice,
-                S.quantity             
+                S.quantity               
               FROM tbl_sales AS S
               INNER JOIN tbl_products AS P
-              ON S.productID = P.productID
+                ON S.productID = P.productID
               INNER JOIN tbl_orders AS O
-              ON S.orderID = O.orderID
+                ON S.orderID = O.orderID
+              INNER JOIN tbl_users AS U
+                ON O.userID = U.userID
               """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
