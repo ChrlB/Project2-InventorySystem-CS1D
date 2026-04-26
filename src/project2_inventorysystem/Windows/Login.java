@@ -47,19 +47,13 @@ public class Login extends JFrame {
     try{
       this.conn = conn;
       
-      //header = new Header();
       user_panel = new JPanel();
       user_panel.setBackground(new Color(0XB58863));
-      //user_panel.setBackground(new Color(0x10232A));
       user_panel.setLayout(null);
-      //user_panel.setBounds(300, 110, 830, 300);
       user_panel.setBounds(220, 110, 830, 300);
       
       
-      //barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/barista.png",30,60,400,400);
       barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",-10,40,400,400);
-      //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",280,0,370,120);
-      //logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",460,15,420,160);
       logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",280,5,480,170);
       
       ImageIcon hidden_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/hidden.png"));
@@ -68,27 +62,6 @@ public class Login extends JFrame {
       scaled_hidden_icon = new ImageIcon(hidden_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
       scaled_show_icon = new ImageIcon(show_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
        
-
-//      show_password_btn = new JButton(null,scaled_hidden_icon);
-//      show_password_btn.setBounds(608,140,32,50);
-//      show_password_btn.setFocusable(false);
-//      show_password_btn.addActionListener((a) -> showHidePassword());
-//      
-//      username_field = new TextFieldBuilder (true ,355, 70 ,285,50,15);
-//      password_field = new JPasswordField (15);
-//      password_field.setEchoChar('*');
-//      password_field.setBounds(355, 140, 250, 50);
-//      password_field.setFont(new Font("Arial", Font.BOLD, 16));
-//      password_field.setForeground(new Color(0x10232A));
-//      
-//      login_btn = new ButtonBuilder("LOGIN",250,210,390,60,17);
-//      login_btn.addActionListener((a)->  login() );
-//      
-//      username_label = new LabelBuilder("Username: ",250,70,200,50,17);
-//      password_label = new LabelBuilder("Password: ",250,140,200,50,17);
-      
-//      username_label.setForeground(new Color(0XB58863));
-//      password_label.setForeground(new Color(0XB58863));
 
       show_password_btn = new JButton(null,scaled_hidden_icon);
       show_password_btn.setBounds(498,140,32,50);
@@ -110,12 +83,9 @@ public class Login extends JFrame {
      
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);
-      //this.setSize(470,420);
-      //this.setSize(925,520);
       this.setSize(815,520);
       this.setResizable(false);
       this.setTitle("LOGIN");
-      //this.getContentPane().setBackground(new Color(0XB58863));
       this.getContentPane().setBackground(new Color(0x10232A));
       this.setLocationRelativeTo(null);
       

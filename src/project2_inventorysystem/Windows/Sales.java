@@ -11,9 +11,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import project2_inventorysystem.Windows.MyComponents.Header;
+import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TableBuilder;
+import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 
 /**
  *
@@ -31,11 +34,41 @@ public class Sales extends JFrame{
     String sql;
     PreparedStatement pstmt;
     
+    TextFieldBuilder total_orders_field,
+                    total_sales_field,
+                    total_quantity_field;
+        
+    LabelBuilder  total_orders_field_label,
+              total_sales_field_label,
+              total_quantity_field_label;
+    
+    JPanel footer_panel;
+    
    public Sales(int userID,Connection conn){
-      try{            
+      try{  
         this.conn = conn;
         user_ID = userID;
         header = new Header();
+        
+        footer_panel = new JPanel();
+//        footer_panel.setBackground(new Color(0x3D4D55));
+        footer_panel.setBackground(new Color(0XB58863));
+        footer_panel.setLayout(null);
+        footer_panel.setBounds(0, 580, 1270, 120);
+        
+        total_orders_field = new TextFieldBuilder(false, 170, 590, 250, 50, 17);
+        total_sales_field = new TextFieldBuilder(false, 560, 590, 260, 50, 17);
+        total_quantity_field = new TextFieldBuilder(false, 980, 590, 250, 50, 17);
+        
+        total_orders_field_label = new LabelBuilder("TOTAL ORDERS: ",30,590,150,50,15);
+        total_sales_field_label = new LabelBuilder("TOTAL SALES: ",430,590,150,50,15);
+        total_quantity_field_label = new LabelBuilder("TOTAL QUANTITY: ",830,590,150,50,15);
+        
+        total_orders_field_label.setForeground(new Color(0x3D4D55));
+        total_sales_field_label.setForeground(new Color(0x3D4D55));
+        total_quantity_field_label.setForeground(new Color(0x3D4D55));
+        
+        total_sales_field.setText("₱");
         
         sql = """
               SELECT *
@@ -53,7 +86,7 @@ public class Sales extends JFrame{
         });
         
         sales_tbl_scrollpane = new JScrollPane(sales_tbl);
-        sales_tbl_scrollpane.setBounds(30,160,1200,480);
+        sales_tbl_scrollpane.setBounds(30,160,1200,410);
           
          this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
@@ -71,9 +104,20 @@ public class Sales extends JFrame{
         this.getContentPane().setBackground(new Color(0xD3C3B9));
         this.setLocationRelativeTo(null);
         
-        
         this.add (header);
         this.add(sales_tbl_scrollpane);
+        
+        this.add(total_orders_field);
+        this.add(total_sales_field);
+        this.add(total_quantity_field);
+        
+        this.add(total_orders_field_label);
+        this.add(total_sales_field_label);
+        this.add(total_quantity_field_label);
+        
+        this.add(footer_panel);
+        
+        
         this.setVisible(true);
         
       }catch(Exception ex){
