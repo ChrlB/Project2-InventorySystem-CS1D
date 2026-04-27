@@ -98,14 +98,14 @@ public class Sales extends JFrame{
         product_combobox.addActionListener((a) -> { refreshTable();} );
         
         //  order_combobox
-        sql = "SELECT orderID FROM tbl_orders; ";
+        sql = "SELECT orderID FROM tbl_orders ORDER BY orderID DESC; ";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         while(rs.next()){ order_combobox.addItem(rs.getString("orderID")); }
         
         
         //  customer_combobox
-        sql = "SELECT  customerName FROM tbl_orders; ";
+        sql = "SELECT  DISTINCT customerName AS customerName FROM tbl_orders; ";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         while(rs.next()){ customer_combobox.addItem(rs.getString("customerName")); }
@@ -168,7 +168,8 @@ public class Sales extends JFrame{
         sql = """
               SELECT 
                  SUM(salePrice * quantity) AS TOTAL_SALE_PRICE, 
-                 SUM(quantity) AS TOTAL_QUANTITY
+                 SUM(quantity) AS TOTAL_QUANTITY,
+                 COUNT(DISTINCT orderID) AS TOTAL_ORDERS
               FROM tbl_sales AS S
             
               """;
@@ -177,17 +178,6 @@ public class Sales extends JFrame{
         rs.next();
         total_sales_field.setText(rs.getString("TOTAL_SALE_PRICE"));
         total_quantity_field.setText(rs.getString("TOTAL_QUANTITY"));
-        
-        sql = """
-              SELECT 
-                 COUNT(DISTINCT orderID) AS TOTAL_ORDERS
-                
-              FROM tbl_sales AS S
-            
-              """;
-        pstmt = conn.prepareStatement(sql);
-        rs = pstmt.executeQuery();
-        rs.next();
         total_orders_field.setText(rs.getString("TOTAL_ORDERS"));
           
          this.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -241,9 +231,94 @@ public class Sales extends JFrame{
     
     void refreshTable(){
       try{
+        String selected_order_text = order_combobox.getSelectedItem().toString();
+        int selected_order = (selected_order_text.equals("ALL"))?  0 : Integer.parseInt(selected_order_text );
+        String selected_customer = customer_combobox.getSelectedItem().toString();
+        String selected_user = user_combobox.getSelectedItem().toString();
         String selected_category = product_category_combobox.getSelectedItem().toString();
+        String selected_product = product_combobox.getSelectedItem().toString();
+        
+        sql = """
+          SELECT 
+              S.saleID,
+              S.orderID,
+              U.username      AS user,
+              O.customerName,
+              S.productID,
+              P.productName,
+              P.categoryName  AS category,
+              S.salePrice,
+              S.quantity,
+              DATE_FORMAT(O.orderDate,"%Y-%d-%m") as orderDate
+          FROM tbl_sales AS S
+              
+          INNER JOIN tbl_products AS P
+              ON S.productID = P.productID
+              
+          INNER JOIN tbl_orders AS O
+              ON S.orderID = O.orderID
+              
+          INNER JOIN tbl_users AS U
+              ON O.userID = U.userID
+              
+          WHERE  
+              (? = 0            OR S.orderID      = ?)
+              AND (? = 'ALL'    OR U.username     = ?)
+              AND (? = 'ALL'    OR O.customerName = ?)
+              AND (? = 'ALL'    OR P.categoryName = ?)
+              AND (? = 'ALL'    OR P.productName  = ?)
+          ORDER BY S.orderID DESC;
+        """;
         
         
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, selected_order);          pstmt.setInt(2, selected_order);
+        pstmt.setString(3, selected_user); pstmt.setString(4, selected_user);
+        pstmt.setString(5, selected_customer);     pstmt.setString(6, selected_customer);
+        pstmt.setString(7, selected_category); pstmt.setString(8, selected_category);
+        pstmt.setString(9, selected_product);  pstmt.setString(10, selected_product);
+        
+        rs = pstmt.executeQuery();
+        sales_tbl.refreshTable(rs);
+        
+        sql = """
+            SELECT 
+                COUNT(DISTINCT S.orderID) AS TOTAL_ORDERS,
+                SUM(S.salePrice * S.quantity) AS TOTAL_SALE_PRICE,
+                SUM(S.quantity) AS TOTAL_QUANTITY
+            FROM tbl_sales AS S
+              
+            INNER JOIN tbl_products AS P 
+                ON S.productID = P.productID
+              
+            INNER JOIN tbl_orders   AS O 
+                ON S.orderID   = O.orderID
+              
+            INNER JOIN tbl_users    AS U 
+                ON O.userID     = U.userID
+              
+            WHERE
+                (? = 0         OR S.orderID      = ?)
+                AND (? = 'ALL' OR U.username     = ?)
+                AND (? = 'ALL' OR O.customerName = ?)
+                AND (? = 'ALL' OR P.categoryName = ?)
+                AND (? = 'ALL' OR P.productName  = ?)
+        """;
+
+        // same bindings
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, selected_order);        pstmt.setInt(2, selected_order);
+        pstmt.setString(3, selected_user);      pstmt.setString(4, selected_user);
+        pstmt.setString(5, selected_customer);  pstmt.setString(6, selected_customer);
+        pstmt.setString(7, selected_category);  pstmt.setString(8, selected_category);
+        pstmt.setString(9, selected_product);   pstmt.setString(10, selected_product);
+
+        rs = pstmt.executeQuery();
+        if (rs.next()) {
+            total_sales_field.setText(rs.getString("TOTAL_SALE_PRICE"));
+            total_quantity_field.setText(rs.getString("TOTAL_QUANTITY"));
+            total_orders_field.setText(rs.getString("TOTAL_ORDERS"));
+        }
         
       }catch(Exception ex){
         ex.printStackTrace();
