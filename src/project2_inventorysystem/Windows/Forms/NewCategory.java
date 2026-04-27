@@ -149,7 +149,7 @@ public class NewCategory extends JFrame{
               "Do you want to proceed Adding this category?",
               "NEW CATEGORY CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
         );
-       if (command == CANCEL) return;
+       if (!(command == JOptionPane.OK_OPTION)) return;
        
        sql = """
             INSERT INTO tbl_categories(

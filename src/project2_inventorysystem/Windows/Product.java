@@ -303,7 +303,7 @@ public class Product extends JFrame{
               "Do you want to proceed updating this record?",
               "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
       );
-      if (command == CANCEL) return;
+      if (!(command == JOptionPane.OK_OPTION)) return;
       
       String new_product_name = product_name_field.getText().trim(); 
       String new_product_category = product_category_combobox.getSelectedItem().toString().trim();

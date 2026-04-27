@@ -217,7 +217,7 @@ public class Dashboard extends JFrame{
               "Are you sure you want to log out?",
               "Log Out", JOptionPane.OK_CANCEL_OPTION
       );
-      if (command == CANCEL) return;
+      if (!(command == JOptionPane.OK_OPTION)) return;
       
       
 //      sql = "UPDATE tbl_userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";

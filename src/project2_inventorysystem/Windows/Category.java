@@ -112,8 +112,12 @@ public class Category extends JFrame{
         
         
         sql = """
-             SELECT *
-             FROM tbl_categories
+            SELECT 
+                categoryName,
+                description,
+                unit,
+                lowStockThreshold
+            FROM tbl_categories
              """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
@@ -164,8 +168,13 @@ public class Category extends JFrame{
     public void refreshTable(){
       try{
         sql = """
-          SELECT *
+          SELECT 
+              categoryName,
+              description,
+              unit,
+              lowStockThreshold
           FROM tbl_categories
+          WHERE isActive = 1;
         """;
 
         pstmt = conn.prepareStatement(sql);
@@ -222,7 +231,7 @@ public class Category extends JFrame{
                 "Do you want to proceed updating this Category?",
                 "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
         );
-        if (command == CANCEL) return;
+        if (!(command == JOptionPane.OK_OPTION)) return;
 
         category_name_field.setText(category_name_field.getText().trim().toUpperCase());
 
@@ -365,12 +374,12 @@ public class Category extends JFrame{
                 "DELETE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION,
                 JOptionPane.WARNING_MESSAGE
         );
-        if (command == CANCEL) return;
+        if (!(command == JOptionPane.OK_OPTION)) return;
         
         
         sql = """
-           DELETE
-           FROM tbl_products
+           UPDATE tbl_categories
+              SET isActive = 0
            WHERE categoryName = ?;
         """;
         
@@ -381,7 +390,7 @@ public class Category extends JFrame{
         
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(null,
-                    "Category successfully Deleted.",
+                    "Category successfully Archived.",
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             refreshTable();
         } else {

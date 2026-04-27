@@ -96,7 +96,12 @@ public class User extends JFrame{
 
 
         sql = """
-              SELECT *
+              SELECT 
+                userID,
+                username,
+                password,
+                fullname,
+                DATE_FORMAT(dateCreated,"%Y-%d-%m") as dateCreated
               FROM tbl_users
               WHERE isActive = 1;
               """;
@@ -346,7 +351,12 @@ public class User extends JFrame{
     public void refreshTable(){
       try{
         sql = """
-              SELECT * 
+              SELECT 
+                userID,
+                username,
+                password,
+                fullname,
+                DATE_FORMAT(dateCreated,"%Y-%d-%m") as dateCreated
               FROM tbl_users
               WHERE isActive = 1;
               """;

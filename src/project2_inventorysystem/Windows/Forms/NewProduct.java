@@ -166,7 +166,7 @@ public class NewProduct extends JFrame {
               "Do you want to proceed Adding this product?",
               "NEW PRODUCT CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
       );
-      if (command == CANCEL) return;
+      if (!(command == JOptionPane.OK_OPTION)) return;
       
       
       sql = """
