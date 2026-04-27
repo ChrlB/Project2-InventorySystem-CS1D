@@ -409,10 +409,10 @@ public class Order extends JFrame{
     
     try {
       if (pendingItems.isEmpty()) {
-        JOptionPane.showMessageDialog(null, "No items added!");
+        JOptionPane.showMessageDialog(null, "No items added!","Message",JOptionPane.WARNING_MESSAGE);
         return;
       }else if(customer_name_field.getText().trim().equals("")){
-        JOptionPane.showMessageDialog(null, "customer name is required!");
+        JOptionPane.showMessageDialog(null, "customer name is required!","Message",JOptionPane.WARNING_MESSAGE);
         return;
       }
 

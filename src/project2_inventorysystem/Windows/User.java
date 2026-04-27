@@ -98,6 +98,7 @@ public class User extends JFrame{
         sql = """
               SELECT *
               FROM tbl_users
+              WHERE isActive = 1;
               """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
@@ -270,7 +271,8 @@ public class User extends JFrame{
         if (command == CANCEL) return;
         
         sql = """
-              DELETE FROM tbl_users
+              UPDATE tbl_users
+                SET isActive = 0
               WHERE userID = ?;
               """;
         pstmt = conn.prepareStatement(sql);
@@ -280,13 +282,13 @@ public class User extends JFrame{
         
         if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
-                ("User "+ selected_record[0] +" successfully deleted."),
+                ("User "+ selected_record[0] +" successfully archived."),
                 "Success", JOptionPane.INFORMATION_MESSAGE);
           
           refreshTable();
         } else {
           JOptionPane.showMessageDialog(null,
-                "No User is added.",
+                "No User is deleted.",
                 "Failed", JOptionPane.WARNING_MESSAGE);
         }
         
@@ -346,6 +348,7 @@ public class User extends JFrame{
         sql = """
               SELECT * 
               FROM tbl_users
+              WHERE isActive = 1;
               """;
         pstmt = conn.prepareStatement(sql);
         users_tbl.refreshTable(pstmt.executeQuery());

@@ -161,7 +161,12 @@ public class Login extends JFrame {
   
   ResultSet getUserInfo(String input_username){
     try{
-      sql = "SELECT * FROM tbl_users WHERE username = ?";
+      sql = """
+            SELECT * 
+            FROM tbl_users 
+            WHERE username = ?
+            AND isActive = 1;
+      """;
       pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, input_username);
       
@@ -183,7 +188,7 @@ public class Login extends JFrame {
       pstmt.executeUpdate();
       System.out.println("Login Successful!");
     }catch(Exception ex){
-      
+      ex.printStackTrace();
     }
     
   }
