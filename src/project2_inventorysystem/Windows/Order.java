@@ -122,7 +122,7 @@ public class Order extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       
-      product_category_combobox = new ComboBoxBuilder("ALL",500,250,150,40);
+      product_category_combobox = new ComboBoxBuilder("ALL",500,250,150,40,15);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }

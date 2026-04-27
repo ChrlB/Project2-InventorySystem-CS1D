@@ -13,11 +13,11 @@ import javax.swing.JComboBox;
  * @author user
  */
 public class ComboBoxBuilder extends JComboBox{
-  public ComboBoxBuilder(Object firstItem,  int x,int y, int width,int height){
+  public ComboBoxBuilder(Object firstItem,  int x,int y, int width,int height, int fontSize){
     this.addItem(firstItem);
     this.setSelectedIndex(0);
     this.setBounds(x, y, width, height);
-    this.setFont(new Font("Arial", Font.BOLD, 15));
+    this.setFont(new Font("Arial", Font.BOLD, fontSize));
     this.setForeground(new Color(0x3D4D55));
   }
   

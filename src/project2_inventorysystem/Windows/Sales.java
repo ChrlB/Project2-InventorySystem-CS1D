@@ -67,9 +67,9 @@ public class Sales extends JFrame{
         footer_panel.setLayout(null);
         footer_panel.setBounds(0, 580, 1270, 120);
         
-        total_orders_field = new TextFieldBuilder(false, 170, 590, 250, 50, 17);
-        total_sales_field = new TextFieldBuilder(false, 560, 590, 260, 50, 17);
-        total_quantity_field = new TextFieldBuilder(false, 980, 590, 250, 50, 17);
+        total_orders_field = new TextFieldBuilder(false, 170, 590, 250, 40, 17);
+        total_sales_field = new TextFieldBuilder(false, 560, 590, 260, 40, 17);
+        total_quantity_field = new TextFieldBuilder(false, 980, 590, 250, 40, 17);
         
         total_orders_field_label = new LabelBuilder("TOTAL ORDERS: ",30,590,150,50,15);
         total_sales_field_label = new LabelBuilder("TOTAL SALES: ",430,590,150,50,15);
@@ -79,80 +79,57 @@ public class Sales extends JFrame{
         total_sales_field_label.setForeground(new Color(0x3D4D55));
         total_quantity_field_label.setForeground(new Color(0x3D4D55));
         
-        order_combobox_label = new LabelBuilder("Order Filter:",30,120,150,30, 15);
-//        customer_combobox_label = new LabelBuilder("Customer Filter:",30,120,200,30, 15);
-//        user_combobox_label = new LabelBuilder("User Filter:",30,120,150,30, 15);
-//        product_category_combobox_label = new LabelBuilder("Product Category Filter:",30,120,200,30, 15);
-//        product_combobox_label = new LabelBuilder("Product Filter:",30,120,150,30, 15);
+        order_combobox_label = new LabelBuilder("Order Filter:",30,102,150,30, 13);
+        customer_combobox_label = new LabelBuilder("Customer Filter:",200,102,150,30, 13);
+        user_combobox_label = new LabelBuilder("User Filter:",370,102,150,30, 13);
+        product_category_combobox_label = new LabelBuilder("Product Category Filter:",540,102,200,30, 13);
+        product_combobox_label = new LabelBuilder("Product Filter:",710,102,150,30, 13);
         
+        order_combobox = new ComboBoxBuilder("ALL",30,125,150,30,13);
+        customer_combobox = new ComboBoxBuilder("ALL",200,125,150,30,13);
+        user_combobox = new ComboBoxBuilder("ALL",370,125,150,30,13);
+        product_category_combobox = new ComboBoxBuilder("ALL",540,125,150,30,13);
+        product_combobox = new ComboBoxBuilder("ALL",710,125,150,30,13);
+
+        order_combobox.addActionListener((a) -> { refreshTable();} );
+        customer_combobox.addActionListener((a) -> { refreshTable();} );
+        user_combobox.addActionListener((a) -> { refreshTable();} );
+        product_category_combobox.addActionListener((a) -> { refreshTable();} );
+        product_combobox.addActionListener((a) -> { refreshTable();} );
         
         //  order_combobox
-        sql = """
-          SELECT categoryName FROM tbl_categories; 
-        """;
-
+        sql = "SELECT orderID FROM tbl_orders; ";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
-        
-        order_combobox = new ComboBoxBuilder("ALL",225,110,150,40);
-        while(rs.next()){ order_combobox.addItem(rs.getString("categoryName")); }
-        //product_category_combobox.addActionListener((e) -> updateTable());
+        while(rs.next()){ order_combobox.addItem(rs.getString("orderID")); }
         
         
         //  customer_combobox
-//        sql = """
-//          SELECT  categoryName FROM tbl_categories; 
-//        """;
-//
-//        pstmt = conn.prepareStatement(sql);
-//        rs = pstmt.executeQuery();
-//        
-//        order_combobox = new ComboBoxBuilder("ALL",225,110,150,40);
-//        while(rs.next()){ order_combobox.addItem(rs.getString("categoryName")); }
-//        //product_category_combobox.addActionListener((e) -> updateTable());
+        sql = "SELECT  customerName FROM tbl_orders; ";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+        while(rs.next()){ customer_combobox.addItem(rs.getString("customerName")); }
         
         
         //  user_combobox
-        sql = """
-//          SELECT  categoryName FROM tbl_categories; 
-//        """;
-//
-//        pstmt = conn.prepareStatement(sql);
-//        rs = pstmt.executeQuery();
-//        
-//        order_combobox = new ComboBoxBuilder("ALL",225,110,150,40);
-//        while(rs.next()){ order_combobox.addItem(rs.getString("categoryName")); }
-        //product_category_combobox.addActionListener((e) -> updateTable());
+        sql = "SELECT  username FROM tbl_users; ";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+        while(rs.next()){ user_combobox.addItem(rs.getString("username")); }
         
         
         //  product_category_combobox
-//        sql = """
-//          SELECT 
-//            categoryName
-//          FROM tbl_categories; 
-//        """;
-//
-//        pstmt = conn.prepareStatement(sql);
-//        rs = pstmt.executeQuery();
-//
-//        product_category_combobox = new ComboBoxBuilder("ALL",225,110,150,40);
-//        while(rs.next()){
-//          product_category_combobox.addItem(rs.getString("categoryName"));
-//        }
-        //product_category_combobox.addActionListener((e) -> updateTable());
+        sql = "SELECT categoryName FROM tbl_categories;";
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+        while(rs.next()){ product_category_combobox.addItem(rs.getString("categoryName")); }
         
         
         // product_combobox
-        sql = """
-          SELECT  categoryName FROM tbl_categories; 
-        """;
-
+        sql = "SELECT  productName FROM tbl_products; ";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
-        
-        order_combobox = new ComboBoxBuilder("ALL",225,110,150,40);
-        while(rs.next()){ order_combobox.addItem(rs.getString("categoryName")); }
-        //product_category_combobox.addActionListener((e) -> updateTable());
+        while(rs.next()){ product_combobox.addItem(rs.getString("productName")); }
         
         
         sql = """
@@ -165,7 +142,8 @@ public class Sales extends JFrame{
               P.productName,
               P.categoryName  AS category,
               S.salePrice,
-              S.quantity               
+              S.quantity,
+              DATE_FORMAT(O.orderDate,"%Y-%d-%m") as orderDate
           FROM tbl_sales AS S
               
           INNER JOIN tbl_products AS P
@@ -232,7 +210,16 @@ public class Sales extends JFrame{
         this.add(sales_tbl_scrollpane);
         
         this.add(order_combobox);
+        this.add(customer_combobox);
+        this.add(user_combobox);
+        this.add(product_category_combobox);
+        this.add(product_combobox);
+        
         this.add(order_combobox_label);
+        this.add(customer_combobox_label);
+        this.add(user_combobox_label);
+        this.add(product_category_combobox_label);
+        this.add(product_combobox_label);
         
         this.add(total_orders_field);
         this.add(total_sales_field);
@@ -251,5 +238,18 @@ public class Sales extends JFrame{
         System.out.println(ex);
       }
     }
+    
+    void refreshTable(){
+      try{
+        String selected_category = product_category_combobox.getSelectedItem().toString();
+        
+        
+        
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+   
+   
   
 }

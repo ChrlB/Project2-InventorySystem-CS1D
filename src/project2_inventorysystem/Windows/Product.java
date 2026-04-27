@@ -62,7 +62,8 @@ public class Product extends JFrame{
       sql = """
         SELECT 
           categoryName
-        FROM tbl_categories;
+        FROM tbl_categories
+        WHERE isActive = 1;
       """;
 
       pstmt = conn.prepareStatement(sql);
@@ -398,17 +399,15 @@ public class Product extends JFrame{
                 option,
                 option[1]
       );
+      if(command != 0) return;
       
-      if(command == 0){
-        sql = """
-          UPDATE tbl_products
-          SET isActive = 0
-          WHERE productID = ?;
-        """;
-        message = "Product successfully Archived.";
-      }else{
-        return;
-      }
+      
+      sql = """
+        UPDATE tbl_products
+        SET isActive = 0
+        WHERE productID = ?;
+      """;
+      message = "Product successfully Archived.";
       
       
       pstmt = conn.prepareStatement(sql);
