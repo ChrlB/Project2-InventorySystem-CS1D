@@ -30,7 +30,6 @@ public class Login extends JFrame {
   String sql;
   TextFieldBuilder username_field;
   JPasswordField password_field;
-  Header header;
   IconBuilder barista_icon,
           hidden_icon,
           logo_icon;

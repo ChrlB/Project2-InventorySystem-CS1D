@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import project2_inventorysystem.Windows.Forms.NewCategory;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
+import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
@@ -46,7 +47,8 @@ public class Category extends JFrame{
     
     ButtonBuilder new_btn, 
                   delete_btn,
-                  update_btn;
+                  update_btn,
+                  readd_category_btn;
     
     TableBuilder category_tbl;
     JScrollPane category_tbl_scrollpane;
@@ -54,6 +56,8 @@ public class Category extends JFrame{
     ResultSet rs;
     String sql;
     PreparedStatement pstmt;
+    
+    ComboBoxBuilder category_combobox;
     
     Object[] selected_record;
     
@@ -78,13 +82,22 @@ public class Category extends JFrame{
         lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
         lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
         
+        readd_category_btn = new ButtonBuilder("RE-ADD USER", 650, 115, 175, 30,14);
+        readd_category_btn.setEnabled(false);
+        
+        category_combobox = new ComboBoxBuilder("Active",500, 115, 125, 30,14);
+        category_combobox.addItem("Archived");
+        
         new_btn = new ButtonBuilder("NEW CATEGORY",1050, 30, 200, 50,15);
         update_btn = new ButtonBuilder("UPDATE",250, 370, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",30, 370, 200, 50,15);
         
-        new_btn.addActionListener((a) -> { new NewCategory(this, conn);this.setEnabled(true);} );
+        new_btn.addActionListener((a) -> { new NewCategory(this, conn);this.setEnabled(false);} );
         update_btn.addActionListener((a) -> { updateCategory();} );
         delete_btn.addActionListener((a) -> { deleteCategory();} );
+        
+        readd_category_btn.addActionListener((a) -> { readdCategory();} );
+        category_combobox.addActionListener((a) -> { refreshTable();} );
                 
         header.add(new_btn);
         
@@ -156,6 +169,9 @@ public class Category extends JFrame{
         this.add(header);
         this.add(category_form_panel);
         this.add(category_tbl_scrollpane);
+        this.add(readd_category_btn);
+        this.add(category_combobox);
+        
         
         this.setVisible(true);
         
@@ -167,6 +183,12 @@ public class Category extends JFrame{
     
     public void refreshTable(){
       try{
+        int isActive = (category_combobox.getSelectedItem().toString().equals("Active"))? 1:0;
+      
+        readd_category_btn.setEnabled((isActive != 1));
+        delete_btn.setEnabled((isActive == 1));
+        update_btn.setEnabled((isActive == 1));
+        
         sql = """
           SELECT 
               categoryName,
@@ -174,11 +196,13 @@ public class Category extends JFrame{
               unit,
               lowStockThreshold
           FROM tbl_categories
-          WHERE isActive = 1;
+          WHERE isActive = ?;
         """;
 
         pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, isActive);
         category_tbl.refreshTable(pstmt.executeQuery());
+        
       }catch(Exception ex){
         ex.printStackTrace();
       }
@@ -207,6 +231,55 @@ public class Category extends JFrame{
         ex.printStackTrace();
       }
     }
+    
+    void readdCategory(){
+      try{
+        int row = category_tbl.getSelectedRow();
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+
+        selected_record = new Object[]{
+          category_tbl.getValueAt(row, 0)
+        };
+
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed re-adding this Category?",
+                "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+        );
+        if (!(command == JOptionPane.OK_OPTION)) return;
+
+        sql = """
+              UPDATE tbl_users
+              SET
+                isActive = 1
+              WHERE userID = ?;
+              """;
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, (int)selected_record[0]);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "Category added successfully.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No record was added. The Category may not exist.",
+                    "Update Failed", JOptionPane.WARNING_MESSAGE);
+        }
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+  
     
     void updateCategory(){
       int CANCEL = 2;
