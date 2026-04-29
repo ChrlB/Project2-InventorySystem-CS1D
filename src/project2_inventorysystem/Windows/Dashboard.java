@@ -6,6 +6,8 @@ package project2_inventorysystem.Windows;
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.sql.*;
@@ -50,6 +52,7 @@ public class Dashboard extends JFrame{
       this.conn = conn;
       this.user_ID = userID;
       
+      {
       header = new Header();
       //header.setBackground(new Color(0X3E2522));
       
@@ -102,20 +105,16 @@ public class Dashboard extends JFrame{
       best_products_label.setBounds(420,370,300,50);
       best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
-//      sql = """
-//        SELECT 
-//            productID,
-//            productName as name,
-//            IF(stockQuantity = 0,'OUT OF STOCK',stockQuantity) as stocks 
-//        FROM products WHERE stockQuantity < 11;
-//        """;
       sql = """
         SELECT 
             p.productID,
             p.productName as name,
             IF(p.stockQuantity = 0,'OUT OF STOCK',p.stockQuantity) as stocks 
         FROM tbl_products as p 
-        inner join tbl_categories as c on p.categoryName = c.categoryName
+            
+        INNER JOIN tbl_categories AS c 
+            on p.categoryName = c.categoryName
+            
         WHERE p.stockQuantity < c.lowStockthreshold;
        """;
       
@@ -168,6 +167,20 @@ public class Dashboard extends JFrame{
       best_products_tbl.setBounds(420,420,800,170);
       
       
+      button_panel.add(order_btn);
+      button_panel.add(product_btn);
+      button_panel.add(sales_btn);
+      button_panel.add(user_btn);
+      
+      button_panel.add(order_icon);
+      button_panel.add(product_icon);
+      button_panel.add(sales_icon);
+      button_panel.add(user_icon);
+      
+      }
+      
+      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("DASHBOARD");
       this.setLayout(null);
@@ -183,17 +196,6 @@ public class Dashboard extends JFrame{
           logout(user_ID); 
         }
       });
-      
-      button_panel.add(order_btn);
-      button_panel.add(product_btn);
-      button_panel.add(sales_btn);
-      button_panel.add(user_btn);
-      
-      button_panel.add(order_icon);
-      button_panel.add(product_icon);
-      button_panel.add(sales_icon);
-      button_panel.add(user_icon);
-      
       
       
       this.add(low_stocks_tbl);
@@ -220,11 +222,16 @@ public class Dashboard extends JFrame{
       if (!(command == JOptionPane.OK_OPTION)) return;
       
       
-//      sql = "UPDATE tbl_userlogs SET logoutDate = CURRENT_TIMESTAMP WHERE userID = ? AND logoutDate IS NULL";
+//      sql = """
+//            UPDATE tbl_userlogs 
+//            SET logoutDate = CURRENT_TIMESTAMP 
+//            WHERE userID = ? 
+//              AND logoutDate IS NULL
+//            """;
 //      pstmt = conn.prepareStatement(sql);
 //      pstmt.setInt(1, user_ID);
 //      pstmt.executeUpdate();
-//
+
       System.out.println("Logout Successful!");
       new Login(conn);
       dispose();

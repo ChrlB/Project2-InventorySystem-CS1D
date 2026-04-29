@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Objects;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -157,7 +158,8 @@ public class Category extends JFrame{
         });
         
       
-
+        ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+        this.setIconImage(icon.getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("PRODUCT CATEGORIES");
         this.setLayout(null);

@@ -85,9 +85,9 @@ public class User extends JFrame{
         delete_btn.addActionListener((a) -> {deleteRecord();});
         change_password_btn.addActionListener((a) -> {changePassword();});
         update_btn.addActionListener((a) -> {updateRecord();});
+        user_logs_btn.addActionListener((a) -> {new UserLogs(user_ID, conn); dispose();});
         
         readd_user_btn.addActionListener((a) -> {readdUser();});
-        
         user_combobox.addActionListener((a) -> {refreshTable();} );
         
         header.add(user_logs_btn);
@@ -146,7 +146,9 @@ public class User extends JFrame{
             dispose();
           }
         });
-
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+         this.setIconImage(icon.getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("USER");
         this.setLayout(null);

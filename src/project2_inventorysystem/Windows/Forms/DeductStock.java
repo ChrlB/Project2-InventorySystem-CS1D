@@ -7,6 +7,7 @@ package project2_inventorysystem.Windows.Forms;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
@@ -50,6 +51,8 @@ public class DeductStock extends JFrame{
     cancel_btn.addActionListener((a) -> {closeWindow();});
     confirm_btn.addActionListener((a) -> { deductStock();});
     
+    ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+    this.setIconImage(icon.getImage());
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
     this.setTitle("DEDUCT STOCK");

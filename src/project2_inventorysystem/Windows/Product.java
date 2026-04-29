@@ -176,7 +176,8 @@ public class Product extends JFrame{
         }
       });
 
-
+      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("PRODUCT");
       this.setLayout(null);

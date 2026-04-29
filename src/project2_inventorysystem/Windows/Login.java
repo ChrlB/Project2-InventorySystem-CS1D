@@ -79,14 +79,6 @@ public class Login extends JFrame {
       
       username_label = new LabelBuilder("Username: ",140,70,200,50,17);
       password_label = new LabelBuilder("Password: ",140,140,200,50,17);
-     
-      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      this.setLayout(null);
-      this.setSize(815,520);
-      this.setResizable(false);
-      this.setTitle("LOGIN");
-      this.getContentPane().setBackground(new Color(0x10232A));
-      this.setLocationRelativeTo(null);
       
       user_panel.add(password_field);
       user_panel.add (username_field);
@@ -96,6 +88,18 @@ public class Login extends JFrame {
       
       user_panel.add(username_label);
       user_panel.add(password_label);
+      
+      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
+      this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      this.setLayout(null);
+      this.setSize(815,520);
+      this.setResizable(false);
+      this.setTitle("LOGIN");
+      this.getContentPane().setBackground(new Color(0x10232A));
+      this.setLocationRelativeTo(null);
+      
+      
       this.add(logo_icon);
       
       this.add(barista_icon);

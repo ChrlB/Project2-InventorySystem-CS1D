@@ -49,6 +49,8 @@ public class ReStock extends JFrame{
     cancel_btn.addActionListener((a) -> {closeWindow();});
     confirm_btn.addActionListener((a) -> { addStock();});
     
+    ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
     this.setTitle("RESTOCK");

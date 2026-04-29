@@ -82,7 +82,8 @@ public class NewProduct extends JFrame {
       cancel_btn.addActionListener((a) -> {closeWindow();});
       confirm_btn.addActionListener((a) -> {addProduct();});
       
-      
+      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setLayout(null);
       this.setTitle("NEW PRODUCT FORM");

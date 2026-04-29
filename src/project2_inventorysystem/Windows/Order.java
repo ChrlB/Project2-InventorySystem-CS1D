@@ -15,6 +15,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -191,7 +192,8 @@ public class Order extends JFrame{
       total_order_price_label.setBackground(Color.WHITE);
       
       
-      
+      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("ORDER");
       this.setLayout(null);

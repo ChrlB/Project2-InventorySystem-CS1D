@@ -55,7 +55,8 @@ public class ChangePassword extends JFrame{
     cancel_btn.addActionListener((a) -> {close();});
     confirm_btn.addActionListener((a) -> {changeUserPassword();});
     
-    
+    ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+    this.setIconImage(icon.getImage());
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
     this.setTitle("CHANGE PASSWORD FORM");
