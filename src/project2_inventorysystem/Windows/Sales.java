@@ -290,7 +290,7 @@ public class Sales extends JFrame{
               
             INNER JOIN tbl_products AS P 
                 ON S.productID = P.productID
-              
+                    
             INNER JOIN tbl_orders   AS O 
                 ON S.orderID   = O.orderID
               

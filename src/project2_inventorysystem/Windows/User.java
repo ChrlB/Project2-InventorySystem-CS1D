@@ -23,10 +23,13 @@ public class User extends JFrame{
     int user_ID;
     Connection conn;
     Header header;
+    
     ButtonBuilder new_btn, 
                   delete_btn,
                   change_password_btn,
-                  update_btn;
+                  update_btn,
+                  user_logs_btn;
+    
     JPanel user_form_panel;
     TextFieldBuilder user_id_field,
                      username_field,
@@ -60,6 +63,7 @@ public class User extends JFrame{
         username_field = new TextFieldBuilder(true, 130, 130, 320, 50, 15);
         full_name_field = new TextFieldBuilder(true, 130, 210, 320, 50, 15);
         
+        user_logs_btn = new ButtonBuilder("USER LOGS",1050, 30, 200, 50,15);
         
         new_btn = new ButtonBuilder("NEW",30, 290, 200, 50,15);
         update_btn = new ButtonBuilder("UPDATE",250, 290, 200, 50,15);
@@ -73,7 +77,9 @@ public class User extends JFrame{
         delete_btn.addActionListener((a) -> {deleteRecord();});
         change_password_btn.addActionListener((a) -> {changePassword();});
         update_btn.addActionListener((a) -> {updateRecord();});
-
+        
+        header.add(user_logs_btn);
+        
         user_form_panel = new JPanel();
         user_form_panel.setLayout(null);
         user_form_panel.setBounds(0,100, 480, 450);
