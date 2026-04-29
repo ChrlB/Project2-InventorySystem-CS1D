@@ -29,7 +29,8 @@ public class Product extends JFrame{
                 update_btn,
                 restock_btn,
                 category_window_btn,
-                add_product_btn;
+                add_product_btn,
+                readd_product_btn;
   
   TextFieldBuilder product_id_field,
                    product_name_field, 
@@ -48,7 +49,8 @@ public class Product extends JFrame{
                    unit_price_field_label, 
                    stock_quantity_field_label;
   
-  ComboBoxBuilder product_category_combobox;
+  ComboBoxBuilder product_category_combobox,
+                  product_combobox;
   Object[] selected_record;
   
   Product(int userID, Connection conn){
@@ -74,9 +76,15 @@ public class Product extends JFrame{
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
       
+      
+      product_combobox = new ComboBoxBuilder("Active",490, 115, 125, 30,14);
+      product_combobox.addItem("Archived");
+      
       category_window_btn = new ButtonBuilder("PRODUCT CATEGORY", 1040, 25, 200, 50,15);
       add_product_btn = new ButtonBuilder("ADD PRODUCT", 800, 25, 200, 50,15);
-
+      readd_product_btn = new ButtonBuilder("RE-ADD PRODUCT", 640, 115, 175, 30,14);
+      readd_product_btn.setEnabled(false);
+      
       delete_btn = new ButtonBuilder("DELETE", 30, 370, 200, 50,15);
       update_btn = new ButtonBuilder("UPDATE", 250, 370, 200, 50,15);
       deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 200, 50,15);
@@ -84,12 +92,14 @@ public class Product extends JFrame{
       
       category_window_btn.addActionListener( (a) -> { new Category(user_ID, conn);dispose();} );
       add_product_btn.addActionListener( (a) -> { new NewProduct(this , conn); this.setEnabled(false);  } );
-      
+      readd_product_btn.addActionListener( (a) -> { readdProduct();} );
+              
       deduct_btn.addActionListener( (a) -> { deductProduct();} );
       delete_btn.addActionListener( (a) -> { deleteProduct();} );
       update_btn.addActionListener( (a) -> { updateProduct();} );
       restock_btn.addActionListener( (a) -> { restockProduct();} );
       
+      product_combobox.addActionListener( (a) -> { refreshTable();});
 
       product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 
       product_name_field = new TextFieldBuilder(true, 175, 110, 275, 50, 15);
@@ -178,7 +188,9 @@ public class Product extends JFrame{
       this.add(header);
       this.add(product_form_panel);
       this.add(product_tbl_scroll_pane);
-
+      this.add(product_combobox);
+      this.add(readd_product_btn);
+      
       this.setVisible(true);
 
     } catch(Exception ex) {
@@ -216,6 +228,14 @@ public class Product extends JFrame{
   
   public void refreshTable(){
     try{
+      int isActive = (product_combobox.getSelectedItem().toString().equals("Active"))? 1:0;
+      
+      readd_product_btn.setEnabled((isActive != 1));
+      deduct_btn.setEnabled((isActive == 1));
+      delete_btn.setEnabled((isActive == 1));
+      update_btn.setEnabled((isActive == 1));
+      restock_btn.setEnabled((isActive == 1));
+      
       sql = """
         SELECT 
             p.productID as ID,
@@ -228,10 +248,11 @@ public class Product extends JFrame{
         FROM tbl_products as p
         inner join tbl_categories as c 
             on  p.categoryName = c.categoryName
-        WHERE p.isActive = 1;
+        WHERE p.isActive = ?;
       """;
       
       pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, isActive);
       products_tbl.refreshTable(pstmt.executeQuery());
     }catch(Exception ex){
       ex.printStackTrace();
@@ -279,6 +300,54 @@ public class Product extends JFrame{
     }catch(Exception ex){
       ex.printStackTrace();
     
+    }
+  }
+  
+  void readdProduct(){
+    try{
+      int row = products_tbl.getSelectedRow();
+      if (row == -1) {
+        JOptionPane.showMessageDialog(null,
+          "Please select a record first.",
+          "No Selection", JOptionPane.WARNING_MESSAGE);
+        return;
+      } 
+      
+      selected_record = new Object[]{
+        products_tbl.getValueAt(row, 0)
+      };
+      
+      int command = JOptionPane.showConfirmDialog(null,
+              "Do you want to proceed re-adding this Product?",
+              "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+      );
+      if (!(command == JOptionPane.OK_OPTION)) return;
+      
+      sql = """
+            UPDATE tbl_products
+            SET
+              isActive = 1
+            WHERE productID = ?;
+            """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, (int)selected_record[0]);
+      
+      int rowsAffected = pstmt.executeUpdate();
+
+      if (rowsAffected > 0) {
+          JOptionPane.showMessageDialog(null,
+                  "Product added successfully.",
+                  "Success", JOptionPane.INFORMATION_MESSAGE);
+          refreshTable();
+
+      } else {
+          JOptionPane.showMessageDialog(null,
+                  "No record was added. The Product may not exist.",
+                  "Update Failed", JOptionPane.WARNING_MESSAGE);
+      }
+    }catch(Exception ex){
+      ex.printStackTrace();
     }
   }
   

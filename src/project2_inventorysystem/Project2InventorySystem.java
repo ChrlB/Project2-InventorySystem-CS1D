@@ -39,6 +39,7 @@ public class Project2InventorySystem {
       
     
     }catch(Exception ex){
+      
       System.out.print(ex);
     }
     //new Dashboard();

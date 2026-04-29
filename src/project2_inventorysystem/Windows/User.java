@@ -28,7 +28,8 @@ public class User extends JFrame{
                   delete_btn,
                   change_password_btn,
                   update_btn,
-                  user_logs_btn;
+                  user_logs_btn,
+                  readd_user_btn;
     
     JPanel user_form_panel;
     TextFieldBuilder user_id_field,
@@ -45,6 +46,8 @@ public class User extends JFrame{
                   username_field_label,
                   full_name_field_label;
     
+    ComboBoxBuilder user_combobox;
+    
     Object[] selected_record;
     
     User(int userID,Connection conn){
@@ -53,6 +56,11 @@ public class User extends JFrame{
         user_ID = userID;
         header = new Header();
         
+        readd_user_btn = new ButtonBuilder("RE-ADD USER", 650, 115, 175, 30,14);
+        readd_user_btn.setEnabled(false);
+        
+        user_combobox = new ComboBoxBuilder("Active",500, 115, 125, 30,14);
+        user_combobox.addItem("Archived");
         
         user_id_field_label = new LabelBuilder("User ID: ",30,50,100,50,15);
         username_field_label= new LabelBuilder("Username: ",30,130,100,50,15);
@@ -77,6 +85,10 @@ public class User extends JFrame{
         delete_btn.addActionListener((a) -> {deleteRecord();});
         change_password_btn.addActionListener((a) -> {changePassword();});
         update_btn.addActionListener((a) -> {updateRecord();});
+        
+        readd_user_btn.addActionListener((a) -> {readdUser();});
+        
+        user_combobox.addActionListener((a) -> {refreshTable();} );
         
         header.add(user_logs_btn);
         
@@ -146,6 +158,10 @@ public class User extends JFrame{
         this.add(header);
         this.add(user_form_panel);
         this.add(users_tbl_scrollpane);
+        
+        this.add(readd_user_btn);
+        this.add(user_combobox);
+        
         this.setVisible(true);
         
       }catch(Exception ex){
@@ -173,6 +189,54 @@ public class User extends JFrame{
       }
     };
     
+    void readdUser(){
+      try{
+        int row = users_tbl.getSelectedRow();
+        if (row == -1) {
+          JOptionPane.showMessageDialog(null,
+            "Please select a record first.",
+            "No Selection", JOptionPane.WARNING_MESSAGE);
+          return;
+        } 
+
+        selected_record = new Object[]{
+          users_tbl.getValueAt(row, 0)
+        };
+
+        int command = JOptionPane.showConfirmDialog(null,
+                "Do you want to proceed re-adding this user?",
+                "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+        );
+        if (!(command == JOptionPane.OK_OPTION)) return;
+
+        sql = """
+              UPDATE tbl_users
+              SET
+                isActive = 1
+              WHERE userID = ?;
+              """;
+
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, (int)selected_record[0]);
+
+        int rowsAffected = pstmt.executeUpdate();
+
+        if (rowsAffected > 0) {
+            JOptionPane.showMessageDialog(null,
+                    "User added successfully.",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+            refreshTable();
+
+        } else {
+            JOptionPane.showMessageDialog(null,
+                    "No record was added. The User may not exist.",
+                    "Update Failed", JOptionPane.WARNING_MESSAGE);
+        }
+      }catch(Exception ex){
+        ex.printStackTrace();
+      }
+    }
+  
     
     void updateRecord(){
       int CANCEL = 2;
@@ -356,6 +420,13 @@ public class User extends JFrame{
     
     public void refreshTable(){
       try{
+        int isActive = (user_combobox.getSelectedItem().toString().equals("Active"))? 1:0;
+      
+        readd_user_btn.setEnabled((isActive != 1));
+        delete_btn.setEnabled((isActive == 1));
+        update_btn.setEnabled((isActive == 1));
+        change_password_btn.setEnabled((isActive == 1));
+                
         sql = """
               SELECT 
                 userID,
@@ -364,9 +435,11 @@ public class User extends JFrame{
                 fullname,
                 DATE_FORMAT(dateCreated,"%Y-%d-%m") as dateCreated
               FROM tbl_users
-              WHERE isActive = 1;
+              WHERE isActive = ?;
               """;
+        
         pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, isActive);
         users_tbl.refreshTable(pstmt.executeQuery());
         
       }catch(Exception ex){
