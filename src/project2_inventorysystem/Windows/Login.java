@@ -144,7 +144,7 @@ public class Login extends JFrame {
         // hashed password of that user istored in database 
         if (BCrypt.checkpw(input_password, hashed_password)) {
           user_ID = rs.getInt("userID");
-          //recordUserLog(user_ID);
+          recordUserLog(user_ID);
           new Dashboard(user_ID, conn);
           this.dispose();
         }else { 

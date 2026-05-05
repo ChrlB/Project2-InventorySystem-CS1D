@@ -104,7 +104,7 @@ public class Sales extends JFrame{
         
         
         //  customer_combobox
-        sql = "SELECT  DISTINCT customerName AS customerName FROM tbl_orders; ";
+        sql = "SELECT  DISTINCT customerName AS customerName, orderDate FROM tbl_orders ORDER BY orderDate DESC; ";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
         while(rs.next()){ customer_combobox.addItem(rs.getString("customerName")); }

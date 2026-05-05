@@ -160,7 +160,6 @@ public class Dashboard extends JFrame{
         );
       """;
 
-      //sql ="Select * from categories";
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
@@ -222,15 +221,15 @@ public class Dashboard extends JFrame{
       if (!(command == JOptionPane.OK_OPTION)) return;
       
       
-//      sql = """
-//            UPDATE tbl_userlogs 
-//            SET logoutDate = CURRENT_TIMESTAMP 
-//            WHERE userID = ? 
-//              AND logoutDate IS NULL
-//            """;
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setInt(1, user_ID);
-//      pstmt.executeUpdate();
+      sql = """
+            UPDATE tbl_userlogs 
+            SET logoutDate = CURRENT_TIMESTAMP 
+            WHERE userID = ? 
+              AND logoutDate IS NULL
+            """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, user_ID);
+      pstmt.executeUpdate();
 
       System.out.println("Logout Successful!");
       new Login(conn);
