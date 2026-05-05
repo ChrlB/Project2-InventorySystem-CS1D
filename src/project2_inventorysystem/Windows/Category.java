@@ -83,7 +83,7 @@ public class Category extends JFrame{
         lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
         lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
         
-        readd_category_btn = new ButtonBuilder("RE-ADD USER", 650, 115, 175, 30,14);
+        readd_category_btn = new ButtonBuilder("RE-ADD CATEGORY", 650, 115, 175, 30,14);
         readd_category_btn.setEnabled(false);
         
         category_combobox = new ComboBoxBuilder("Active",500, 115, 125, 30,14);
@@ -132,6 +132,7 @@ public class Category extends JFrame{
                 unit,
                 lowStockThreshold
             FROM tbl_categories
+            WHERE isActive = 1;
              """;
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
@@ -255,14 +256,14 @@ public class Category extends JFrame{
         if (!(command == JOptionPane.OK_OPTION)) return;
 
         sql = """
-              UPDATE tbl_users
+              UPDATE tbl_categories
               SET
                 isActive = 1
-              WHERE userID = ?;
+              WHERE categoryName = ?;
               """;
 
         pstmt = conn.prepareStatement(sql);
-        pstmt.setInt(1, (int)selected_record[0]);
+        pstmt.setString(1, ""+selected_record[0]);
 
         int rowsAffected = pstmt.executeUpdate();
 

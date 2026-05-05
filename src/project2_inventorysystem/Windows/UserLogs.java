@@ -74,7 +74,7 @@ public class UserLogs extends JFrame {
       ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-      this.setTitle("USER");
+      this.setTitle("USER LOGS");
       this.setLayout(null);
       this.setResizable(false);
       this.setSize(1270,580);

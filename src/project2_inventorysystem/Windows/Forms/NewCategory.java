@@ -51,7 +51,7 @@ public class NewCategory extends JFrame{
     
     category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
     description_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
-    unit_field_label= new LabelBuilder("Unit Field: ",30,210,150,50,15);
+    unit_field_label= new LabelBuilder("Unit ex:(pcs, cup): ",30,210,150,50,15);
     lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
     lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
     

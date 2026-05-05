@@ -451,6 +451,8 @@ public class Order extends JFrame{
       insert_sales_pstmt.executeBatch();
       
       JOptionPane.showMessageDialog(null, "Order confirmed!");
+      
+      customer_name_field.setText("");
       updateTable();
       resetOrder();
     } catch (SQLException ex) {

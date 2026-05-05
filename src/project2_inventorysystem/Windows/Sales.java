@@ -5,10 +5,6 @@
 package project2_inventorysystem.Windows;
 
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -183,7 +179,7 @@ public class Sales extends JFrame{
         total_quantity_field.setText(rs.getString("TOTAL_QUANTITY"));
         total_orders_field.setText(rs.getString("TOTAL_ORDERS"));
           
-         this.addWindowListener(new java.awt.event.WindowAdapter() {
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
           public void windowClosing(java.awt.event.WindowEvent e) {
             new Dashboard(user_ID,conn); 
@@ -192,7 +188,7 @@ public class Sales extends JFrame{
         });
         
         ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
-         this.setIconImage(icon.getImage());
+        this.setIconImage(icon.getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("SALES");
         this.setLayout(null);
