@@ -30,11 +30,10 @@ public class TableBuilder extends JTable{
       DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
       centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
 
-      // Align only the first column (index 0)
+      
       this.setDefaultRenderer(Object.class, centerRenderer);
       this.setModel(buildModel(rs));
-      //getTableHeader().setBackground(new Color(0X291C0E));
-      //getTableHeader().setForeground(new Color(0xE1D4C2));
+      
       this.setRowHeight(35);
       this.setFont(new Font("Arial", Font.BOLD, 14));
       this.setForeground(new Color(0x3D4D55));
