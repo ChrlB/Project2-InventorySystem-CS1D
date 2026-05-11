@@ -98,11 +98,11 @@ public class Dashboard extends JFrame{
       
       
       low_stocks_label = new JLabel("LOW STOCK PRODUCTS:");
-      low_stocks_label.setBounds(420,150,300,50);
+      low_stocks_label.setBounds(420,125,300,50);
       low_stocks_label.setFont(new Font("Arial", Font.BOLD, 16));
       
-      best_products_label = new JLabel("MONTHLY BEST PRODUCT:");
-      best_products_label.setBounds(420,370,300,50);
+      best_products_label = new JLabel("BEST SELLER:");
+      best_products_label.setBounds(420,345,300,50);
       best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
       sql = """
@@ -115,14 +115,15 @@ public class Dashboard extends JFrame{
         INNER JOIN tbl_categories AS c 
             on p.categoryName = c.categoryName
             
-        WHERE p.stockQuantity < c.lowStockthreshold;
+        WHERE p.stockQuantity < c.lowStockthreshold
+            AND P.isActive = 1;
        """;
       
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       low_stocks_tbl= new JScrollPane(new TableBuilder(rs));
       //low_stocks_tbl.setBounds(420,150,400,350);
-      low_stocks_tbl.setBounds(420,200,800,170);
+      low_stocks_tbl.setBounds(420,175,800,170);
       
       
       
@@ -140,7 +141,8 @@ public class Dashboard extends JFrame{
           SELECT
               productID,
               SUM(quantity) AS total_sale
-          FROM tbl_sales
+          FROM tbl_sales 
+            
           GROUP BY productID
         ) AS S ON P.productID = S.productID
         
@@ -156,14 +158,17 @@ public class Dashboard extends JFrame{
             GROUP BY productID
           ) AS sales ON product.productID = sales.productID
 
-          WHERE product.categoryName = P.categoryName  
-        );
+          WHERE product.categoryName = P.categoryName
+           AND P.isActive = 1
+        )
+            
+        ORDER BY total_sale DESC;
       """;
 
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
-      best_products_tbl.setBounds(420,420,800,170);
+      best_products_tbl.setBounds(420,395,800,170);
       
       
       button_panel.add(order_btn);

@@ -33,8 +33,8 @@ public class Project2InventorySystem {
       String pass = prop.getProperty("DB_PASS");
       
       Connection conn = DriverManager.getConnection( url, user, pass);
-      
       new Login(conn);
+      
       System.out.println(conn);
       
     

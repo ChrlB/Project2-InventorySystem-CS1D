@@ -372,7 +372,7 @@ public class Order extends JFrame{
       order_list.setText(
         order_list.getText() + "\n [" +
         pendingItems.size() + "]  " +
-        quantity + unit + "  " +
+        quantity +" "+ unit + "  " +
         productName + " - ₱" + total_item_price
       );
       
