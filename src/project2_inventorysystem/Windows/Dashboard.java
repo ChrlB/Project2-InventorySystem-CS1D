@@ -6,8 +6,6 @@ package project2_inventorysystem.Windows;
 import project2_inventorysystem.Windows.MyComponents.*;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Image;
-import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.sql.*;
@@ -80,10 +78,10 @@ public class Dashboard extends JFrame{
       sales_btn =   new ButtonBuilder("SALES"   ,160,250,220,70,20);
       user_btn =    new ButtonBuilder("USER"    ,160,350,220,70,20);
       
-      order_btn.addActionListener(e -> {  new Order(user_ID, conn); this.dispose();  });
-      product_btn.addActionListener(e -> {new Product(user_ID,conn);this.dispose();});
-      sales_btn.addActionListener(e -> {new Sales(user_ID,conn);this.dispose();});
-      user_btn.addActionListener(e ->{new User(user_ID,conn); this.dispose();});
+      order_btn.addActionListener(e -> {    new Order(user_ID, conn); this.dispose();  });
+      product_btn.addActionListener(e -> {  new Product(user_ID,conn);  this.dispose(); });
+      sales_btn.addActionListener(e -> {    new Sales(user_ID,conn);  this.dispose(); });
+      user_btn.addActionListener(e ->{      new User(user_ID,conn); this.dispose(); });
       
       barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/barista.png",1150,15,40,40);
       order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
@@ -170,7 +168,6 @@ public class Dashboard extends JFrame{
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
       best_products_tbl.setBounds(420,395,800,170);
       
-      
       button_panel.add(order_btn);
       button_panel.add(product_btn);
       button_panel.add(sales_btn);
@@ -183,6 +180,11 @@ public class Dashboard extends JFrame{
       
       }
       
+      if(user_ID != 1){
+        product_btn.setEnabled(false);
+        user_btn.setEnabled(false);
+      }
+      
       ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -192,7 +194,6 @@ public class Dashboard extends JFrame{
       this.setSize(1270,650);
       this.getContentPane().setBackground(new Color(0xD3C3B9));
       this.setLocationRelativeTo(null);
-      //this.getContentPane().setBackground(new Color(0xFFE0B2));
       
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
