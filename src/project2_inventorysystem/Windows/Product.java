@@ -272,9 +272,11 @@ public class Product extends JFrame{
       
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0),
+        products_tbl.getValueAt(row, 5)
+
       };
       
-      new DeductStock(this, (int)selected_record[0], conn);
+      new DeductStock(this, (int)selected_record[0],(int)selected_record[1], conn);
       this.setEnabled(false);
     }catch(Exception ex){
       ex.printStackTrace();
@@ -360,7 +362,9 @@ public class Product extends JFrame{
           "Please select a record first.",
           "No Selection", JOptionPane.WARNING_MESSAGE);
         return;
-      } 
+      }
+      
+      
       
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0),
@@ -369,6 +373,7 @@ public class Product extends JFrame{
         products_tbl.getValueAt(row, 3),
         products_tbl.getValueAt(row, 5)
       };
+      
       
       int command = JOptionPane.showConfirmDialog(null,
               "Do you want to proceed updating this record?",
@@ -384,9 +389,9 @@ public class Product extends JFrame{
                       unit_price_field.getText().trim()
       ); 
       
-      if (new_product_name.isEmpty() || new_unit_price == 0) {
+      if (new_product_name.isEmpty() || new_unit_price <= 0) {
           JOptionPane.showMessageDialog(null,
-                  "Unit Price and Product Name cannot be empty or 0.",
+                  "Unit Price and Product Name cannot be empty or less than 1.",
                   "Validation Error", JOptionPane.WARNING_MESSAGE);
           return;
       }

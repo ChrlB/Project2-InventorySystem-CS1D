@@ -21,6 +21,7 @@ import project2_inventorysystem.Windows.Product;
  */
 public class DeductStock extends JFrame{
   int productID;
+  int max_deduct;
   Connection conn;
   Product parent;
   
@@ -33,10 +34,11 @@ public class DeductStock extends JFrame{
   String sql;
   PreparedStatement pstmt;
   
-  public DeductStock(Product parent, int productID, Connection conn){
+  public DeductStock(Product parent, int productID,int max_deduct, Connection conn){
     this.productID = productID;
     this.conn = conn;
     this.parent = parent;
+    this.max_deduct = max_deduct;
     
     
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
@@ -87,6 +89,13 @@ public class DeductStock extends JFrame{
       if(stock_to_deduct < 1){
         JOptionPane.showMessageDialog(null,
                 "Stock to Deduct cannot be less than 1.",
+                "INVALID INPUT", JOptionPane.INFORMATION_MESSAGE);
+        return;
+      }
+      
+      if(stock_to_deduct > max_deduct){
+        JOptionPane.showMessageDialog(null,
+                "Stock to Deduct cannot be greater than current stock",
                 "INVALID INPUT", JOptionPane.INFORMATION_MESSAGE);
         return;
       }
