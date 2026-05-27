@@ -29,13 +29,10 @@ public class NewCategory extends JFrame{
   TextFieldBuilder category_name_field,
                      description_field,
                      unit_field;
-  SpinnerBuilder lowStockThreshold_spinner;
 
   LabelBuilder  category_name_field_label,
                 description_field_label,
-                unit_field_label,
-                lowStockThreshold_field_label,
-                lowStockThreshold2_field_label;
+                unit_field_label;
   
   ButtonBuilder confirm_btn, 
                 cancel_btn;
@@ -52,24 +49,17 @@ public class NewCategory extends JFrame{
     category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
     description_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
     unit_field_label= new LabelBuilder("Unit ex:(pcs, cup): ",30,210,150,50,15);
-    lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
-    lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
     
     category_name_field_label.setForeground(new Color(0XB58863));
     description_field_label.setForeground(new Color(0XB58863));
     unit_field_label.setForeground(new Color(0XB58863));
-    lowStockThreshold_field_label.setForeground(new Color(0XB58863));
-    lowStockThreshold2_field_label.setForeground(new Color(0XB58863));
 
     category_name_field = new TextFieldBuilder(true, 180, 50, 270, 50, 15);
     description_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
     unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
-
-    lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
-    lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
     
-    confirm_btn = new ButtonBuilder("CONFIRM",30, 370, 200, 50,15);
-    cancel_btn = new ButtonBuilder("CANCEL",250, 370, 200, 50,15);
+    confirm_btn = new ButtonBuilder("CONFIRM",30, 290, 200, 50,15);
+    cancel_btn = new ButtonBuilder("CANCEL",250, 290, 200, 50,15);
 
     cancel_btn.addActionListener((a) -> {closeWindow();});
     confirm_btn.addActionListener((a) -> {addCategory();});
@@ -79,7 +69,7 @@ public class NewCategory extends JFrame{
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
     this.setTitle("NEW CATEGORY FORM");
-    this.setSize(490,480);
+    this.setSize(490,470);
     this.getContentPane().setBackground(new Color(0x293A3E));
     this.setLocationRelativeTo(null);
     this.setResizable(false);
@@ -94,14 +84,10 @@ public class NewCategory extends JFrame{
     this.add(category_name_field);
     this.add(description_field);
     this.add(unit_field);
-    this.add(lowStockThreshold_spinner);
-
 
     this.add(category_name_field_label);
     this.add(description_field_label);
     this.add(unit_field_label);
-    this.add(lowStockThreshold_field_label);
-    this.add(lowStockThreshold2_field_label);
     
     this.add(confirm_btn);
     this.add(cancel_btn);
@@ -115,14 +101,12 @@ public class NewCategory extends JFrame{
   }
   
   void addCategory(){
-      int CANCEL = 2;
       try{
          String new_category_name = category_name_field.getText().trim();
-         int new_lowStockThreshold = ((Number) lowStockThreshold_spinner.getValue()).intValue();
          String new_description = description_field.getText().trim();
          String new_unit = unit_field.getText().trim();
          
-        if (new_category_name.isEmpty() || new_lowStockThreshold == 0 || new_unit.isEmpty()){
+        if (new_category_name.isEmpty() ||  new_unit.isEmpty()){
              JOptionPane.showMessageDialog(null,
                 "Category Name Unit and LowStockThreshold cannot be empty or 0.",
                 "Validation Error", JOptionPane.WARNING_MESSAGE);
@@ -145,7 +129,7 @@ public class NewCategory extends JFrame{
                     "\"" + new_category_name + "\" already exists in the category.\n"
                     + "Please check your category table.",
                   "Category Already Exists", JOptionPane.WARNING_MESSAGE);
-        return;
+          return;
         }
         
         int command = JOptionPane.showConfirmDialog(null,
@@ -158,17 +142,15 @@ public class NewCategory extends JFrame{
             INSERT INTO tbl_categories(
                 categoryName,
                 description,
-                unit,
-                lowStockThreshold
+                unit
               )
-            VALUES(UPPER(?),?,?,?);
+            VALUES(UPPER(?),?,?);
           """;
 
        pstmt = conn.prepareStatement(sql);
        pstmt.setString(1,new_category_name);
        pstmt.setString(2,new_description);
        pstmt.setString(3,new_unit);
-       pstmt.setInt(4,new_lowStockThreshold);
        
       int rowsAffected = pstmt.executeUpdate();
       

@@ -6,7 +6,6 @@ package project2_inventorysystem.Windows;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.List;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import project2_inventorysystem.Windows.Dashboard;
@@ -16,15 +15,10 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
 import project2_inventorysystem.Windows.MyComponents.*;
 
 /**
@@ -104,10 +98,10 @@ public class Order extends JFrame{
             """;
       deduct_stock_pstmt = conn.prepareStatement(sql);
       
-      add_btn = new ButtonBuilder("ADD",325,330,150,45,15);
+      add_btn = new ButtonBuilder("ADD",325,340,150,45,15);
       add_btn.addActionListener((a) -> addItemToOrder());
       
-      cancel_btn= new ButtonBuilder("CANCEL",500,330,150,45,15);
+      cancel_btn= new ButtonBuilder("CANCEL",500,340,150,45,15);
       cancel_btn.addActionListener((a) -> cancelOrder());
       
       confirm_btn= new ButtonBuilder("CONFIRM ORDER",325,405,325,45,15);
@@ -123,7 +117,7 @@ public class Order extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
       
-      product_category_combobox = new ComboBoxBuilder("ALL",500,250,150,40,15);
+      product_category_combobox = new ComboBoxBuilder("ALL",500,270,150,40,15);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
@@ -131,10 +125,10 @@ public class Order extends JFrame{
       
       
       quantity_spinner = new SpinnerBuilder(0);
-      quantity_spinner.setBounds(325,250,150,40);
+      quantity_spinner.setBounds(325,270,150,40);
       
-      product_category_combobox_label = new LabelBuilder(" Product Category:",500,220,150,30, 15);
-      quantity_spinner_label = new LabelBuilder(" Quantity:",325,220,150,30, 15);
+      product_category_combobox_label = new LabelBuilder(" Product Category:",500,240,150,30, 15);
+      quantity_spinner_label = new LabelBuilder(" Quantity:",325,240,150,30, 15);
       
       sql = """
         SELECT productID ,
@@ -159,19 +153,18 @@ public class Order extends JFrame{
       });
       
       product_tbl_scrollpane = new JScrollPane(product_tbl);
-      product_tbl_scrollpane.setBounds(0,0,700,200);
+      product_tbl_scrollpane.setBounds(0,0,700,220);
       
       
-      productID_field = new TextFieldBuilder(false,50,250,250,40,15);
-      productName_field = new TextFieldBuilder(false,50,330,250,40,15);
+      productID_field = new TextFieldBuilder(false,50,270,250,40,15);
+      productName_field = new TextFieldBuilder(false,50,340,250,40,15);
       customer_name_field = new TextFieldBuilder(true,50,410,250,40,15);
       
-      productID_field_label = new LabelBuilder(" ProductID:",50,220,250,30,15);
-      productName_field_label = new LabelBuilder(" Product name:",50,300,250,30,15);
+      productID_field_label = new LabelBuilder(" ProductID:",50,240,250,30,15);
+      productName_field_label = new LabelBuilder(" Product name:",50,310,250,30,15);
       customer_name_field_label = new LabelBuilder(" Customer name:",50,380,250,30,15);
       
       
-      //order_list.setBackground(new Color(0xD3C3B9));
       
       order_list_label = new LabelBuilder(" ORDER LIST:",725, 125, 500, 50,25);
       order_list_label.setOpaque(true); 
