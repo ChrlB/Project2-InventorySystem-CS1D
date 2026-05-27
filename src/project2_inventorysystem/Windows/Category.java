@@ -73,15 +73,15 @@ public class Category extends JFrame{
         category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);
         description_field_label= new LabelBuilder("Discription: ",30,130,150,50,15);
         unit_field_label= new LabelBuilder("Unit Field: ",30,210,150,50,15);
-        lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
-        lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
+//        lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,270,150,50,15);
+//        lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
         
         category_name_field = new TextFieldBuilder(true, 180, 50, 270, 50, 15);
         description_field = new TextFieldBuilder(true, 180, 130, 270, 50, 15);
         unit_field = new TextFieldBuilder(true, 180, 210, 270, 50, 15);
         
-        lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
-        lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
+//        lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
+//        lowStockThreshold_spinner.setBounds( 180, 290, 270, 50);
         
         readd_category_btn = new ButtonBuilder("RE-ADD CATEGORY", 650, 115, 175, 30,14);
         readd_category_btn.setEnabled(false);
@@ -111,14 +111,14 @@ public class Category extends JFrame{
         category_form_panel.add(category_name_field);
         category_form_panel.add(description_field);
         category_form_panel.add(unit_field);
-        category_form_panel.add(lowStockThreshold_spinner);
+//        category_form_panel.add(lowStockThreshold_spinner);
         
         
         category_form_panel.add(category_name_field_label);
         category_form_panel.add(description_field_label);
         category_form_panel.add(unit_field_label);
-        category_form_panel.add(lowStockThreshold_field_label);
-        category_form_panel.add(lowStockThreshold2_field_label);
+//        category_form_panel.add(lowStockThreshold_field_label);
+//        category_form_panel.add(lowStockThreshold2_field_label);
         
        
         category_form_panel.add(delete_btn);
@@ -129,8 +129,7 @@ public class Category extends JFrame{
             SELECT 
                 categoryName,
                 description,
-                unit,
-                lowStockThreshold
+                unit
             FROM tbl_categories
             WHERE isActive = 1;
              """;
@@ -196,8 +195,7 @@ public class Category extends JFrame{
           SELECT 
               categoryName,
               description,
-              unit,
-              lowStockThreshold
+              unit
           FROM tbl_categories
           WHERE isActive = ?;
         """;
@@ -220,15 +218,14 @@ public class Category extends JFrame{
           selected_record = new Object[] {
             category_tbl.getValueAt(row, 0),
             category_tbl.getValueAt(row, 1), 
-            category_tbl.getValueAt(row, 2), 
-            category_tbl.getValueAt(row, 3)
+            category_tbl.getValueAt(row, 2)
           };
         }
         
         category_name_field.setText(""+selected_record[0]);
         description_field.setText((selected_record[1] == null)? "" : String.valueOf(selected_record[1]));
         unit_field.setText(""+selected_record[2]);
-        lowStockThreshold_spinner.setValue((int)selected_record[3]);
+        //lowStockThreshold_spinner.setValue((int)selected_record[3]);
         
       }catch(Exception ex){
         ex.printStackTrace();
@@ -299,8 +296,7 @@ public class Category extends JFrame{
         selected_record = new Object[]{
           category_tbl.getValueAt(row, 0),
           category_tbl.getValueAt(row, 1),
-          category_tbl.getValueAt(row, 2),
-          category_tbl.getValueAt(row, 3)
+          category_tbl.getValueAt(row, 2)
         };
 
         int command = JOptionPane.showConfirmDialog(null,
@@ -314,7 +310,7 @@ public class Category extends JFrame{
         String new_category_name = category_name_field.getText().trim(); 
         String new_description = description_field.getText().trim(); 
         String new_unit = unit_field.getText().trim(); 
-        int new_lowStockThreshold = ((Number) lowStockThreshold_spinner.getValue()).intValue();
+        //int new_lowStockThreshold = ((Number) lowStockThreshold_spinner.getValue()).intValue();
 
         if(new_description.isEmpty()) new_description = null;
 
@@ -330,8 +326,8 @@ public class Category extends JFrame{
         if( 
             is_category_name_not_changed && 
             Objects.equals(new_description, selected_record[1]) && 
-            new_unit.equals(selected_record[2]) && 
-            new_lowStockThreshold == ((Number) selected_record[3]).intValue()
+            new_unit.equals(selected_record[2]) //&& 
+            //new_lowStockThreshold == ((Number) selected_record[3]).intValue()
           ){
           JOptionPane.showMessageDialog(null,
                     "No changes to update.",
@@ -359,12 +355,12 @@ public class Category extends JFrame{
           }
         }
 
-        if(new_lowStockThreshold < 5 ){
-          JOptionPane.showMessageDialog(null,
-                    "Minimum lowStockThreshold is 5.",
-                    "Validation Error", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+//        if(new_lowStockThreshold < 5 ){
+//          JOptionPane.showMessageDialog(null,
+//                    "Minimum lowStockThreshold is 5.",
+//                    "Validation Error", JOptionPane.WARNING_MESSAGE);
+//            return;
+//        }
         
         //System.out.println("updated");
         
@@ -372,8 +368,7 @@ public class Category extends JFrame{
             UPDATE tbl_categories
             SET categoryName = UPPER(?),
                 description = LOWER(?),
-                unit = LOWER(?),
-                lowStockThreshold = ?
+                unit = LOWER(?)
             WHERE categoryName = UPPER(?);
         """;
 
@@ -381,8 +376,8 @@ public class Category extends JFrame{
         pstmt.setString(1,new_category_name);
         pstmt.setString(2,new_description);
         pstmt.setString(3,new_unit);
-        pstmt.setInt(4,new_lowStockThreshold);
-        pstmt.setString(5,""+selected_record[0]);
+        //pstmt.setInt(4,new_lowStockThreshold);
+        pstmt.setString(4,""+selected_record[0]);
 
         int rowsAffected = pstmt.executeUpdate();
 
@@ -417,8 +412,7 @@ public class Category extends JFrame{
         selected_record = new Object[]{
           category_tbl.getValueAt(row, 0),
           category_tbl.getValueAt(row, 1),
-          category_tbl.getValueAt(row, 2),
-          category_tbl.getValueAt(row, 3)
+          category_tbl.getValueAt(row, 2)
         };
         
         category_name_field.setText(selected_record[0].toString());

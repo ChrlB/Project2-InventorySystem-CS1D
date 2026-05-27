@@ -110,10 +110,7 @@ public class Dashboard extends JFrame{
             IF(p.stockQuantity = 0,'OUT OF STOCK',p.stockQuantity) as stocks 
         FROM tbl_products as p 
             
-        INNER JOIN tbl_categories AS c 
-            on p.categoryName = c.categoryName
-            
-        WHERE p.stockQuantity < c.lowStockthreshold
+        WHERE p.stockQuantity <= p.lowStockthreshold
             AND P.isActive = 1;
        """;
       
@@ -227,15 +224,15 @@ public class Dashboard extends JFrame{
       if (!(command == JOptionPane.OK_OPTION)) return;
       
       
-      sql = """
-            UPDATE tbl_userlogs 
-            SET logoutDate = CURRENT_TIMESTAMP 
-            WHERE userID = ? 
-              AND logoutDate IS NULL
-            """;
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, user_ID);
-      pstmt.executeUpdate();
+//      sql = """
+//            UPDATE tbl_userlogs 
+//            SET logoutDate = CURRENT_TIMESTAMP 
+//            WHERE userID = ? 
+//              AND logoutDate IS NULL
+//            """;
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setInt(1, user_ID);
+//      pstmt.executeUpdate();
 
       System.out.println("Logout Successful!");
       new Login(conn);

@@ -31,11 +31,11 @@ public class Product extends JFrame{
                 category_window_btn,
                 add_product_btn,
                 readd_product_btn;
+  SpinnerBuilder lowStockThreshold_spinner;
   
   TextFieldBuilder product_id_field,
                    product_name_field, 
-                   unit_price_field, 
-                   stock_quantity_field;
+                   unit_price_field;
   String sql;
   ResultSet rs,
             products_rs;
@@ -47,7 +47,8 @@ public class Product extends JFrame{
                    product_name_field_label, 
                    category_name_field_label,
                    unit_price_field_label, 
-                   stock_quantity_field_label;
+                   lowStockThreshold_field_label,
+                   lowStockThreshold2_field_label;
   
   ComboBoxBuilder product_category_combobox,
                   product_combobox;
@@ -71,7 +72,7 @@ public class Product extends JFrame{
       pstmt = conn.prepareStatement(sql);
       rs = pstmt.executeQuery();
 
-      product_category_combobox = new ComboBoxBuilder(175, 170, 275, 50);
+      product_category_combobox = new ComboBoxBuilder(155, 170, 255, 50);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
@@ -85,10 +86,10 @@ public class Product extends JFrame{
       readd_product_btn = new ButtonBuilder("RE-ADD PRODUCT", 640, 115, 175, 30,14);
       readd_product_btn.setEnabled(false);
       
-      delete_btn = new ButtonBuilder("DELETE", 30, 370, 200, 50,15);
-      update_btn = new ButtonBuilder("UPDATE", 250, 370, 200, 50,15);
-      deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 200, 50,15);
-      restock_btn = new ButtonBuilder("RESTOCK", 250, 450, 200, 50,15);
+      delete_btn = new ButtonBuilder("DELETE", 30, 370, 185, 50,15);
+      update_btn = new ButtonBuilder("UPDATE", 225, 370, 185, 50,15);
+      deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 185, 50,15);
+      restock_btn = new ButtonBuilder("RESTOCK", 225, 450, 185, 50,15);
       
       category_window_btn.addActionListener( (a) -> { new Category(user_ID, conn);dispose();} );
       add_product_btn.addActionListener( (a) -> { new NewProduct(this , conn); this.setEnabled(false);  } );
@@ -101,23 +102,24 @@ public class Product extends JFrame{
       
       product_combobox.addActionListener( (a) -> { refreshTable();});
 
-      product_id_field = new TextFieldBuilder(false, 175, 50, 275, 50, 15); 
-      product_name_field = new TextFieldBuilder(true, 175, 110, 275, 50, 15);
-      unit_price_field = new TextFieldBuilder(true, 175, 230, 275, 50, 15);
-      stock_quantity_field = new TextFieldBuilder(false, 175, 290, 275, 50, 15);
-
+      product_id_field = new TextFieldBuilder(false, 155, 50, 255, 50, 15); 
+      product_name_field = new TextFieldBuilder(true, 155, 110, 255, 50, 15);
+      unit_price_field = new TextFieldBuilder(true, 155, 230, 255, 50, 15);
+      lowStockThreshold_spinner = new SpinnerBuilder(true,5,300);
+      lowStockThreshold_spinner.setBounds( 155, 290, 255, 50);
 
       product_id_field_label = new LabelBuilder("Product ID: ",30,50,200,50,15);
       product_name_field_label = new LabelBuilder("Product Name: ",30,110,200,50,15);
       category_name_field_label = new LabelBuilder("Category Name: ",30,170,200,50,15);
       unit_price_field_label = new LabelBuilder("Unit Price: ",30,230,200,50,15);
-      stock_quantity_field_label = new LabelBuilder("Stock: ",30,290,200,50,15);
+      lowStockThreshold_field_label= new LabelBuilder("Low Stock ",30,280,200,50,15);
+      lowStockThreshold2_field_label= new LabelBuilder("Threshold: ",30,300,150,50,15);
 
       header.add(category_window_btn);   
       header.add(add_product_btn);
 
       product_form_panel = new JPanel();
-      product_form_panel.setBounds(0, 100, 480, 550);
+      product_form_panel.setBounds(0, 100, 430, 550);
       product_form_panel.setBackground (new Color(0XB58863));
       product_form_panel.setLayout(null);
 
@@ -125,7 +127,7 @@ public class Product extends JFrame{
       product_form_panel.add(product_name_field);
       product_form_panel.add(product_category_combobox);
       product_form_panel.add(unit_price_field);
-      product_form_panel.add(stock_quantity_field);
+      product_form_panel.add(lowStockThreshold_spinner);
 
       product_form_panel.add(deduct_btn);
       product_form_panel.add(delete_btn);
@@ -136,7 +138,8 @@ public class Product extends JFrame{
       product_form_panel.add (product_name_field_label); 
       product_form_panel.add (category_name_field_label);
       product_form_panel.add (unit_price_field_label); 
-      product_form_panel.add (stock_quantity_field_label);
+      product_form_panel.add(lowStockThreshold_field_label);
+      product_form_panel.add(lowStockThreshold2_field_label);
 
       sql = """
         SELECT 
@@ -146,6 +149,7 @@ public class Product extends JFrame{
             p.unitPrice,
             c.unit,
             p.stockQuantity as stock,
+            p.lowStockthreshold as "lowStock threshold",
             DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
         FROM tbl_products as p
         inner join tbl_categories as c 
@@ -166,7 +170,7 @@ public class Product extends JFrame{
       });
       
       product_tbl_scroll_pane = new JScrollPane(products_tbl);
-      product_tbl_scroll_pane.setBounds(490, 150, 740, 455);
+      product_tbl_scroll_pane.setBounds(440, 150, 810, 455);
 
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
@@ -182,7 +186,7 @@ public class Product extends JFrame{
       this.setTitle("PRODUCT");
       this.setLayout(null);
       this.setResizable(false);
-      this.setSize(1270,680);
+      this.setSize(1290,680);
       this.getContentPane().setBackground(new Color(0xD3C3B9));
       this.setLocationRelativeTo(null);
       
@@ -210,7 +214,7 @@ public class Product extends JFrame{
           products_tbl.getValueAt(row, 1), 
           products_tbl.getValueAt(row, 2), 
           products_tbl.getValueAt(row, 3),
-          products_tbl.getValueAt(row, 5)  
+          products_tbl.getValueAt(row, 6)
         };
       }
       
@@ -218,7 +222,7 @@ public class Product extends JFrame{
       product_name_field.setText(""+selected_record[1]);
       product_category_combobox.setSelectedItem(selected_record[2]);
       unit_price_field.setText(""+selected_record[3]);
-      stock_quantity_field.setText(""+selected_record[4]);
+      lowStockThreshold_spinner.setValue((int)selected_record[4]);
         
       
       
@@ -245,6 +249,7 @@ public class Product extends JFrame{
             p.unitPrice,
             c.unit,
             p.stockQuantity as stock,
+            p.lowStockthreshold as "lowStock threshold",
             DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
         FROM tbl_products as p
         inner join tbl_categories as c 
@@ -371,7 +376,7 @@ public class Product extends JFrame{
         products_tbl.getValueAt(row, 1),
         products_tbl.getValueAt(row, 2),
         products_tbl.getValueAt(row, 3),
-        products_tbl.getValueAt(row, 5)
+        products_tbl.getValueAt(row, 6)
       };
       
       
@@ -388,6 +393,7 @@ public class Product extends JFrame{
                       "0": 
                       unit_price_field.getText().trim()
       ); 
+      int new_lowstock_threshold = (int) lowStockThreshold_spinner.getValue(); 
       
       if (new_product_name.isEmpty() || new_unit_price <= 0) {
           JOptionPane.showMessageDialog(null,
@@ -399,7 +405,8 @@ public class Product extends JFrame{
       if( 
           new_product_name.equals(selected_record[1]) && 
           new_product_category.equals(selected_record[2]) && 
-          new_unit_price == ((Number) selected_record[3]).doubleValue()
+          new_unit_price == ((Number) selected_record[3]).doubleValue() &&
+          new_lowstock_threshold == (int) selected_record[4]
         ){
         JOptionPane.showMessageDialog(null,
                   "No changes to update.",
@@ -412,7 +419,8 @@ public class Product extends JFrame{
             SET
               productName = ?,
               categoryName = ?,
-              unitPrice = ?
+              unitPrice = ?,
+              lowStockThreshold = ?
             WHERE productID = ?;
             """;
 
@@ -420,7 +428,8 @@ public class Product extends JFrame{
       pstmt.setString(1, new_product_name);
       pstmt.setString(2, new_product_category);
       pstmt.setDouble(3, new_unit_price);
-      pstmt.setInt(4, (int) selected_record[0]);
+      pstmt.setInt(4, (int) new_lowstock_threshold);
+      pstmt.setInt(5, (int) selected_record[0]);
 
       int rowsAffected = pstmt.executeUpdate();
 
