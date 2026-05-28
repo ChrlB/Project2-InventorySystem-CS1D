@@ -22,7 +22,7 @@ public class UserDataAccessObject {
     this.conn = conn;
   }
   
-  public ResultSet getUserInfo(String input_username){
+  public ResultSet getUserInfoByUsername(String input_username){
     try{
       sql = """
             SELECT * 
@@ -32,6 +32,25 @@ public class UserDataAccessObject {
       """;
       pstmt = conn.prepareStatement(sql);
       pstmt.setString(1, input_username);
+      
+      //execute the sql command then store the result to ResultSet object
+      return pstmt.executeQuery();
+      
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  public ResultSet getUserInfoByUserID(int user_id){
+    try{
+      sql = """
+            SELECT * 
+            FROM tbl_users 
+            WHERE userID = ?
+            AND isActive = 1;
+      """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, user_id);
       
       //execute the sql command then store the result to ResultSet object
       return pstmt.executeQuery();

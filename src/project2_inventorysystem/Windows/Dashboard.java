@@ -25,17 +25,21 @@ import project2_inventorysystem.DAO.UserDataAccessObject;
 public class Dashboard extends JFrame{
   Header header; 
   JPanel button_panel;
+  
   JScrollPane low_stocks_tbl , 
               best_products_tbl;
+  
   ButtonBuilder order_btn,
                 product_btn,
                 sales_btn,
                 user_btn;
+  
   IconBuilder barista_icon,
               order_icon,
               product_icon,
               sales_icon,
               user_icon;
+  
   JLabel low_stocks_label,
          best_products_label;
   
@@ -46,11 +50,9 @@ public class Dashboard extends JFrame{
   UserDataAccessObject userDAO;
   ProductDataAccessObject productDAO;
   
-  
-  PreparedStatement pstmt;
   Connection conn;
   ResultSet rs;
-  String sql;
+  
   
   public Dashboard(int userID, Connection conn){
     try{
@@ -62,12 +64,8 @@ public class Dashboard extends JFrame{
       
       {
       header = new Header();
-      //header.setBackground(new Color(0X3E2522));
       
-      sql = "SELECT * FROM tbl_users WHERE userID = ?";
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, userID);
-      rs = pstmt.executeQuery();
+      rs = userDAO.getUserInfoByUserID(user_ID);
       rs.next();
       
       
@@ -114,7 +112,7 @@ public class Dashboard extends JFrame{
       low_stocks_tbl= new JScrollPane(new TableBuilder(rs));
       low_stocks_tbl.setBounds(420,175,800,170);
       
-      rs = productDAO.getBestProducts();
+      rs = productDAO.getBestSellerProducts();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
       best_products_tbl.setBounds(420,395,800,170);
       
@@ -163,7 +161,8 @@ public class Dashboard extends JFrame{
       this.add(button_panel);
       this.setVisible(true);
     }catch (Exception ex){
-      System.out.print(ex);
+      ex.printStackTrace();
+      //System.out.print(ex);
     }
   }
   

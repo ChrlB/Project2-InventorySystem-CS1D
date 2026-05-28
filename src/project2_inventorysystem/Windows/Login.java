@@ -23,6 +23,7 @@ import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class Login extends JFrame {
+  int user_ID;
   UserDataAccessObject userDAO;
   Connection conn;
   ResultSet rs ;
@@ -136,7 +137,7 @@ public class Login extends JFrame {
       String input_username = username_field.getText();
       String input_password = new String(password_field.getPassword());
       
-      rs = userDAO.getUserInfo(input_username);
+      rs = userDAO.getUserInfoByUsername(input_username);
       
       // if their`s a record 
       if(rs.next()){
@@ -163,7 +164,7 @@ public class Login extends JFrame {
       }
       
     }catch (Exception ex){
-      System.out.print(ex.getCause());
+      ex.printStackTrace();
     }
   }
   {

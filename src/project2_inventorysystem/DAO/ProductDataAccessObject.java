@@ -41,7 +41,7 @@ public class ProductDataAccessObject {
     }
   }
   
-  public ResultSet getBestProducts(){
+  public ResultSet getBestSellerProducts(){
     try{
       sql = """
         SELECT 
