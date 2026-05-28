@@ -9,6 +9,7 @@ package project2_inventorysystem.Windows;
  * @author user
  */
 import project2_inventorysystem.Windows.MyComponents.*;
+import project2_inventorysystem.DAO.UserDataAccessObject;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -22,29 +23,34 @@ import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class Login extends JFrame {
-  PreparedStatement pstmt;
+  UserDataAccessObject userDAO;
+  Connection conn;
   ResultSet rs ;
+  
   ButtonBuilder login_btn;
   JButton show_password_btn;
-  Connection conn;
-  String sql;
+  
   TextFieldBuilder username_field;
   JPasswordField password_field;
+  
   IconBuilder barista_icon,
           hidden_icon,
           logo_icon;
+  
   JPanel user_panel;
   LabelBuilder username_label,
                password_label;
   
   ImageIcon scaled_hidden_icon,
             scaled_show_icon;
+  
   boolean isPasswordHidden = true;
   
   public Login(Connection conn){
     
     try{
       this.conn = conn;
+      userDAO = new UserDataAccessObject(conn);
       
       user_panel = new JPanel();
       user_panel.setBackground(new Color(0XB58863));
@@ -99,13 +105,9 @@ public class Login extends JFrame {
       this.getContentPane().setBackground(new Color(0x10232A));
       this.setLocationRelativeTo(null);
       
-      
       this.add(logo_icon);
-      
       this.add(barista_icon);
       this.add(user_panel);
-      
-      
       
       this.setVisible(true);
       
@@ -134,7 +136,7 @@ public class Login extends JFrame {
       String input_username = username_field.getText();
       String input_password = new String(password_field.getPassword());
       
-      rs = getUserInfo(input_username);
+      rs = userDAO.getUserInfo(input_username);
       
       // if their`s a record 
       if(rs.next()){
@@ -144,9 +146,12 @@ public class Login extends JFrame {
         // hashed password of that user istored in database 
         if (BCrypt.checkpw(input_password, hashed_password)) {
           user_ID = rs.getInt("userID");
-          //recordUserLog(user_ID);
+          
+          //userDAO.recordUserLoginLog(user_ID);
+          
           new Dashboard(user_ID, conn);
           this.dispose();
+          
         }else { 
           JOptionPane.showMessageDialog(null, "Your Password Is Wrong", "LOGIN FAILED", JOptionPane.INFORMATION_MESSAGE);
           //System.out.println("Invalid Password."); 
@@ -161,40 +166,40 @@ public class Login extends JFrame {
       System.out.print(ex.getCause());
     }
   }
+  {
+// { ResultSet getUserInfo(String input_username){
+//    try{
+//      sql = """
+//            SELECT * 
+//            FROM tbl_users 
+//            WHERE username = ?
+//            AND isActive = 1;
+//      """;
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setString(1, input_username);
+//      
+//      //execute the sql command then store the result to ResultSet object
+//      return pstmt.executeQuery();
+//      
+//    }catch(SQLException ex){
+//      return null;
+//    }
+//    
+//  }
   
-  ResultSet getUserInfo(String input_username){
-    try{
-      sql = """
-            SELECT * 
-            FROM tbl_users 
-            WHERE username = ?
-            AND isActive = 1;
-      """;
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setString(1, input_username);
-      
-      //execute the sql command then store the result to ResultSet object
-      return pstmt.executeQuery();
-      
-    }catch(SQLException ex){
-      return null;
-    }
-    
-  }
-  
-  void recordUserLog(int user_ID){
-    try{
-      sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, user_ID);
-
-      pstmt.executeUpdate();
-      System.out.println("Login Successful!");
-    }catch(Exception ex){
-      ex.printStackTrace();
-    }
-    
-  }
-  
+//  void recordUserLog(int user_ID){
+//    try{
+//      sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setInt(1, user_ID);
+//
+//      pstmt.executeUpdate();
+//      System.out.println("Login Successful!");
+//    }catch(Exception ex){
+//      ex.printStackTrace();
+//    }
+//    
+//  }
+}
   
 }

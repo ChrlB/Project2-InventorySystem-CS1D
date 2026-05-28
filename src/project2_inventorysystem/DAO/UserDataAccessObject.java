@@ -1,0 +1,75 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package project2_inventorysystem.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+/**
+ *
+ * @author user
+ */
+public class UserDataAccessObject {
+  Connection conn;
+  PreparedStatement pstmt;
+  
+  String sql;
+  
+  public UserDataAccessObject(Connection conn){
+    this.conn = conn;
+  }
+  
+  public ResultSet getUserInfo(String input_username){
+    try{
+      sql = """
+            SELECT * 
+            FROM tbl_users 
+            WHERE username = ?
+            AND isActive = 1;
+      """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, input_username);
+      
+      //execute the sql command then store the result to ResultSet object
+      return pstmt.executeQuery();
+      
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  
+  public void recordUserLoginLog(int loggedin_user_ID){
+    try{
+      sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, loggedin_user_ID);
+
+      pstmt.executeUpdate();
+      System.out.println("Login Successful!");
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+    
+  }
+  
+  public void recordUserLogoutLog(int loggedin_user_ID){
+    try{
+      sql = """
+          UPDATE tbl_userlogs 
+          SET logoutDate = CURRENT_TIMESTAMP 
+          WHERE userID = ? 
+          AND logoutDate IS NULL
+        """;
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, loggedin_user_ID);
+      pstmt.executeUpdate();
+      
+    }catch(Exception ex){
+      ex.printStackTrace();
+    }
+  }
+}

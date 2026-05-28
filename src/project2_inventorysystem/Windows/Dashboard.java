@@ -14,6 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import static javax.swing.SwingConstants.CENTER;
+import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.DAO.UserDataAccessObject;
 
 
 /**
@@ -40,6 +42,11 @@ public class Dashboard extends JFrame{
   LabelBuilder     user_fullname_label;
           
   int user_ID;
+  
+  UserDataAccessObject userDAO;
+  ProductDataAccessObject productDAO;
+  
+  
   PreparedStatement pstmt;
   Connection conn;
   ResultSet rs;
@@ -47,6 +54,9 @@ public class Dashboard extends JFrame{
   
   public Dashboard(int userID, Connection conn){
     try{
+      this.userDAO = new UserDataAccessObject(conn);
+      this.productDAO = new ProductDataAccessObject(conn);
+      
       this.conn = conn;
       this.user_ID = userID;
       
@@ -66,7 +76,6 @@ public class Dashboard extends JFrame{
       button_panel = new JPanel();
       button_panel.setLayout(null);
       button_panel.setBounds(0,100,400,550);
-      //button_panel.setBackground(new Color(0X8C6E63));
       button_panel.setBackground(new Color(0XB58863));
       
       user_fullname_label = new LabelBuilder(rs.getString("fullname"),1100,55,140,30,15);
@@ -89,11 +98,8 @@ public class Dashboard extends JFrame{
       sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",30,240,100,90);
       user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
       
-      
       header.add(barista_icon);
       header.add(user_fullname_label);
-      
-      
       
       low_stocks_label = new JLabel("LOW STOCK PRODUCTS:");
       low_stocks_label.setBounds(420,125,300,50);
@@ -103,67 +109,15 @@ public class Dashboard extends JFrame{
       best_products_label.setBounds(420,345,300,50);
       best_products_label.setFont(new Font("Arial", Font.BOLD, 16));
       
-      sql = """
-        SELECT 
-            p.productID,
-            p.productName as name,
-            IF(p.stockQuantity = 0,'OUT OF STOCK',p.stockQuantity) as stocks 
-        FROM tbl_products as p 
-            
-        WHERE p.stockQuantity <= p.lowStockthreshold
-            AND P.isActive = 1;
-       """;
       
-      pstmt = conn.prepareStatement(sql);
-      rs = pstmt.executeQuery();
+      rs = productDAO.getLowStockProducts();
       low_stocks_tbl= new JScrollPane(new TableBuilder(rs));
-      //low_stocks_tbl.setBounds(420,150,400,350);
       low_stocks_tbl.setBounds(420,175,800,170);
       
-      
-      
-      sql = """
-        SELECT 
-          P.productID,
-          P.productName       AS name,
-          P.unitPrice         AS price,
-          P.categoryName      AS category,
-          S.total_sale
-        FROM tbl_products AS P
-        
-        INNER JOIN (
-        
-          SELECT
-              productID,
-              SUM(quantity) AS total_sale
-          FROM tbl_sales 
-            
-          GROUP BY productID
-        ) AS S ON P.productID = S.productID
-        
-        WHERE S.total_sale = (
-          SELECT MAX(sales.total_sale)
-          FROM tbl_products AS product
-
-          INNER JOIN (
-            SELECT
-              productID,
-              SUM(quantity) AS total_sale
-            FROM tbl_sales
-            GROUP BY productID
-          ) AS sales ON product.productID = sales.productID
-
-          WHERE product.categoryName = P.categoryName
-           AND P.isActive = 1
-        )
-            
-        ORDER BY total_sale DESC;
-      """;
-
-      pstmt = conn.prepareStatement(sql);
-      rs = pstmt.executeQuery();
+      rs = productDAO.getBestProducts();
       best_products_tbl = new JScrollPane(new TableBuilder(rs));
       best_products_tbl.setBounds(420,395,800,170);
+      
       
       button_panel.add(order_btn);
       button_panel.add(product_btn);
@@ -214,9 +168,7 @@ public class Dashboard extends JFrame{
   }
   
   void logout(int user_ID){
-    int CANCEL = 2;
     try{
-      
       int command = JOptionPane.showConfirmDialog(null,
               "Are you sure you want to log out?",
               "Log Out", JOptionPane.OK_CANCEL_OPTION
@@ -224,15 +176,7 @@ public class Dashboard extends JFrame{
       if (!(command == JOptionPane.OK_OPTION)) return;
       
       
-//      sql = """
-//            UPDATE tbl_userlogs 
-//            SET logoutDate = CURRENT_TIMESTAMP 
-//            WHERE userID = ? 
-//              AND logoutDate IS NULL
-//            """;
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setInt(1, user_ID);
-//      pstmt.executeUpdate();
+      //userDAO.recordUserLogoutLog(user_ID);
 
       System.out.println("Logout Successful!");
       new Login(conn);
