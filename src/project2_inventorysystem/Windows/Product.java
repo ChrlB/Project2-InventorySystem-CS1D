@@ -26,6 +26,7 @@ public class Product extends JFrame{
   
   Header header;
   JPanel product_form_panel;
+  
   ButtonBuilder deduct_btn,
                 delete_btn,
                 update_btn,
@@ -33,15 +34,16 @@ public class Product extends JFrame{
                 category_window_btn,
                 add_product_btn,
                 readd_product_btn;
+  
   SpinnerBuilder lowStockThreshold_spinner;
   
   TextFieldBuilder product_id_field,
                    product_name_field, 
                    unit_price_field;
-  String sql;
+  
   ResultSet rs,
             products_rs;
-  PreparedStatement pstmt;
+  
   TableBuilder products_tbl;
   JScrollPane product_tbl_scroll_pane;
   
@@ -64,24 +66,11 @@ public class Product extends JFrame{
       
       header = new Header();
 
-
-//      sql = """
-//        SELECT 
-//          categoryName
-//        FROM tbl_categories
-//        WHERE isActive = 1;
-//      """;
-//
-//      pstmt = conn.prepareStatement(sql);
-//      rs = pstmt.executeQuery();
-
       rs = productDAO.getProductCategories();
-
       product_category_combobox = new ComboBoxBuilder(155, 170, 255, 50);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
       }
-      
       
       product_combobox = new ComboBoxBuilder("Active",490, 115, 125, 30,14);
       product_combobox.addItem("Archived");
@@ -145,31 +134,10 @@ public class Product extends JFrame{
       product_form_panel.add (unit_price_field_label); 
       product_form_panel.add(lowStockThreshold_field_label);
       product_form_panel.add(lowStockThreshold2_field_label);
-
-//      sql = """
-//        SELECT 
-//            p.productID as ID,
-//            p.productName,
-//            p.categoryName as category,
-//            p.unitPrice,
-//            c.unit,
-//            p.stockQuantity as stock,
-//            p.lowStockthreshold as "lowStock threshold",
-//            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-//        FROM tbl_products as p
-//        inner join tbl_categories as c 
-//            on  p.categoryName = c.categoryName
-//        WHERE p.isActive = 1;
-//      """;
-//      
-//      
-//      
-//      pstmt = conn.prepareStatement(sql);
-//      products_rs = pstmt.executeQuery();
+    
       
       products_rs = productDAO.getProducts(true);
       products_tbl = new TableBuilder(products_rs);
-      
       products_tbl.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseReleased(MouseEvent e) {  
@@ -177,9 +145,11 @@ public class Product extends JFrame{
         }
       });
       
+      
       product_tbl_scroll_pane = new JScrollPane(products_tbl);
       product_tbl_scroll_pane.setBounds(440, 150, 810, 455);
 
+      
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
@@ -188,6 +158,7 @@ public class Product extends JFrame{
         }
       });
 
+      
       ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -216,7 +187,6 @@ public class Product extends JFrame{
       int row = products_tbl.getSelectedRow();
 
       if (row != -1) {
-
         selected_record = new Object[] {
           products_tbl.getValueAt(row, 0),
           products_tbl.getValueAt(row, 1), 
@@ -225,13 +195,13 @@ public class Product extends JFrame{
           products_tbl.getValueAt(row, 6)
         };
       }
+     
       
       product_id_field.setText(""+selected_record[0]);
       product_name_field.setText(""+selected_record[1]);
       product_category_combobox.setSelectedItem(selected_record[2]);
       unit_price_field.setText(""+selected_record[3]);
       lowStockThreshold_spinner.setValue((int)selected_record[4]);
-        
       
       
     }catch(Exception ex){
@@ -241,7 +211,7 @@ public class Product extends JFrame{
   
   public void refreshTable(){
     try{
-      boolean isActive = (product_combobox.getSelectedItem().toString().equals("Active"))? true:false;
+      boolean isActive = (product_combobox.getSelectedItem().toString().equals("Active"));
       
       readd_product_btn.setEnabled(!isActive);
       deduct_btn.setEnabled(isActive);
@@ -249,25 +219,7 @@ public class Product extends JFrame{
       update_btn.setEnabled(isActive);
       restock_btn.setEnabled(isActive);
       
-//      sql = """
-//        SELECT 
-//            p.productID as ID,
-//            p.productName,
-//            p.categoryName as category,
-//            p.unitPrice,
-//            c.unit,
-//            p.stockQuantity as stock,
-//            p.lowStockthreshold as "lowStock threshold",
-//            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-//        FROM tbl_products as p
-//        inner join tbl_categories as c 
-//            on  p.categoryName = c.categoryName
-//        WHERE p.isActive = ?;
-//      """;
-//      
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setInt(1, isActive);
-//      products_tbl.refreshTable(pstmt.executeQuery());
+
       products_tbl.refreshTable(productDAO.getProducts(isActive));
       
     }catch(Exception ex){
@@ -285,11 +237,13 @@ public class Product extends JFrame{
         return;
       } 
       
+      
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0),
         products_tbl.getValueAt(row, 5)
 
       };
+      
       
       new DeductStock(this, (int)selected_record[0],(int)selected_record[1], conn);
       this.setEnabled(false);
@@ -309,9 +263,11 @@ public class Product extends JFrame{
         return;
       } 
       
+      
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0)
       };
+      
       
       new ReStock(this, (int)selected_record[0], conn);
       this.setEnabled(false);
@@ -331,36 +287,26 @@ public class Product extends JFrame{
         return;
       } 
       
+      
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0)
       };
       
+      
       int command = JOptionPane.showConfirmDialog(null,
               "Do you want to proceed re-adding this Product?",
               "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
-      );
-      if (!(command == JOptionPane.OK_OPTION)) return;
+      );if (!(command == JOptionPane.OK_OPTION)) return;
       
-//      sql = """
-//            UPDATE tbl_products
-//            SET
-//              isActive = 1
-//            WHERE productID = ?;
-//            """;
-//
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setInt(1, (int)selected_record[0]);
-//      
-//      int rowsAffected = pstmt.executeUpdate();
-      
+     
       int rowsAffected = productDAO.setProductStatus( (int)selected_record[0], true);
               
+      
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
                   "Product re-added successfully.",
                   "Success", JOptionPane.INFORMATION_MESSAGE);
           refreshTable();
-
       } else {
           JOptionPane.showMessageDialog(null,
                   "No record was added. The Product may not exist.",
@@ -395,17 +341,18 @@ public class Product extends JFrame{
       int command = JOptionPane.showConfirmDialog(null,
               "Do you want to proceed updating this record?",
               "UPDATE CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
-      );
-      if (!(command == JOptionPane.OK_OPTION)) return;
+      ); if (!(command == JOptionPane.OK_OPTION)) return;
+      
       
       String new_product_name = product_name_field.getText().trim(); 
       String new_product_category = product_category_combobox.getSelectedItem().toString().trim();
+      int new_lowstock_threshold = (int) lowStockThreshold_spinner.getValue(); 
       double new_unit_price = Double.parseDouble(
               (unit_price_field.getText().trim().isEmpty())? 
                       "0": 
                       unit_price_field.getText().trim()
       ); 
-      int new_lowstock_threshold = (int) lowStockThreshold_spinner.getValue(); 
+      
       
       if (new_product_name.isEmpty() || new_unit_price <= 0) {
           JOptionPane.showMessageDialog(null,
@@ -413,6 +360,7 @@ public class Product extends JFrame{
                   "Validation Error", JOptionPane.WARNING_MESSAGE);
           return;
       }
+      
       
       if( 
           new_product_name.equals(selected_record[1]) && 
@@ -426,31 +374,21 @@ public class Product extends JFrame{
         return;
       }
       
-      sql = """
-            UPDATE tbl_products
-            SET
-              productName = ?,
-              categoryName = ?,
-              unitPrice = ?,
-              lowStockThreshold = ?
-            WHERE productID = ?;
-            """;
-
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setString(1, new_product_name);
-      pstmt.setString(2, new_product_category);
-      pstmt.setDouble(3, new_unit_price);
-      pstmt.setInt(4, (int) new_lowstock_threshold);
-      pstmt.setInt(5, (int) selected_record[0]);
-
-      int rowsAffected = pstmt.executeUpdate();
-
+      
+      int rowsAffected = productDAO.updateProductInfo(
+              ((int) selected_record[0]),
+              new_product_name, 
+              new_product_category,
+              new_unit_price,
+              new_lowstock_threshold
+      );
+      
+              
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
                   "Product Record updated successfully.",
                   "Success", JOptionPane.INFORMATION_MESSAGE);
           refreshTable();
-
       } else {
           JOptionPane.showMessageDialog(null,
                   "No record was updated. The Product may not exist.",
@@ -477,14 +415,17 @@ public class Product extends JFrame{
         return;
       } 
       
+      
       selected_record = new Object[]{
         products_tbl.getValueAt(row, 0),
         products_tbl.getValueAt(row, 5)
       };
       
+      
       String message = ((int)selected_record[1] > 0)?
               "This product is currently in stock. Are you sure you want to delete it?":
               "Do you want to proceed deleting this Product?" ;
+      
       
       Object[] option = {"To Archive","Cancel"};
       int command = JOptionPane.showOptionDialog(null,
@@ -494,24 +435,13 @@ public class Product extends JFrame{
                 null,
                 option,
                 option[1]
-      );
-      if(command != 0) return;
+      ); if(command != 0) return;
       
       
-      sql = """
-        UPDATE tbl_products
-        SET isActive = 0
-        WHERE productID = ?;
-      """;
+      int rowsAffected = productDAO.setProductStatus((int)selected_record[0], false);
+              
+      
       message = "Product successfully Archived.";
-      
-      
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, (int)selected_record[0]);
-      
-      int rowsAffected = pstmt.executeUpdate();
-      
-      
       if (rowsAffected > 0) {
         JOptionPane.showMessageDialog(null,
               message, "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -522,6 +452,7 @@ public class Product extends JFrame{
               "No Product deleted.",
               "Failed", JOptionPane.WARNING_MESSAGE);
       }
+      
     }catch(Exception ex){
       ex.printStackTrace();
       JOptionPane.showMessageDialog(null,

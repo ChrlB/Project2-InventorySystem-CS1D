@@ -154,4 +154,30 @@ public class ProductDataAccessObject {
      return 0;
    }
   }
+  
+  public int updateProductInfo( int productID, String product_name, String category, double unit_price, int low_stock_threshold){
+    try{
+      sql = """
+        UPDATE tbl_products
+        SET
+          productName = ?,
+          categoryName = ?,
+          unitPrice = ?,
+          lowStockThreshold = ?
+        WHERE productID = ?;
+      """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1, product_name);
+      pstmt.setString(2, category);
+      pstmt.setDouble(3, unit_price);
+      pstmt.setInt(4, low_stock_threshold);
+      pstmt.setInt(5, productID);
+      
+      return pstmt.executeUpdate();
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return 0;
+    }
+  }
 }
