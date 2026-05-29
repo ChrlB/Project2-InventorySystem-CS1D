@@ -180,4 +180,42 @@ public class ProductDataAccessObject {
       return 0;
     }
   }
+
+  public int deductProductStock(int productID, int amount){
+    try{
+      sql = """
+        UPDATE tbl_products
+        SET stockQuantity = stockQuantity - ?
+        WHERE productID = ?;
+      """;
+      
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, amount);
+      pstmt.setInt(2, productID);
+      
+      return pstmt.executeUpdate();
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return 0;
+    }
+  }
+  
+  public int restockProductStock(int productID, int amount){
+    try{
+      sql = """
+        UPDATE tbl_products
+        SET stockQuantity = stockQuantity + ?
+        WHERE productID = ?;
+      """;  
+      
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, amount);
+      pstmt.setInt(2, productID);
+      
+      return pstmt.executeUpdate();
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return 0;
+    }
+  }
 }

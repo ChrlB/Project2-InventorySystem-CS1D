@@ -7,6 +7,7 @@ package project2_inventorysystem.Windows.Forms;
 import java.awt.Color;
 import javax.swing.*;
 import java.sql.*;
+import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
@@ -22,6 +23,8 @@ public class ReStock extends JFrame{
   Connection conn;
   Product parent;
   
+  ProductDataAccessObject productDAO;
+  
   ButtonBuilder confirm_btn, 
                 cancel_btn;
   
@@ -36,6 +39,7 @@ public class ReStock extends JFrame{
     this.conn = conn;
     this.parent = parent;
     
+    productDAO = new ProductDataAccessObject(conn);
     
     stock_label = new LabelBuilder("Add Stock: ",30,50,100,50,15);
     stock_label.setForeground(new Color(0XB58863));
@@ -90,18 +94,9 @@ public class ReStock extends JFrame{
         return;
       }
       
-      sql = """
-        UPDATE tbl_products
-        SET stockQuantity = stockQuantity + ?
-        WHERE productID = ?;
-      """;
       
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, stock_to_add);
-      pstmt.setInt(2, productID);
-      
-      int rowsAffected = pstmt.executeUpdate();
-      
+      int rowsAffected = productDAO.restockProductStock(productID, stock_to_add);
+              
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
                   "Stock successfully added.",

@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
@@ -23,6 +24,7 @@ public class DeductStock extends JFrame{
   int productID;
   int max_deduct;
   Connection conn;
+  ProductDataAccessObject productDAO;
   Product parent;
   
   ButtonBuilder confirm_btn, 
@@ -31,14 +33,14 @@ public class DeductStock extends JFrame{
   SpinnerBuilder deduct_spinner;
   LabelBuilder stock_label;
   
-  String sql;
-  PreparedStatement pstmt;
   
   public DeductStock(Product parent, int productID,int max_deduct, Connection conn){
     this.productID = productID;
     this.conn = conn;
     this.parent = parent;
     this.max_deduct = max_deduct;
+    
+    productDAO = new ProductDataAccessObject(conn);
     
     
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
@@ -100,17 +102,9 @@ public class DeductStock extends JFrame{
         return;
       }
       
-      sql = """
-        UPDATE tbl_products
-        SET stockQuantity = stockQuantity - ?
-        WHERE productID = ?;
-      """;
       
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, stock_to_deduct);
-      pstmt.setInt(2, productID);
+      int rowsAffected = productDAO.deductProductStock(productID, stock_to_deduct);
       
-      int rowsAffected = pstmt.executeUpdate();
       
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
