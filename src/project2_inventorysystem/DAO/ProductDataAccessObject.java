@@ -20,6 +20,34 @@ public class ProductDataAccessObject {
     this.conn = conn;
   }
   
+  public ResultSet getProducts(boolean isActive){
+    try{
+      sql = """
+        SELECT 
+            p.productID as ID,
+            p.productName,
+            p.categoryName as category,
+            p.unitPrice,
+            c.unit,
+            p.stockQuantity as stock,
+            p.lowStockthreshold as "lowStock threshold",
+            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
+        FROM tbl_products as p
+        inner join tbl_categories as c 
+            on  p.categoryName = c.categoryName
+        WHERE p.isActive = ?;
+      """;
+      
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, ((isActive)? 1:0) );
+      
+      return pstmt.executeQuery();
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  
   public ResultSet getLowStockProducts(){
     try{
       sql = """
@@ -89,5 +117,41 @@ public class ProductDataAccessObject {
     }
   }
   
+  public ResultSet getProductCategories(){
+    try{
+      sql = """
+          SELECT 
+            categoryName
+          FROM tbl_categories
+          WHERE isActive = 1;
+        """;
+      
+      pstmt = conn.prepareStatement(sql);
+      return pstmt.executeQuery();
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return null;
+    }
+    
+  }
   
+  public int setProductStatus(int productID, boolean isActive){
+   try{
+     sql = """
+        UPDATE tbl_products
+        SET
+          isActive = ?
+        WHERE productID = ?;
+      """;
+     
+     pstmt = conn.prepareStatement(sql);
+     pstmt.setInt(1, ((isActive)? 1:0) );
+     pstmt.setInt(2, productID );
+     
+     return pstmt.executeUpdate();
+   } catch(SQLException ex){
+     ex.printStackTrace();
+     return 0;
+   }
+  }
 }

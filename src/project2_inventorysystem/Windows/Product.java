@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
+import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.Windows.Forms.DeductStock;
 import project2_inventorysystem.Windows.Forms.NewProduct;
 
@@ -19,9 +20,10 @@ import project2_inventorysystem.Windows.Forms.NewProduct;
  * @author user
  */
 public class Product extends JFrame{
-  final int CANCEL = 2;
   int user_ID;
   Connection conn;
+  ProductDataAccessObject productDAO;
+  
   Header header;
   JPanel product_form_panel;
   ButtonBuilder deduct_btn,
@@ -56,21 +58,24 @@ public class Product extends JFrame{
   
   Product(int userID, Connection conn){
     try{
+      productDAO = new ProductDataAccessObject(conn);
       this.conn = conn;
       user_ID = userID;
       
       header = new Header();
 
 
-      sql = """
-        SELECT 
-          categoryName
-        FROM tbl_categories
-        WHERE isActive = 1;
-      """;
+//      sql = """
+//        SELECT 
+//          categoryName
+//        FROM tbl_categories
+//        WHERE isActive = 1;
+//      """;
+//
+//      pstmt = conn.prepareStatement(sql);
+//      rs = pstmt.executeQuery();
 
-      pstmt = conn.prepareStatement(sql);
-      rs = pstmt.executeQuery();
+      rs = productDAO.getProductCategories();
 
       product_category_combobox = new ComboBoxBuilder(155, 170, 255, 50);
       while(rs.next()){
@@ -141,25 +146,28 @@ public class Product extends JFrame{
       product_form_panel.add(lowStockThreshold_field_label);
       product_form_panel.add(lowStockThreshold2_field_label);
 
-      sql = """
-        SELECT 
-            p.productID as ID,
-            p.productName,
-            p.categoryName as category,
-            p.unitPrice,
-            c.unit,
-            p.stockQuantity as stock,
-            p.lowStockthreshold as "lowStock threshold",
-            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-        FROM tbl_products as p
-        inner join tbl_categories as c 
-            on  p.categoryName = c.categoryName
-        WHERE p.isActive = 1;
-      """;
+//      sql = """
+//        SELECT 
+//            p.productID as ID,
+//            p.productName,
+//            p.categoryName as category,
+//            p.unitPrice,
+//            c.unit,
+//            p.stockQuantity as stock,
+//            p.lowStockthreshold as "lowStock threshold",
+//            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
+//        FROM tbl_products as p
+//        inner join tbl_categories as c 
+//            on  p.categoryName = c.categoryName
+//        WHERE p.isActive = 1;
+//      """;
+//      
+//      
+//      
+//      pstmt = conn.prepareStatement(sql);
+//      products_rs = pstmt.executeQuery();
       
-      pstmt = conn.prepareStatement(sql);
-      products_rs = pstmt.executeQuery();
-
+      products_rs = productDAO.getProducts(true);
       products_tbl = new TableBuilder(products_rs);
       
       products_tbl.addMouseListener(new MouseAdapter() {
@@ -233,33 +241,35 @@ public class Product extends JFrame{
   
   public void refreshTable(){
     try{
-      int isActive = (product_combobox.getSelectedItem().toString().equals("Active"))? 1:0;
+      boolean isActive = (product_combobox.getSelectedItem().toString().equals("Active"))? true:false;
       
-      readd_product_btn.setEnabled((isActive != 1));
-      deduct_btn.setEnabled((isActive == 1));
-      delete_btn.setEnabled((isActive == 1));
-      update_btn.setEnabled((isActive == 1));
-      restock_btn.setEnabled((isActive == 1));
+      readd_product_btn.setEnabled(!isActive);
+      deduct_btn.setEnabled(isActive);
+      delete_btn.setEnabled(isActive);
+      update_btn.setEnabled(isActive);
+      restock_btn.setEnabled(isActive);
       
-      sql = """
-        SELECT 
-            p.productID as ID,
-            p.productName,
-            p.categoryName as category,
-            p.unitPrice,
-            c.unit,
-            p.stockQuantity as stock,
-            p.lowStockthreshold as "lowStock threshold",
-            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
-        FROM tbl_products as p
-        inner join tbl_categories as c 
-            on  p.categoryName = c.categoryName
-        WHERE p.isActive = ?;
-      """;
+//      sql = """
+//        SELECT 
+//            p.productID as ID,
+//            p.productName,
+//            p.categoryName as category,
+//            p.unitPrice,
+//            c.unit,
+//            p.stockQuantity as stock,
+//            p.lowStockthreshold as "lowStock threshold",
+//            DATE_FORMAT(p.dateCreated,"%Y-%d-%m") as dateCreated
+//        FROM tbl_products as p
+//        inner join tbl_categories as c 
+//            on  p.categoryName = c.categoryName
+//        WHERE p.isActive = ?;
+//      """;
+//      
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setInt(1, isActive);
+//      products_tbl.refreshTable(pstmt.executeQuery());
+      products_tbl.refreshTable(productDAO.getProducts(isActive));
       
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, isActive);
-      products_tbl.refreshTable(pstmt.executeQuery());
     }catch(Exception ex){
       ex.printStackTrace();
     }
@@ -331,21 +341,23 @@ public class Product extends JFrame{
       );
       if (!(command == JOptionPane.OK_OPTION)) return;
       
-      sql = """
-            UPDATE tbl_products
-            SET
-              isActive = 1
-            WHERE productID = ?;
-            """;
-
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setInt(1, (int)selected_record[0]);
+//      sql = """
+//            UPDATE tbl_products
+//            SET
+//              isActive = 1
+//            WHERE productID = ?;
+//            """;
+//
+//      pstmt = conn.prepareStatement(sql);
+//      pstmt.setInt(1, (int)selected_record[0]);
+//      
+//      int rowsAffected = pstmt.executeUpdate();
       
-      int rowsAffected = pstmt.executeUpdate();
-
+      int rowsAffected = productDAO.setProductStatus( (int)selected_record[0], true);
+              
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
-                  "Product added successfully.",
+                  "Product re-added successfully.",
                   "Success", JOptionPane.INFORMATION_MESSAGE);
           refreshTable();
 

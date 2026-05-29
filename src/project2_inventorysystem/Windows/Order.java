@@ -30,6 +30,8 @@ public class Order extends JFrame{
   int user_ID, total_order_price ;
   ArrayList<Object[]> pendingItems ;
   
+  
+  
   Header header ;
   JPanel order_form_panel;
   
