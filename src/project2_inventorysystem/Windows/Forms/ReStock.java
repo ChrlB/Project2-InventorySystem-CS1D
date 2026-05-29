@@ -31,8 +31,6 @@ public class ReStock extends JFrame{
   SpinnerBuilder restock_spinner;
   LabelBuilder stock_label;
   
-  String sql;
-  PreparedStatement pstmt;
   
   public ReStock(Product parent, int productID, Connection conn){
     this.productID = productID;

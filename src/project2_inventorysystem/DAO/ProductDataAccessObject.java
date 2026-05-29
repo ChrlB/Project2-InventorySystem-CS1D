@@ -117,16 +117,17 @@ public class ProductDataAccessObject {
     }
   }
   
-  public ResultSet getProductCategories(){
+  public ResultSet getProductCategories(boolean isActive){
     try{
       sql = """
           SELECT 
             categoryName
           FROM tbl_categories
-          WHERE isActive = 1;
+          WHERE isActive = ?;
         """;
       
       pstmt = conn.prepareStatement(sql);
+      pstmt.setInt(1, ((isActive)? 1:0) );
       return pstmt.executeQuery();
     }catch(SQLException ex){
       ex.printStackTrace();

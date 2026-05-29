@@ -66,7 +66,7 @@ public class Product extends JFrame{
       
       header = new Header();
 
-      rs = productDAO.getProductCategories();
+      rs = productDAO.getProductCategories(true);
       product_category_combobox = new ComboBoxBuilder(155, 170, 255, 50);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));

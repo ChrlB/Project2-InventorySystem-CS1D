@@ -7,6 +7,7 @@ package project2_inventorysystem.Windows.Forms;
 import java.awt.Color;
 import java.sql.*;
 import javax.swing.*;
+import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -21,6 +22,7 @@ import project2_inventorysystem.Windows.Product;
 public class NewProduct extends JFrame {
   Product parent;
   Connection conn;
+  ProductDataAccessObject productDAO;
   
   String sql;
   ResultSet rs;
@@ -49,15 +51,18 @@ public class NewProduct extends JFrame {
       this.parent = parent;
       this.conn = conn;
       
-      sql = """
-        SELECT 
-          categoryName
-        FROM tbl_categories;
-      """;
+      productDAO = new ProductDataAccessObject(conn);
+      
+//      sql = """
+//        SELECT 
+//          categoryName
+//        FROM tbl_categories;
+//      """;
+//
+//      pstmt = conn.prepareStatement(sql);
+//      rs = pstmt.executeQuery();
 
-      pstmt = conn.prepareStatement(sql);
-      rs = pstmt.executeQuery();
-
+      rs = productDAO.getProductCategories(true);
       product_category_combobox = new ComboBoxBuilder(175, 120, 275, 50);
       while(rs.next()){
         product_category_combobox.addItem(rs.getString("categoryName"));
