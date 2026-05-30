@@ -18,7 +18,7 @@ public class DBConnection {
   private static DBConnection instance = null;
   private  Connection conn;
   
-  public DBConnection(){
+  private DBConnection(){
     try{
       Properties prop = new Properties();
       prop.load(new FileInputStream("db.properties"));
@@ -39,7 +39,6 @@ public class DBConnection {
   public  static DBConnection getInstance(){
     if(instance == null){
       instance = new DBConnection();
-      return instance;
     }
     return instance;
   }

@@ -63,6 +63,26 @@ public class UserDataAccessObject {
     }
   }
   
+  public ResultSet getCurrentUser(){
+    try{
+      
+      sql = """
+            SELECT * 
+            FROM tbl_users 
+            WHERE logoutDate IS NULL
+              AND isActive = 1;
+      """;
+      pstmt = conn.prepareStatement(sql);
+      
+      //execute the sql command then store the result to ResultSet object
+      return pstmt.executeQuery();
+      
+    }catch(SQLException ex){
+      ex.printStackTrace();
+      return null;
+    }
+  }
+  
   public void recordUserLoginLog(int loggedin_user_ID){
     try{
       sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";

@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 
 public class Login extends JFrame {
   int user_ID;
@@ -151,8 +152,9 @@ public class Login extends JFrame {
           user_ID = rs.getInt("userID");
           
           //userDAO.recordUserLoginLog(user_ID);
+          UserSession.getInstance().createSession(rs);
           
-          new Dashboard(user_ID, conn);
+          new Dashboard();
           this.dispose();
           
         }else { 
@@ -170,39 +172,6 @@ public class Login extends JFrame {
     }
   }
   {
-// { ResultSet getUserInfo(String input_username){
-//    try{
-//      sql = """
-//            SELECT * 
-//            FROM tbl_users 
-//            WHERE username = ?
-//            AND isActive = 1;
-//      """;
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setString(1, input_username);
-//      
-//      //execute the sql command then store the result to ResultSet object
-//      return pstmt.executeQuery();
-//      
-//    }catch(SQLException ex){
-//      return null;
-//    }
-//    
-//  }
-  
-//  void recordUserLog(int user_ID){
-//    try{
-//      sql = "INSERT INTO tbl_userlogs(userID) VALUES(?)";
-//      pstmt = conn.prepareStatement(sql);
-//      pstmt.setInt(1, user_ID);
-//
-//      pstmt.executeUpdate();
-//      System.out.println("Login Successful!");
-//    }catch(Exception ex){
-//      ex.printStackTrace();
-//    }
-//    
-//  }
 }
   
 }

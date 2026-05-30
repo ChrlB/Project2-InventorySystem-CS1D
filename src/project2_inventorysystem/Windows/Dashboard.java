@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import static javax.swing.SwingConstants.CENTER;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.DAO.UserDataAccessObject;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 
 
 /**
@@ -54,13 +56,13 @@ public class Dashboard extends JFrame{
   ResultSet rs;
   
   
-  public Dashboard(int userID, Connection conn){
+  public Dashboard(){
     try{
       this.userDAO = new UserDataAccessObject();
       this.productDAO = new ProductDataAccessObject();
       
-      this.conn = conn;
-      this.user_ID = userID;
+      this.conn = DBConnection.getInstance().getDBConnection();
+      this.user_ID = UserSession.getInstance().getUserID();
       
       {
       header = new Header();
