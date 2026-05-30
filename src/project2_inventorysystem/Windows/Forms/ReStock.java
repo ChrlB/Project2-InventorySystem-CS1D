@@ -37,7 +37,7 @@ public class ReStock extends JFrame{
     this.conn = conn;
     this.parent = parent;
     
-    productDAO = new ProductDataAccessObject(conn);
+    productDAO = new ProductDataAccessObject();
     
     stock_label = new LabelBuilder("Add Stock: ",30,50,100,50,15);
     stock_label.setForeground(new Color(0XB58863));

@@ -209,7 +209,6 @@ public class Category extends JFrame{
         category_name_field.setText(""+selected_record[0]);
         description_field.setText((selected_record[1] == null)? "" : String.valueOf(selected_record[1]));
         unit_field.setText(""+selected_record[2]);
-        //lowStockThreshold_spinner.setValue((int)selected_record[3]);
         
       }catch(Exception ex){
         ex.printStackTrace();

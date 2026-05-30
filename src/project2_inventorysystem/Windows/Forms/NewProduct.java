@@ -49,7 +49,7 @@ public class NewProduct extends JFrame {
       this.parent = parent;
       this.conn = conn;
       
-      productDAO = new ProductDataAccessObject(conn);
+      productDAO = new ProductDataAccessObject();
       
 
       rs = productDAO.getProductCategories(true);

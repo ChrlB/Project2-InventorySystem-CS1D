@@ -40,7 +40,7 @@ public class DeductStock extends JFrame{
     this.parent = parent;
     this.max_deduct = max_deduct;
     
-    productDAO = new ProductDataAccessObject(conn);
+    productDAO = new ProductDataAccessObject();
     
     
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);

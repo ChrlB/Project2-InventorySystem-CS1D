@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *
  * @author user
@@ -16,8 +17,8 @@ public class ProductDataAccessObject {
   Connection conn;
   PreparedStatement pstmt;
   
-  public ProductDataAccessObject(Connection conn){
-    this.conn = conn;
+  public ProductDataAccessObject(){
+    this.conn = DBConnection.getInstance().getDBConnection();
   }
   
   public ResultSet getProducts(boolean isActive){

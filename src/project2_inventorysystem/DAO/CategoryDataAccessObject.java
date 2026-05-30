@@ -4,6 +4,7 @@
  */
 package project2_inventorysystem.DAO;
 import java.sql.Connection;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *
  * @author user
@@ -11,8 +12,8 @@ import java.sql.Connection;
 public class CategoryDataAccessObject {
   Connection conn;
   
-  public CategoryDataAccessObject(Connection conn){
-    this.conn = conn;
+  public CategoryDataAccessObject(){
+    this.conn = DBConnection.getInstance().getDBConnection();
   }
   
   

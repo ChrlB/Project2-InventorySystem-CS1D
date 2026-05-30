@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 
 public class Login extends JFrame {
   int user_ID;
@@ -47,11 +48,12 @@ public class Login extends JFrame {
   
   boolean isPasswordHidden = true;
   
-  public Login(Connection conn){
+  public Login(){
     
     try{
-      this.conn = conn;
-      userDAO = new UserDataAccessObject(conn);
+      
+      this.conn = DBConnection.getInstance().getDBConnection();
+      userDAO = new UserDataAccessObject();
       
       user_panel = new JPanel();
       user_panel.setBackground(new Color(0XB58863));

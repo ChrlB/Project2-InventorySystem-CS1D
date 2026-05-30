@@ -60,7 +60,7 @@ public class Product extends JFrame{
   
   Product(int userID, Connection conn){
     try{
-      productDAO = new ProductDataAccessObject(conn);
+      productDAO = new ProductDataAccessObject();
       this.conn = conn;
       user_ID = userID;
       

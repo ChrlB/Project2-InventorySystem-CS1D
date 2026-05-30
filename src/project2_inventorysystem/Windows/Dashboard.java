@@ -56,8 +56,8 @@ public class Dashboard extends JFrame{
   
   public Dashboard(int userID, Connection conn){
     try{
-      this.userDAO = new UserDataAccessObject(conn);
-      this.productDAO = new ProductDataAccessObject(conn);
+      this.userDAO = new UserDataAccessObject();
+      this.productDAO = new ProductDataAccessObject();
       
       this.conn = conn;
       this.user_ID = userID;
@@ -178,7 +178,7 @@ public class Dashboard extends JFrame{
       //userDAO.recordUserLogoutLog(user_ID);
 
       System.out.println("Logout Successful!");
-      new Login(conn);
+      new Login();
       dispose();
     }catch (Exception ex){
       System.out.print(ex.getCause());

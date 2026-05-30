@@ -4,6 +4,7 @@
  */
 package project2_inventorysystem.DAO;
 import java.sql.Connection;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *
  * @author user
@@ -11,8 +12,8 @@ import java.sql.Connection;
 public class OrderDataAccessObject {
   Connection conn;
   
-  public OrderDataAccessObject(Connection conn){
-    this.conn = conn;
+  public OrderDataAccessObject(){
+    this.conn = DBConnection.getInstance().getDBConnection();
   }
   
   

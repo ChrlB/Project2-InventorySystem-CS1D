@@ -4,11 +4,7 @@
  */
 package project2_inventorysystem;
 import project2_inventorysystem.Windows.*;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
-
-import java.sql.*;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *
  * @author user
@@ -23,24 +19,13 @@ public class Project2InventorySystem {
    */
   
   public static void main(String[] args) {
-    
     try{
-      Properties prop = new Properties();
-      prop.load(new FileInputStream("db.properties"));
-
-      String url = prop.getProperty("DB_URL");
-      String user = prop.getProperty("DB_USER");
-      String pass = prop.getProperty("DB_PASS");
       
-      Connection conn = DriverManager.getConnection( url, user, pass);
-      new Login(conn);
-      
-      System.out.println(conn);
-      
+      DBConnection.getInstance();
+      new Login();
     
     }catch(Exception ex){
-      
-      System.out.print(ex);
+      ex.printStackTrace();
     }
     //new Dashboard();
   }

@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *
  * @author user
@@ -18,8 +19,8 @@ public class UserDataAccessObject {
   
   String sql;
   
-  public UserDataAccessObject(Connection conn){
-    this.conn = conn;
+  public UserDataAccessObject(){
+    this.conn = DBConnection.getInstance().getDBConnection();
   }
   
   public ResultSet getUserInfoByUsername(String input_username){
