@@ -24,9 +24,7 @@ public class NewProduct extends JFrame {
   Connection conn;
   ProductDataAccessObject productDAO;
   
-  String sql;
   ResultSet rs;
-  PreparedStatement pstmt;
   
   LabelBuilder   product_name_field_label, 
                  category_name_field_label,
@@ -53,14 +51,6 @@ public class NewProduct extends JFrame {
       
       productDAO = new ProductDataAccessObject(conn);
       
-//      sql = """
-//        SELECT 
-//          categoryName
-//        FROM tbl_categories;
-//      """;
-//
-//      pstmt = conn.prepareStatement(sql);
-//      rs = pstmt.executeQuery();
 
       rs = productDAO.getProductCategories(true);
       product_category_combobox = new ComboBoxBuilder(175, 120, 275, 50);
@@ -161,54 +151,35 @@ public class NewProduct extends JFrame {
         return;
       }
       
-      sql = """
-        SELECT *
-        FROM tbl_products
-        WHERE   productName = LOWER(?)
-            AND categoryName = ? ;
-      """;
-
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setString(1,new_product_name);
-      pstmt.setString(2,new_product_category);
       
-      rs = pstmt.executeQuery();
+      boolean isProductAlreadyExists = productDAO.isProductAlreadyExists(new_product_name, new_product_category);
       
-      if(rs.next()){
+      
+      if(isProductAlreadyExists){
         JOptionPane.showMessageDialog(null,
                 "\"" + new_product_name + "\" already exists in the " + new_product_category + " category.\n"
                 + "It may be active or archived. Please check your product list.",
               "Product Already Exists", JOptionPane.WARNING_MESSAGE);
         return;
       }
+     
       
       int command = JOptionPane.showConfirmDialog(null,
               "Do you want to proceed Adding this product?",
               "NEW PRODUCT CONFIRMATION", JOptionPane.OK_CANCEL_OPTION
+      ); if (!(command == JOptionPane.OK_OPTION)) return;
+      
+      
+      
+      int rowsAffected = productDAO.addNewProduct(
+          new_product_name, 
+          new_product_category, 
+          new_unit_price, 
+          new_stock_quantity, 
+          new_lowstock_threshold
       );
-      if (!(command == JOptionPane.OK_OPTION)) return;
       
-      
-      sql = """
-        INSERT INTO tbl_products(
-            productName,
-            categoryName,
-            unitPrice,
-            stockQuantity,
-            lowStockThreshold
-          )
-        VALUES(LOWER(?),?,?,?,?);
-      """;
 
-      pstmt = conn.prepareStatement(sql);
-      pstmt.setString(1,new_product_name);
-      pstmt.setString(2,new_product_category);
-      pstmt.setDouble(3,new_unit_price);
-      pstmt.setInt(4,new_stock_quantity);
-      pstmt.setInt(5,new_lowstock_threshold);
-      
-      int rowsAffected = pstmt.executeUpdate();
-      
       if (rowsAffected > 0) {
           JOptionPane.showMessageDialog(null,
                   "Product successfully added.",

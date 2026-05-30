@@ -21,7 +21,6 @@ import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
-import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
 import project2_inventorysystem.Windows.MyComponents.TableBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 

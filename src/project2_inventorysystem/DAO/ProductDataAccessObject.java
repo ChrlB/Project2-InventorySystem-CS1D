@@ -219,4 +219,47 @@ public class ProductDataAccessObject {
       return 0;
     }
   }
+  
+  public boolean isProductAlreadyExists(String productName, String category) throws SQLException{
+    sql = """
+      SELECT *
+      FROM tbl_products
+      WHERE   productName = LOWER(?)
+          AND categoryName = ? ;
+    """;
+
+    pstmt = conn.prepareStatement(sql);
+    pstmt.setString(1,productName);
+    pstmt.setString(2,category);
+
+    ResultSet rs = pstmt.executeQuery();
+    return (rs.next());
+  }
+  
+  public int addNewProduct(String productName,String category, double price, int stockQuantity, int lowStockThreshold){
+    try{
+      sql = """
+        INSERT INTO tbl_products(
+            productName,
+            categoryName,
+            unitPrice,
+            stockQuantity,
+            lowStockThreshold
+          )
+        VALUES(LOWER(?),?,?,?,?);
+      """;
+
+      pstmt = conn.prepareStatement(sql);
+      pstmt.setString(1,productName);
+      pstmt.setString(2,category);
+      pstmt.setDouble(3,price);
+      pstmt.setInt(4,stockQuantity);
+      pstmt.setInt(5,lowStockThreshold);
+      
+      return pstmt.executeUpdate();
+    }catch(SQLException ex ){
+      ex.printStackTrace();
+      return 0;
+    }
+  }
 }
