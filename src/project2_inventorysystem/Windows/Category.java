@@ -160,9 +160,7 @@ public class Category extends JFrame{
         this.add(readd_category_btn);
         this.add(category_combobox);
         
-        
         this.setVisible(true);
-        
         
       }catch(Exception ex){
         System.out.println(ex);
