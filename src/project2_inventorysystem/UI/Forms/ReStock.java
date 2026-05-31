@@ -8,7 +8,7 @@ import java.awt.Color;
 import javax.swing.*;
 import java.sql.*;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
 import project2_inventorysystem.UI.MyComponents.LabelBuilder;
 import project2_inventorysystem.UI.MyComponents.SpinnerBuilder;

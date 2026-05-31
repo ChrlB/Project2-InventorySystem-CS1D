@@ -4,7 +4,7 @@
  */
 package project2_inventorysystem.DAO;
 import java.sql.Connection;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 /**
  *
  * @author user

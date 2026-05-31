@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 /**
  *
  * @author user

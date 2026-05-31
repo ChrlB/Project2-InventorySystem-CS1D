@@ -12,7 +12,7 @@ import project2_inventorysystem.UI.MyComponents.LabelBuilder;
 import project2_inventorysystem.UI.MyComponents.TextFieldBuilder;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.UI.UIFileHandler.Icons;
 import project2_inventorysystem.UI.Windows.User;
 /**

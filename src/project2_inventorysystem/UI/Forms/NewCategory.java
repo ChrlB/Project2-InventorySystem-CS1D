@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.UI.Windows.Category;
 import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
 import project2_inventorysystem.UI.MyComponents.LabelBuilder;

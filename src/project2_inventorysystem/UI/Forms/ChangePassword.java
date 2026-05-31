@@ -12,8 +12,8 @@ import project2_inventorysystem.UI.MyComponents.TextFieldBuilder;
 import project2_inventorysystem.UI.Windows.User;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
-import project2_inventorysystem.Services.UserSession.UserSession;
+import project2_inventorysystem.Services.DBConnection;
+import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.UIFileHandler.Icons;
 /**
  *

@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
-import project2_inventorysystem.Services.UserSession.UserSession;
+import project2_inventorysystem.Services.DBConnection;
+import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.MyComponents.*;
 import project2_inventorysystem.UI.UIFileHandler.Icons;
 

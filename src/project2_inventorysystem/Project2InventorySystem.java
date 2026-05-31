@@ -4,7 +4,7 @@
  */
 package project2_inventorysystem;
 import project2_inventorysystem.UI.Windows.Login;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.DBConnection;
 /**
  *
  * @author user

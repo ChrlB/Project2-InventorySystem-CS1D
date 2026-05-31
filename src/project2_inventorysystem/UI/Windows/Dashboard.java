@@ -15,8 +15,8 @@ import javax.swing.JScrollPane;
 import static javax.swing.SwingConstants.CENTER;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.DAO.UserDataAccessObject;
-import project2_inventorysystem.Services.DBConnection.DBConnection;
-import project2_inventorysystem.Services.UserSession.UserSession;
+import project2_inventorysystem.Services.DBConnection;
+import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.MyComponents.*;
 import project2_inventorysystem.UI.UIFileHandler.Icons;
 
