@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.Forms.NewCategory;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
@@ -58,10 +60,10 @@ public class Category extends JFrame{
     
     Object[] selected_record;
     
-    public Category(int userID,Connection conn){
+    public Category(){
       try{
-        this.conn = conn;
-        user_ID = userID;
+        this.conn = DBConnection.getInstance().getDBConnection();
+        this.user_ID = UserSession.getInstance().getUserID();
         header = new Header();
         
         
@@ -138,7 +140,7 @@ public class Category extends JFrame{
         this.addWindowListener(new java.awt.event.WindowAdapter() {
           @Override
           public void windowClosing(java.awt.event.WindowEvent e) {
-            new Product(user_ID,conn); 
+            new Product(); 
             dispose();
           }
         });

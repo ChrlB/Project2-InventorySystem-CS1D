@@ -19,6 +19,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.MyComponents.*;
 
 /**
@@ -69,10 +71,11 @@ public class Order extends JFrame{
   
   Object[] selected_record;
   
-  public Order(int userID,Connection conn){
+  public Order(){
     try{
-      this.conn = conn;
-      user_ID = userID;
+      this.conn = DBConnection.getInstance().getDBConnection();
+      this.user_ID = UserSession.getInstance().getUserID();
+      
       total_order_price = 0;
       pendingItems = new ArrayList<>();
 

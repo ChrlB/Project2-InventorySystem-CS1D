@@ -11,6 +11,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.Forms.ChangePassword;
 import project2_inventorysystem.Windows.MyComponents.*;
 
@@ -50,10 +52,10 @@ public class User extends JFrame{
     
     Object[] selected_record;
     
-    User(int userID,Connection conn){
+    User(){
       try{
-        this.conn = conn;
-        user_ID = userID;
+        this.conn = DBConnection.getInstance().getDBConnection();
+        this.user_ID = UserSession.getInstance().getUserID();
         header = new Header();
         
         readd_user_btn = new ButtonBuilder("RE-ADD USER", 650, 115, 175, 30,14);
@@ -82,10 +84,10 @@ public class User extends JFrame{
           this.setEnabled(false);
           new NewUser(this,conn);
         });
-        delete_btn.addActionListener((a) -> {deleteRecord();});
-        change_password_btn.addActionListener((a) -> {changePassword();});
-        update_btn.addActionListener((a) -> {updateRecord();});
-        user_logs_btn.addActionListener((a) -> {new UserLogs(user_ID, conn); dispose();});
+        delete_btn.addActionListener((a) -> { deleteRecord();});
+        change_password_btn.addActionListener((a) -> {  changePassword();});
+        update_btn.addActionListener((a) -> {     updateRecord();});
+        user_logs_btn.addActionListener((a) -> {  new UserLogs(); dispose();});
         
         readd_user_btn.addActionListener((a) -> {readdUser();});
         user_combobox.addActionListener((a) -> {refreshTable();} );

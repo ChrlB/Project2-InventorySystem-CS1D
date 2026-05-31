@@ -87,10 +87,10 @@ public class Dashboard extends JFrame{
       sales_btn =   new ButtonBuilder("SALES"   ,160,250,220,70,20);
       user_btn =    new ButtonBuilder("USER"    ,160,350,220,70,20);
       
-      order_btn.addActionListener(e -> {    new Order(user_ID, conn); this.dispose();  });
-      product_btn.addActionListener(e -> {  new Product(user_ID,conn);  this.dispose(); });
-      sales_btn.addActionListener(e -> {    new Sales(user_ID,conn);  this.dispose(); });
-      user_btn.addActionListener(e ->{      new User(user_ID,conn); this.dispose(); });
+      order_btn.addActionListener(e -> {    new Order(); this.dispose();  });
+      product_btn.addActionListener(e -> {  new Product();  this.dispose(); });
+      sales_btn.addActionListener(e -> {    new Sales();  this.dispose(); });
+      user_btn.addActionListener(e ->{      new User(); this.dispose(); });
       
       barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/barista.png",1150,15,40,40);
       order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
@@ -131,7 +131,7 @@ public class Dashboard extends JFrame{
       
       }
       
-      if(user_ID != 1){
+      if( !(UserSession.getInstance().isUserAdmin()) ){
         product_btn.setEnabled(false);
         user_btn.setEnabled(false);
       }
@@ -149,7 +149,7 @@ public class Dashboard extends JFrame{
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
-          logout(user_ID); 
+          logout(); 
         }
       });
       
@@ -168,7 +168,7 @@ public class Dashboard extends JFrame{
     }
   }
   
-  void logout(int user_ID){
+  void logout(){
     try{
       int command = JOptionPane.showConfirmDialog(null,
               "Are you sure you want to log out?",
@@ -177,7 +177,8 @@ public class Dashboard extends JFrame{
       if (!(command == JOptionPane.OK_OPTION)) return;
       
       
-      //userDAO.recordUserLogoutLog(user_ID);
+//      userDAO.recordUserLogoutLog(user_ID);
+      UserSession.getInstance().resetSession();
 
       System.out.println("Logout Successful!");
       new Login();

@@ -27,6 +27,15 @@ public class UserSession {
     }
   }
   
+  public void resetSession(){
+    this.userID = 0;
+    this.username = null;
+  }
+  
+  public boolean isUserAdmin(){
+    return userID == 1;
+  }
+  
   public  static UserSession getInstance(){
     if(instance == null) {
       instance = new UserSession();

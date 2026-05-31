@@ -12,6 +12,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.Forms.DeductStock;
 import project2_inventorysystem.Windows.Forms.NewProduct;
 
@@ -58,11 +60,11 @@ public class Product extends JFrame{
                   product_combobox;
   Object[] selected_record;
   
-  Product(int userID, Connection conn){
+  Product(){
     try{
       productDAO = new ProductDataAccessObject();
-      this.conn = conn;
-      user_ID = userID;
+      this.conn = DBConnection.getInstance().getDBConnection();
+      this.user_ID = UserSession.getInstance().getUserID();
       
       header = new Header();
 
@@ -85,7 +87,7 @@ public class Product extends JFrame{
       deduct_btn = new ButtonBuilder("DEDUCT", 30, 450, 185, 50,15);
       restock_btn = new ButtonBuilder("RESTOCK", 225, 450, 185, 50,15);
       
-      category_window_btn.addActionListener( (a) -> { new Category(user_ID, conn);dispose();} );
+      category_window_btn.addActionListener( (a) -> { new Category();dispose();} );
       add_product_btn.addActionListener( (a) -> { new NewProduct(this , conn); this.setEnabled(false);  } );
       readd_product_btn.addActionListener( (a) -> { readdProduct();} );
               

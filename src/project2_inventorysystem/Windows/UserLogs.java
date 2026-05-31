@@ -11,6 +11,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.*;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.TableBuilder;
 
@@ -30,10 +32,10 @@ public class UserLogs extends JFrame {
   TableBuilder userlogs_tbl;
   JScrollPane userlogs_tbl_scrollpane;
   
-  UserLogs(int userID,Connection conn){
+  UserLogs(){
     try{
-      this.conn = conn;
-      user_ID = userID;
+      this.conn = DBConnection.getInstance().getDBConnection();
+      this.user_ID = UserSession.getInstance().getUserID();
       header = new Header();
 
       sql = """
@@ -66,7 +68,7 @@ public class UserLogs extends JFrame {
       this.addWindowListener(new java.awt.event.WindowAdapter() {
         @Override
         public void windowClosing(java.awt.event.WindowEvent e) {
-        new User(userID, conn);
+        new User();
           dispose();
         }
       });

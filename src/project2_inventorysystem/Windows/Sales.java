@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
 import project2_inventorysystem.Windows.MyComponents.Header;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -55,10 +57,10 @@ public class Sales extends JFrame{
                     product_category_combobox,
                     product_combobox;
     
-   public Sales(int userID,Connection conn){
+   public Sales(){
       try{  
-        this.conn = conn;
-        user_ID = userID;
+        this.conn = DBConnection.getInstance().getDBConnection();
+        this.user_ID = UserSession.getInstance().getUserID();
         header = new Header();
         
         footer_panel = new JPanel();
