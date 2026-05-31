@@ -7,7 +7,7 @@ package project2_inventorysystem.UI.Forms;
 import java.awt.Color;
 import java.sql.*;
 import javax.swing.*;
-import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.DAO.ProductDAO;
 import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
@@ -25,7 +25,7 @@ import project2_inventorysystem.UI.Windows.Product;
 public class NewProduct extends JFrame {
   Product parent;
   Connection conn;
-  ProductDataAccessObject productDAO;
+  ProductDAO productDAO;
   
   ResultSet rs;
   
@@ -52,7 +52,7 @@ public class NewProduct extends JFrame {
       this.parent = parent;
       this.conn = DBConnection.getInstance().getDBConnection();
       
-      productDAO = new ProductDataAccessObject();
+      productDAO = new ProductDAO();
       
 
       rs = productDAO.getProductCategories(true);

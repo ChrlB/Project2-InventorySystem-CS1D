@@ -9,7 +9,7 @@ package project2_inventorysystem.UI.Windows;
  * @author user
  */
 import project2_inventorysystem.UI.Windows.Dashboard;
-import project2_inventorysystem.DAO.UserDataAccessObject;
+import project2_inventorysystem.DAO.UserDAO;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
@@ -28,7 +28,7 @@ import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 public class Login extends JFrame {
   int user_ID;
-  UserDataAccessObject userDAO;
+  UserDAO userDAO;
   Connection conn;
   ResultSet rs ;
   
@@ -56,7 +56,7 @@ public class Login extends JFrame {
     try{
       
       this.conn = DBConnection.getInstance().getDBConnection();
-      userDAO = new UserDataAccessObject();
+      userDAO = new UserDAO();
       
       user_panel = new JPanel();
       user_panel.setBackground(new Color(0XB58863));

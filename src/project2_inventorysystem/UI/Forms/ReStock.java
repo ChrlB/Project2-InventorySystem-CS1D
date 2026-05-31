@@ -7,7 +7,7 @@ package project2_inventorysystem.UI.Forms;
 import java.awt.Color;
 import javax.swing.*;
 import java.sql.*;
-import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.DAO.ProductDAO;
 import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
 import project2_inventorysystem.UI.MyComponents.LabelBuilder;
@@ -24,7 +24,7 @@ public class ReStock extends JFrame{
   Connection conn;
   Product parent;
   
-  ProductDataAccessObject productDAO;
+  ProductDAO productDAO;
   
   ButtonBuilder confirm_btn, 
                 cancel_btn;
@@ -38,7 +38,7 @@ public class ReStock extends JFrame{
     this.conn = DBConnection.getInstance().getDBConnection();
     this.parent = parent;
     
-    productDAO = new ProductDataAccessObject();
+    productDAO = new ProductDAO();
     
     stock_label = new LabelBuilder("Add Stock: ",30,50,100,50,15);
     stock_label.setForeground(new Color(0XB58863));

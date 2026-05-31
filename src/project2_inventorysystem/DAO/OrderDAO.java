@@ -9,13 +9,12 @@ import project2_inventorysystem.Services.DBConnection;
  *
  * @author user
  */
-public class CategoryDataAccessObject {
+public class OrderDAO {
   Connection conn;
   
-  public CategoryDataAccessObject(){
+  public OrderDAO(){
     this.conn = DBConnection.getInstance().getDBConnection();
   }
-  
   
   
 }

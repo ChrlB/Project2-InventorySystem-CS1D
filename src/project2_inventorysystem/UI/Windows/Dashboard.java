@@ -13,8 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import static javax.swing.SwingConstants.CENTER;
-import project2_inventorysystem.DAO.ProductDataAccessObject;
-import project2_inventorysystem.DAO.UserDataAccessObject;
+import project2_inventorysystem.DAO.ProductDAO;
+import project2_inventorysystem.DAO.UserDAO;
 import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.MyComponents.*;
@@ -50,8 +50,8 @@ public class Dashboard extends JFrame{
           
   int user_ID;
   
-  UserDataAccessObject userDAO;
-  ProductDataAccessObject productDAO;
+  UserDAO userDAO;
+  ProductDAO productDAO;
   
   Connection conn;
   ResultSet rs;
@@ -59,8 +59,8 @@ public class Dashboard extends JFrame{
   
   public Dashboard(){
     try{
-      this.userDAO = new UserDataAccessObject();
-      this.productDAO = new ProductDataAccessObject();
+      this.userDAO = new UserDAO();
+      this.productDAO = new ProductDAO();
       
       this.conn = DBConnection.getInstance().getDBConnection();
       this.user_ID = UserSession.getInstance().getUserID();

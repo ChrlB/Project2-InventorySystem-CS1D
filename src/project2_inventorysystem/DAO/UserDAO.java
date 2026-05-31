@@ -13,13 +13,13 @@ import project2_inventorysystem.Services.DBConnection;
  *
  * @author user
  */
-public class UserDataAccessObject {
+public class UserDAO {
   Connection conn;
   PreparedStatement pstmt;
   
   String sql;
   
-  public UserDataAccessObject(){
+  public UserDAO(){
     this.conn = DBConnection.getInstance().getDBConnection();
   }
   

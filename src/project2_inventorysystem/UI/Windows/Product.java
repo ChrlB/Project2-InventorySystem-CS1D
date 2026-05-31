@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 import java.sql.*;
-import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.DAO.ProductDAO;
 import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.Forms.DeductStock;
@@ -27,7 +27,7 @@ import project2_inventorysystem.UI.UIFileHandler.Icons;
 public class Product extends JFrame{
   int user_ID;
   Connection conn;
-  ProductDataAccessObject productDAO;
+  ProductDAO productDAO;
   
   Header header;
   JPanel product_form_panel;
@@ -65,7 +65,7 @@ public class Product extends JFrame{
   
   Product(){
     try{
-      productDAO = new ProductDataAccessObject();
+      productDAO = new ProductDAO();
       this.conn = DBConnection.getInstance().getDBConnection();
       this.user_ID = UserSession.getInstance().getUserID();
       

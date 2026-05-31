@@ -12,12 +12,12 @@ import project2_inventorysystem.Services.DBConnection;
  *
  * @author user
  */
-public class ProductDataAccessObject {
+public class ProductDAO {
   String sql;
   Connection conn;
   PreparedStatement pstmt;
   
-  public ProductDataAccessObject(){
+  public ProductDAO(){
     this.conn = DBConnection.getInstance().getDBConnection();
   }
   

@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.DAO.ProductDAO;
 import project2_inventorysystem.Services.DBConnection;
 import project2_inventorysystem.Services.UserSession;
 import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
@@ -27,7 +27,7 @@ public class DeductStock extends JFrame{
   int productID;
   int max_deduct;
   Connection conn;
-  ProductDataAccessObject productDAO;
+  ProductDAO productDAO;
   Product parent;
   
   ButtonBuilder confirm_btn, 
@@ -43,7 +43,7 @@ public class DeductStock extends JFrame{
     this.parent = parent;
     this.max_deduct = max_deduct;
     
-    productDAO = new ProductDataAccessObject();
+    productDAO = new ProductDAO();
     
     
     stock_label = new LabelBuilder("Deduct Stock: ",30,50,150,50,15);
