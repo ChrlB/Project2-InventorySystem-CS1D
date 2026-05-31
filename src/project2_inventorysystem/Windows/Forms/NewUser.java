@@ -12,6 +12,7 @@ import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Windows.User;
 /**
  *
@@ -36,8 +37,8 @@ public class NewUser extends JFrame{
   ButtonBuilder confirm_btn, 
                 cancel_btn;
   
-  public NewUser(User parent,Connection conn){
-    this.conn = conn;
+  public NewUser(User parent){
+    this.conn = DBConnection.getInstance().getDBConnection();
     this.parent = parent;
     
     username_field = new TextFieldBuilder(true, 130, 50, 320, 50, 15);

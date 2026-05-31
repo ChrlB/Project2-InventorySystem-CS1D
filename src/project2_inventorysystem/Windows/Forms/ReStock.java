@@ -8,11 +8,11 @@ import java.awt.Color;
 import javax.swing.*;
 import java.sql.*;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
 import project2_inventorysystem.Windows.Product;
-import project2_inventorysystem.Windows.User;
 
 /**
  *
@@ -32,9 +32,9 @@ public class ReStock extends JFrame{
   LabelBuilder stock_label;
   
   
-  public ReStock(Product parent, int productID, Connection conn){
+  public ReStock(Product parent, int productID){
     this.productID = productID;
-    this.conn = conn;
+    this.conn = DBConnection.getInstance().getDBConnection();
     this.parent = parent;
     
     productDAO = new ProductDataAccessObject();

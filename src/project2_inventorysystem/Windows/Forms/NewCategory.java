@@ -11,12 +11,11 @@ import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Windows.Category;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
-import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
 import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
-import project2_inventorysystem.Windows.Product;
 
 /**
  *
@@ -41,9 +40,9 @@ public class NewCategory extends JFrame{
   ResultSet rs;
   PreparedStatement pstmt;
   
-  public NewCategory(Category parent,Connection conn){
+  public NewCategory(Category parent){
     this.parent = parent;
-    this.conn = conn;
+    this.conn = DBConnection.getInstance().getDBConnection();
     
     
     category_name_field_label = new LabelBuilder("Category Name: ",30,50,150,50,15);

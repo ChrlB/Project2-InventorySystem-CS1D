@@ -11,6 +11,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
 import project2_inventorysystem.Windows.MyComponents.SpinnerBuilder;
@@ -34,9 +36,9 @@ public class DeductStock extends JFrame{
   LabelBuilder stock_label;
   
   
-  public DeductStock(Product parent, int productID,int max_deduct, Connection conn){
+  public DeductStock(Product parent, int productID,int max_deduct){
     this.productID = productID;
-    this.conn = conn;
+    this.conn = DBConnection.getInstance().getDBConnection();
     this.parent = parent;
     this.max_deduct = max_deduct;
     

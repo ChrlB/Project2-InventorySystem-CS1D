@@ -86,7 +86,7 @@ public class Category extends JFrame{
         update_btn = new ButtonBuilder("UPDATE",250, 320, 200, 50,15);
         delete_btn = new ButtonBuilder("DELETE",30, 320, 200, 50,15);
         
-        new_btn.addActionListener((a) -> { new NewCategory(this, conn);this.setEnabled(false);} );
+        new_btn.addActionListener((a) -> { new NewCategory(this);this.setEnabled(false);} );
         update_btn.addActionListener((a) -> { updateCategory();} );
         delete_btn.addActionListener((a) -> { deleteCategory();} );
         

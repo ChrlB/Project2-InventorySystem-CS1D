@@ -247,7 +247,7 @@ public class Product extends JFrame{
       };
       
       
-      new DeductStock(this, (int)selected_record[0],(int)selected_record[1], conn);
+      new DeductStock(this, (int)selected_record[0],(int)selected_record[1]);
       this.setEnabled(false);
     }catch(Exception ex){
       ex.printStackTrace();
@@ -271,7 +271,7 @@ public class Product extends JFrame{
       };
       
       
-      new ReStock(this, (int)selected_record[0], conn);
+      new ReStock(this, (int)selected_record[0]);
       this.setEnabled(false);
     }catch(Exception ex){
       ex.printStackTrace();

@@ -9,7 +9,6 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
-import org.mindrot.jbcrypt.BCrypt;
 import java.sql.*;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
@@ -82,7 +81,7 @@ public class User extends JFrame{
         
         new_btn.addActionListener((a) -> {
           this.setEnabled(false);
-          new NewUser(this,conn);
+          new NewUser(this);
         });
         delete_btn.addActionListener((a) -> { deleteRecord();});
         change_password_btn.addActionListener((a) -> {  changePassword();});
@@ -392,7 +391,7 @@ public class User extends JFrame{
           users_tbl.getValueAt(row, 0)
         };
         
-        new ChangePassword(this, (int)selected_record[0], conn);
+        new ChangePassword(this);
         this.setEnabled(false);
         
       }catch(Exception ex){

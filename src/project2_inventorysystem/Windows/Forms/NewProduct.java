@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.sql.*;
 import javax.swing.*;
 import project2_inventorysystem.DAO.ProductDataAccessObject;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
 import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
 import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
@@ -47,7 +49,7 @@ public class NewProduct extends JFrame {
   public NewProduct(Product parent,Connection conn){
     try{
       this.parent = parent;
-      this.conn = conn;
+      this.conn = DBConnection.getInstance().getDBConnection();
       
       productDAO = new ProductDataAccessObject();
       

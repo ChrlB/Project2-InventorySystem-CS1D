@@ -12,6 +12,8 @@ import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
 import project2_inventorysystem.Windows.User;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
+import project2_inventorysystem.Services.DBConnection.DBConnection;
+import project2_inventorysystem.Services.UserSession.UserSession;
 /**
  *
  * @author user
@@ -34,10 +36,10 @@ public class ChangePassword extends JFrame{
   String sql;
   PreparedStatement pstmt;
   
-  public ChangePassword(User user_window,int userID, Connection conn){
-    this.conn = conn;
+  public ChangePassword(User user_window){
+    this.conn = DBConnection.getInstance().getDBConnection();
+    this.userID = UserSession.getInstance().getUserID();
     this.user_window = user_window;
-    this.userID = userID;
     
     
     password_field = new TextFieldBuilder(true, 180, 50, 320, 50, 15);
