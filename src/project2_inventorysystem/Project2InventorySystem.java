@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
  */
 package project2_inventorysystem;
-import project2_inventorysystem.Windows.*;
+import project2_inventorysystem.UI.Windows.Login;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 /**
  *

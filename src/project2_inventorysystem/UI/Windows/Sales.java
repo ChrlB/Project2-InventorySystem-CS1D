@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.UI.Windows;
 
+import project2_inventorysystem.UI.Windows.Dashboard;
 import java.awt.Color;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,11 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
-import project2_inventorysystem.Windows.MyComponents.ComboBoxBuilder;
-import project2_inventorysystem.Windows.MyComponents.Header;
-import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
-import project2_inventorysystem.Windows.MyComponents.TableBuilder;
-import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
+import project2_inventorysystem.UI.MyComponents.ComboBoxBuilder;
+import project2_inventorysystem.UI.MyComponents.Header;
+import project2_inventorysystem.UI.MyComponents.LabelBuilder;
+import project2_inventorysystem.UI.MyComponents.TableBuilder;
+import project2_inventorysystem.UI.MyComponents.TextFieldBuilder;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 /**
  *
@@ -189,7 +191,7 @@ public class Sales extends JFrame{
           }
         });
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
         this.setIconImage(icon.getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("SALES");

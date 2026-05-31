@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.UI.Windows;
 
-import project2_inventorysystem.Windows.Forms.NewUser;
+import project2_inventorysystem.UI.Windows.Dashboard;
+import project2_inventorysystem.UI.Forms.NewUser;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -12,8 +13,9 @@ import javax.swing.*;
 import java.sql.*;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
-import project2_inventorysystem.Windows.Forms.ChangePassword;
-import project2_inventorysystem.Windows.MyComponents.*;
+import project2_inventorysystem.UI.Forms.ChangePassword;
+import project2_inventorysystem.UI.MyComponents.*;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 
 /**
@@ -148,7 +150,7 @@ public class User extends JFrame{
           }
         });
         
-        ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
          this.setIconImage(icon.getImage());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setTitle("USER");

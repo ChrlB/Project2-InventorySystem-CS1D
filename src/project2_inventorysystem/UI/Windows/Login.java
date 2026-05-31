@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.UI.Windows;
 
 /**
  *
  * @author user
  */
-import project2_inventorysystem.Windows.MyComponents.*;
+import project2_inventorysystem.UI.Windows.Dashboard;
 import project2_inventorysystem.DAO.UserDataAccessObject;
 import java.awt.Color;
 import java.awt.Font;
@@ -23,6 +23,8 @@ import javax.swing.JPasswordField;
 import org.mindrot.jbcrypt.BCrypt;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
+import project2_inventorysystem.UI.MyComponents.*;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 public class Login extends JFrame {
   int user_ID;
@@ -62,11 +64,11 @@ public class Login extends JFrame {
       user_panel.setBounds(220, 110, 830, 300);
       
       
-      barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",-10,40,400,400);
-      logo_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/logo.png",280,5,480,170);
+      barista_icon = new IconBuilder(Icons.ICON_USER,-10,40,400,400);
+      logo_icon = new IconBuilder(Icons.ICON_LOGO,280,5,480,170);
       
-      ImageIcon hidden_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/hidden.png"));
-      ImageIcon show_icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/show.png"));
+      ImageIcon hidden_icon = new ImageIcon(getClass().getResource(Icons.ICON_HIDDEN));
+      ImageIcon show_icon = new ImageIcon(getClass().getResource(Icons.ICON_SHOW));
       
       scaled_hidden_icon = new ImageIcon(hidden_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
       scaled_show_icon = new ImageIcon(show_icon.getImage().getScaledInstance(20, 25, Image.SCALE_SMOOTH));
@@ -99,7 +101,7 @@ public class Login extends JFrame {
       user_panel.add(username_label);
       user_panel.add(password_label);
       
-      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       this.setLayout(null);

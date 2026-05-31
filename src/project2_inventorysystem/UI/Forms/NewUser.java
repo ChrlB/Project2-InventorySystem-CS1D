@@ -2,18 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows.Forms;
+package project2_inventorysystem.UI.Forms;
 
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import javax.swing.*;
-import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
-import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
-import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
+import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
+import project2_inventorysystem.UI.MyComponents.LabelBuilder;
+import project2_inventorysystem.UI.MyComponents.TextFieldBuilder;
 import java.sql.*;
 import org.mindrot.jbcrypt.BCrypt;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
-import project2_inventorysystem.Windows.User;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
+import project2_inventorysystem.UI.Windows.User;
 /**
  *
  * @author user
@@ -62,7 +63,7 @@ public class NewUser extends JFrame{
     cancel_btn.addActionListener((a) -> {Close();});
     confirm_btn.addActionListener((a) -> {addUser();});
     
-    ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+    ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
       this.setIconImage(icon.getImage());
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);

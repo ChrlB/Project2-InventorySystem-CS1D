@@ -2,8 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
-import project2_inventorysystem.Windows.MyComponents.*;
+package project2_inventorysystem.UI.Windows;
 import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JFrame;
@@ -18,6 +17,8 @@ import project2_inventorysystem.DAO.ProductDataAccessObject;
 import project2_inventorysystem.DAO.UserDataAccessObject;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
+import project2_inventorysystem.UI.MyComponents.*;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 
 /**
@@ -92,11 +93,11 @@ public class Dashboard extends JFrame{
       sales_btn.addActionListener(e -> {    new Sales();  this.dispose(); });
       user_btn.addActionListener(e ->{      new User(); this.dispose(); });
       
-      barista_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/barista.png",1150,15,40,40);
-      order_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/menu.png",30,40,100,90);
-      product_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/product.png",30,140,100,90);
-      sales_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/sales.png",30,240,100,90);
-      user_icon = new IconBuilder("/project2_inventorysystem/Windows/Icons/user.png",30,340,100,90);
+      barista_icon = new IconBuilder(Icons.ICON_BARISTA,1150,15,40,40);
+      order_icon = new IconBuilder(Icons.ICON_MENU,30,40,100,90);
+      product_icon = new IconBuilder(Icons.ICON_PRODUCT,30,140,100,90);
+      sales_icon = new IconBuilder(Icons.ICON_SALES,30,240,100,90);
+      user_icon = new IconBuilder(Icons.ICON_USER,30,340,100,90);
       
       header.add(barista_icon);
       header.add(user_fullname_label);
@@ -136,7 +137,7 @@ public class Dashboard extends JFrame{
         user_btn.setEnabled(false);
       }
       
-      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("DASHBOARD");

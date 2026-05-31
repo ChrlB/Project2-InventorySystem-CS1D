@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.UI.Windows;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import project2_inventorysystem.Windows.Dashboard;
+import project2_inventorysystem.UI.Windows.Dashboard;
 import javax.swing.JFrame;
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,7 +21,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
-import project2_inventorysystem.Windows.MyComponents.*;
+import project2_inventorysystem.UI.MyComponents.*;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 /**
  *
@@ -190,7 +191,7 @@ public class Order extends JFrame{
       total_order_price_label.setBackground(Color.WHITE);
       
       
-      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("ORDER");

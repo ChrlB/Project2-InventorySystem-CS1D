@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows;
+package project2_inventorysystem.UI.Windows;
 
+import project2_inventorysystem.UI.Windows.User;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,8 +14,9 @@ import java.sql.ResultSet;
 import javax.swing.*;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
 import project2_inventorysystem.Services.UserSession.UserSession;
-import project2_inventorysystem.Windows.MyComponents.Header;
-import project2_inventorysystem.Windows.MyComponents.TableBuilder;
+import project2_inventorysystem.UI.MyComponents.Header;
+import project2_inventorysystem.UI.MyComponents.TableBuilder;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 /**
  *
@@ -73,7 +75,7 @@ public class UserLogs extends JFrame {
         }
       });
       
-      ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+      ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
       this.setIconImage(icon.getImage());
       this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
       this.setTitle("USER LOGS");

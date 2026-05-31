@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package project2_inventorysystem.Windows.Forms;
+package project2_inventorysystem.UI.Forms;
 
 import java.awt.Color;
 import java.sql.Connection;
@@ -12,10 +12,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import project2_inventorysystem.Services.DBConnection.DBConnection;
-import project2_inventorysystem.Windows.Category;
-import project2_inventorysystem.Windows.MyComponents.ButtonBuilder;
-import project2_inventorysystem.Windows.MyComponents.LabelBuilder;
-import project2_inventorysystem.Windows.MyComponents.TextFieldBuilder;
+import project2_inventorysystem.UI.Windows.Category;
+import project2_inventorysystem.UI.MyComponents.ButtonBuilder;
+import project2_inventorysystem.UI.MyComponents.LabelBuilder;
+import project2_inventorysystem.UI.MyComponents.TextFieldBuilder;
+import project2_inventorysystem.UI.UIFileHandler.Icons;
 
 /**
  *
@@ -63,7 +64,7 @@ public class NewCategory extends JFrame{
     cancel_btn.addActionListener((a) -> {closeWindow();});
     confirm_btn.addActionListener((a) -> {addCategory();});
     
-    ImageIcon icon = new ImageIcon(getClass().getResource("/project2_inventorysystem/Windows/Icons/cup.png"));
+    ImageIcon icon = new ImageIcon(getClass().getResource(Icons.ICON_CUP));
     this.setIconImage(icon.getImage());
     this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
     this.setLayout(null);
